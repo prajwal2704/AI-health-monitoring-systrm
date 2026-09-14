@@ -1,5 +1,7 @@
 # CarePulse - Clinical Health Monitoring & Disease Diagnostic System
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/prajwal2704/AI-health-monitoring-systrm)
+
 A comprehensive clinical health monitoring and disease prediction system that provides differential diagnostic evaluations, vitals tracking, and conversational medical guidance based on user-reported symptoms. The system features a built-in clinical rule engine covering 40+ medical conditions alongside multi-provider LLM support (Gemini, OpenAI, Anthropic).
 
 ## Features
