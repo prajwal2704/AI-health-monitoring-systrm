@@ -602,6 +602,8 @@ def chat(conversation_id):
             'input_type': 'clinical',
             'response': result['response'],
             'disease_prediction': result.get('disease_prediction'),
+            'spelling_corrections': result.get('spelling_corrections', []),
+            'corrected_text': result.get('corrected_text', message),
             'conversation_id': conversation_id
         }), 200
     
@@ -668,7 +670,9 @@ def predict_disease():
             'success': True,
             'is_valid': True,
             'prediction': result.get('disease_prediction'),
-            'response': result.get('response')
+            'response': result.get('response'),
+            'spelling_corrections': result.get('spelling_corrections', []),
+            'corrected_text': result.get('corrected_text', text)
         }), 200
     except Exception as e:
         return jsonify({

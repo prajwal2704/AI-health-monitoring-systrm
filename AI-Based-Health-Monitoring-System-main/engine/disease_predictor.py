@@ -6,6 +6,7 @@ Calculates weighted match confidence, classifies clinical urgency, and generates
 import re
 from typing import List, Dict, Any, Tuple
 from .disease_database import DISEASE_DATABASE, SYMPTOM_CATEGORIES, SYMPTOM_SYNONYMS
+from .spell_corrector import spell_corrector
 
 class DiseasePredictor:
     """Multi-symptom diagnostic inference engine"""
@@ -24,29 +25,41 @@ class DiseasePredictor:
             return []
 
         import unicodedata
-        # Strip punctuation and symbols, preserve letters, marks, numbers and spaces
-        cleaned = ''.join(' ' if unicodedata.category(c).startswith(('P', 'S')) else c for c in text.lower())
-        padded_text = ' ' + ' '.join(cleaned.split()) + ' '
         detected_tokens = set()
 
-        # 1. Match multi-word synonyms first (longer phrases first)
-        sorted_phrases = sorted(self.synonyms.keys(), key=len, reverse=True)
-        for phrase in sorted_phrases:
-            clean_phrase = phrase.lower().strip()
-            if not clean_phrase:
-                continue
-            pattern = r'(?:\s|^)' + re.escape(clean_phrase) + r'(?:\s|$)'
-            if re.search(pattern, padded_text, re.IGNORECASE):
-                token = self.synonyms[phrase]
-                detected_tokens.add(token)
+        def _scan_text(raw: str):
+            cleaned = ''.join(' ' if unicodedata.category(c).startswith(('P', 'S')) else c for c in raw.lower())
+            padded_text = ' ' + ' '.join(cleaned.split()) + ' '
 
-        # 2. Check for exact token matches in database
-        for dis_id, data in self.database.items():
-            for sym in data['primary_symptoms'] + data['secondary_symptoms']:
-                readable = sym.replace('_', ' ')
-                pattern = r'(?:\s|^)' + re.escape(readable) + r'(?:\s|$)'
+            # 1. Match multi-word synonyms first (longer phrases first)
+            sorted_phrases = sorted(self.synonyms.keys(), key=len, reverse=True)
+            for phrase in sorted_phrases:
+                clean_phrase = phrase.lower().strip()
+                if not clean_phrase:
+                    continue
+                pattern = r'(?:\s|^)' + re.escape(clean_phrase) + r'(?:\s|$)'
                 if re.search(pattern, padded_text, re.IGNORECASE):
-                    detected_tokens.add(sym)
+                    token = self.synonyms[phrase]
+                    detected_tokens.add(token)
+
+            # 2. Check for exact token matches in database
+            for dis_id, data in self.database.items():
+                for sym in data['primary_symptoms'] + data['secondary_symptoms']:
+                    readable = sym.replace('_', ' ')
+                    pattern = r'(?:\s|^)' + re.escape(readable) + r'(?:\s|$)'
+                    if re.search(pattern, padded_text, re.IGNORECASE):
+                        detected_tokens.add(sym)
+
+        # Scan original text
+        _scan_text(text)
+
+        # Also scan spell-corrected text to catch misspelled symptoms
+        try:
+            corrected_text, corrections = spell_corrector.correct_text(text)
+            if corrections:
+                _scan_text(corrected_text)
+        except Exception:
+            pass
 
         return list(detected_tokens)
 
@@ -64,9 +77,16 @@ class DiseasePredictor:
         Returns top predictions, confidence percentages, urgency rating, and treatment advice.
         """
         combined_symptoms = set(symptoms or [])
+        spelling_corrections = []
+        corrected_text = text_input or ''
 
         # Extract any additional symptoms from text
         if text_input:
+            try:
+                corrected_text, spelling_corrections = spell_corrector.correct_text(text_input)
+            except Exception:
+                spelling_corrections = []
+
             extracted = self.extract_symptoms_from_text(text_input)
             combined_symptoms.update(extracted)
 
@@ -79,7 +99,9 @@ class DiseasePredictor:
                 "predictions": [],
                 "primary_diagnosis": None,
                 "urgency": "mild",
-                "extracted_symptoms": []
+                "extracted_symptoms": [],
+                "spelling_corrections": spelling_corrections,
+                "corrected_text": corrected_text
             }
 
         scores: List[Dict[str, Any]] = []
@@ -189,5 +211,7 @@ class DiseasePredictor:
             "all_predictions": top_predictions,
             "urgency": urgency,
             "emergency_flags": emergency_flags,
-            "age_group": age
+            "age_group": age,
+            "spelling_corrections": spelling_corrections,
+            "corrected_text": corrected_text
         }

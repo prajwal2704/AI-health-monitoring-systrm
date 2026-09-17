@@ -9,6 +9,7 @@ from llm_providers import LLMProviderFactory
 from engine.disease_predictor import DiseasePredictor
 from engine.vitals_monitor import VitalsMonitor
 from engine.follow_up_generator import FollowUpGenerator
+from engine.spell_corrector import spell_corrector
 import config
 
 # Clinical and anatomical keywords used to validate medical domain relevance
@@ -146,6 +147,19 @@ class MedicalResponseGenerator:
                 pattern = r'(?:\s|^)' + re.escape(kw.lower()) + r'(?:\s|$)'
                 if re.search(pattern, clean_text, re.IGNORECASE):
                     return 'clinical'
+
+            # 5. Check clinical keywords against spell-corrected text
+            try:
+                corr_text, corrs = spell_corrector.correct_text(text_str)
+                if corrs:
+                    cleaned_corr = ''.join(' ' if unicodedata.category(c).startswith(('P', 'S')) else c for c in corr_text.lower())
+                    clean_corr_text = ' ' + ' '.join(cleaned_corr.split()) + ' '
+                    for kw in sorted(CLINICAL_KEYWORDS, key=len, reverse=True):
+                        pattern = r'(?:\s|^)' + re.escape(kw.lower()) + r'(?:\s|$)'
+                        if re.search(pattern, clean_corr_text, re.IGNORECASE):
+                            return 'clinical'
+            except Exception:
+                pass
 
             # If the user explicitly typed a message and it lacks medical content/symptoms:
             # It is invalid!
@@ -354,6 +368,8 @@ Please provide medical guidance in the following structured format:
                 structured['disclaimer'] = self._get_disclaimer(language)
                 structured['disease_prediction'] = prediction_result
                 structured['follow_up_questions'] = follow_ups
+                structured['spelling_corrections'] = prediction_result.get('spelling_corrections', [])
+                structured['corrected_text'] = prediction_result.get('corrected_text', symptoms)
                 if vitals_result:
                     structured['vitals_analysis'] = vitals_result
 
@@ -366,6 +382,8 @@ Please provide medical guidance in the following structured format:
                     'input_type': 'clinical',
                     'response': structured,
                     'disease_prediction': prediction_result,
+                    'spelling_corrections': prediction_result.get('spelling_corrections', []),
+                    'corrected_text': prediction_result.get('corrected_text', symptoms),
                     'raw_response': raw_response
                 }
             except Exception as e:
@@ -382,6 +400,8 @@ Please provide medical guidance in the following structured format:
         )
         structured_response['is_valid'] = True
         structured_response['input_type'] = 'clinical'
+        structured_response['spelling_corrections'] = prediction_result.get('spelling_corrections', [])
+        structured_response['corrected_text'] = prediction_result.get('corrected_text', symptoms)
 
         return {
             'success': True,
@@ -389,6 +409,8 @@ Please provide medical guidance in the following structured format:
             'input_type': 'clinical',
             'response': structured_response,
             'disease_prediction': prediction_result,
+            'spelling_corrections': prediction_result.get('spelling_corrections', []),
+            'corrected_text': prediction_result.get('corrected_text', symptoms),
             'raw_response': 'Clinical Knowledge Engine'
         }
 
@@ -426,6 +448,19 @@ Please provide medical guidance in the following structured format:
                 f"Based on reported symptoms ({matched_str}), no single condition reached primary diagnostic certainty. "
                 f"A general clinical evaluation is recommended."
             )
+
+        # Prepend spelling correction notice if corrections were made
+        spelling_corrections = prediction_result.get('spelling_corrections', [])
+        if spelling_corrections:
+            corr_pairs = ", ".join([f"'{c['original']}' → '{c['corrected']}'" for c in spelling_corrections])
+            lang_low = (language or 'english').lower()
+            if lang_low == 'kannada':
+                corrections_notice = f"*(ಸ್ವಯಂ ಕಾಗುಣಿತ ತಿದ್ದುಪಡಿ: {corr_pairs})*\n\n"
+            elif lang_low == 'hindi':
+                corrections_notice = f"*(वर्तनी सुधार: {corr_pairs})*\n\n"
+            else:
+                corrections_notice = f"*(Note: Corrected spelling: {corr_pairs})*\n\n"
+            summary = corrections_notice + summary
 
         if differentials:
             diff_names = [f"{d['name']} ({d['confidence']}%)" for d in differentials[:2]]
@@ -541,6 +576,18 @@ Please provide medical guidance in the following structured format:
             medical_attention = f"ತುರ್ತು ಮಟ್ಟ: {urgency.upper()}\nಉಸಿರಾಟದ ತೊಂದರೆ, ತೀವ್ರ ಜ್ವರ ಅಥವಾ ಅತಿಯಾದ ಎದೆ ನೋವು ಕಂಡುಬಂದರೆ ತಕ್ಷಣ ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆಗೆ ಭೇಟಿ ನೀಡಿ."
             possible_causes = f"ಸಾಧ್ಯವಿರುವ ಕಾರಣ: {dis_name}.\nಖಚಿತವಾದ ರೋಗನಿರ್ಣಯಕ್ಕಾಗಿ ನೋಂದಾಯಿತ ವೈದ್ಯರನ್ನು ಸಂಪರ್ಕಿಸಿ ರಕ್ತ ಪರೀಕ್ಷೆ ಮಾಡಿಸಿಕೊಳ್ಳಿ."
 
+        # Prepend spelling correction notice across all languages
+        spelling_corrections = prediction_result.get('spelling_corrections', [])
+        if spelling_corrections:
+            corr_pairs = ", ".join([f"'{c['original']}' → '{c['corrected']}'" for c in spelling_corrections])
+            if lang_lower == 'kannada':
+                corrections_notice = f"*(ಸ್ವಯಂ ಕಾಗುಣಿತ ತಿದ್ದುಪಡಿ: {corr_pairs})*\n\n"
+            elif lang_lower == 'hindi':
+                corrections_notice = f"*(वर्तनी सुधार: {corr_pairs})*\n\n"
+            else:
+                corrections_notice = f"*(Note: Corrected spelling: {corr_pairs})*\n\n"
+            summary = corrections_notice + summary
+
         return {
             'summary': summary,
             'home_care': home_care,
@@ -549,7 +596,9 @@ Please provide medical guidance in the following structured format:
             'disclaimer': self._get_disclaimer(language),
             'disease_prediction': prediction_result,
             'follow_up_questions': follow_ups or [],
-            'vitals_analysis': vitals_result
+            'vitals_analysis': vitals_result,
+            'spelling_corrections': spelling_corrections,
+            'corrected_text': prediction_result.get('corrected_text', symptoms)
         }
 
     def get_system_prompt(self, language: str = 'english') -> str:

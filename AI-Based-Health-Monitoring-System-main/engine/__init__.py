@@ -5,6 +5,7 @@ from .disease_database import DISEASE_DATABASE, SYMPTOM_CATEGORIES, SYMPTOM_SYNO
 from .disease_predictor import DiseasePredictor
 from .vitals_monitor import VitalsMonitor
 from .follow_up_generator import FollowUpGenerator
+from .spell_corrector import MedicalSpellCorrector, spell_corrector
 
 __all__ = [
     'DISEASE_DATABASE',
@@ -12,5 +13,7 @@ __all__ = [
     'SYMPTOM_SYNONYMS',
     'DiseasePredictor',
     'VitalsMonitor',
-    'FollowUpGenerator'
+    'FollowUpGenerator',
+    'MedicalSpellCorrector',
+    'spell_corrector'
 ]

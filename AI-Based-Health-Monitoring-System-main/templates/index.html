@@ -1793,8 +1793,22 @@
         `;
       }
 
+      let spellCorrectionsHtml = '';
+      const spCorrs = (pred && pred.spelling_corrections && pred.spelling_corrections.length) ? pred.spelling_corrections :
+                      (resp && resp.spelling_corrections && resp.spelling_corrections.length) ? resp.spelling_corrections : [];
+      if (spCorrs && spCorrs.length > 0) {
+        const corrItems = spCorrs.map(c => `<code>"${escapeHtml(c.original)}"</code> → <strong style="color:#047857;">"${escapeHtml(c.corrected)}"</strong>`).join(', ');
+        spellCorrectionsHtml = `
+          <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:8px 14px; border-radius:10px; margin-bottom:14px; display:flex; align-items:center; gap:8px; font-size:13px; color:#065f46;">
+            <span style="font-size:16px;">✏️</span>
+            <div><strong>Auto-corrected spelling:</strong> ${corrItems}</div>
+          </div>
+        `;
+      }
+
       resultsArea.innerHTML = `
         <div class="primary-diagnosis-card">
+          ${spellCorrectionsHtml}
           <div class="diagnosis-top">
             <div>
               <div class="diagnosis-name">${escapeHtml(primary.name || 'Clinical Syndrome')}</div>
@@ -2034,6 +2048,19 @@
             <button class="btn-secondary" style="font-size:11.5px; padding:3px 8px; margin-top:8px;" onclick="speakText(this)">Listen</button>
           `;
         } else if (typeof content === 'object' && content && content.summary) {
+          let spellBadge = '';
+          const spCorrs = (content && content.spelling_corrections && content.spelling_corrections.length) ? content.spelling_corrections :
+                          (prediction && prediction.spelling_corrections && prediction.spelling_corrections.length) ? prediction.spelling_corrections : [];
+          if (spCorrs && spCorrs.length > 0) {
+            const corrList = spCorrs.map(c => `<code>"${escapeHtml(c.original)}"</code> → <strong style="color:#047857;">"${escapeHtml(c.corrected)}"</strong>`).join(', ');
+            spellBadge = `
+              <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:6px 12px; border-radius:8px; margin-bottom:10px; display:flex; align-items:center; gap:8px; font-size:12.5px; color:#065f46;">
+                <span style="font-size:15px;">✏️</span>
+                <div><strong>Auto-corrected spelling:</strong> ${corrList}</div>
+              </div>
+            `;
+          }
+
           let predBadge = '';
           if (prediction && prediction.primary_diagnosis && prediction.primary_diagnosis.name && (prediction.primary_diagnosis.confidence > 0)) {
             predBadge = `
@@ -2048,6 +2075,7 @@
           }
 
           bubble.innerHTML = `
+            ${spellBadge}
             ${predBadge}
             <div style="margin-bottom:10px;">
               <h4 style="font-size:13px; font-weight:700; color:#1e1b4b; margin-bottom:4px;">Clinical Assessment</h4>
