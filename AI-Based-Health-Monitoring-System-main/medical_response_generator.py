@@ -2,12 +2,72 @@
 CarePulse Response Generator - Clinical Diagnostic and Conversational Engine
 Integrates the Clinical Disease Predictor, Vitals Monitor, and LLM Providers.
 """
+import re
+import unicodedata
 from typing import Dict, Any, Optional, List
 from llm_providers import LLMProviderFactory
 from engine.disease_predictor import DiseasePredictor
 from engine.vitals_monitor import VitalsMonitor
 from engine.follow_up_generator import FollowUpGenerator
 import config
+
+# Clinical and anatomical keywords used to validate medical domain relevance
+CLINICAL_KEYWORDS = {
+    # English keywords
+    'pain', 'pains', 'ache', 'aches', 'aching', 'sore', 'soreness', 'hurt', 'hurts', 'hurting',
+    'swelling', 'swollen', 'swell', 'bleeding', 'bleed', 'bleeds', 'blood', 'bloody',
+    'fever', 'feverish', 'temperature', 'pyrexia', 'cough', 'coughing', 'coughs', 'cold', 'colds',
+    'chills', 'shivering', 'shiver', 'sweat', 'sweats', 'sweating', 'night sweats', 'dizzy',
+    'dizziness', 'vertigo', 'lightheaded', 'faint', 'fainting', 'nausea', 'nauseous', 'vomit',
+    'vomiting', 'vomited', 'vomits', 'throw up', 'throwing up', 'diarrhea', 'loose motions',
+    'watery stool', 'constipation', 'cramp', 'cramps', 'cramping', 'burn', 'burning', 'itch',
+    'itching', 'itchy', 'rash', 'rashes', 'wound', 'wounds', 'cut', 'cuts', 'bruise', 'bruises',
+    'pus', 'discharge', 'fatigue', 'tired', 'tiredness', 'weak', 'weakness', 'exhaustion',
+    'breath', 'breathing', 'breathless', 'breathlessness', 'shortness of breath', 'wheeze',
+    'wheezing', 'chest', 'pressure', 'tight', 'tightness', 'spasm', 'spasms', 'stiffness',
+    'stiff', 'numb', 'numbness', 'tingling', 'thirst', 'thirsty', 'appetite', 'weight',
+    'vision', 'blur', 'blurry', 'blurred', 'hearing', 'earache', 'sleep', 'insomnia',
+    'infection', 'infected', 'allergy', 'allergic', 'allergies', 'virus', 'viral', 'bacteria',
+    'bacterial', 'flu', 'influenza', 'phlegm', 'mucus', 'sputum', 'sugar', 'glucose', 'bp',
+    'blood pressure', 'pulse', 'heart rate', 'palpitations', 'headache', 'headaches', 'migraine',
+    'asthma', 'diabetes', 'cancer', 'covid', 'coronavirus', 'typhoid', 'malaria', 'dengue',
+    'head', 'brain', 'eye', 'eyes', 'ear', 'ears', 'nose', 'mouth', 'throat', 'neck',
+    'shoulder', 'shoulders', 'heart', 'lung', 'lungs', 'rib', 'ribs', 'arm', 'arms',
+    'hand', 'hands', 'finger', 'fingers', 'back', 'spine', 'abdomen', 'abdominal', 'stomach',
+    'belly', 'pelvis', 'pelvic', 'hip', 'hips', 'groin', 'leg', 'legs', 'thigh', 'knee',
+    'knees', 'calf', 'ankle', 'ankles', 'foot', 'feet', 'toe', 'toes', 'skin', 'urine',
+    'urinating', 'urination', 'pee', 'peeing', 'stool', 'bowel', 'bone', 'bones', 'joint',
+    'joints', 'muscle', 'muscles', 'nerve', 'nerves', 'vein', 'veins', 'artery', 'liver',
+    'kidney', 'kidneys', 'medicine', 'medicines', 'medication', 'medications', 'drug', 'drugs',
+    'pill', 'pills', 'tablet', 'tablets', 'prescription', 'treatment', 'treatments',
+    'sick', 'sickness', 'ill', 'illness', 'disease', 'diseases',
+    'symptom', 'symptoms', 'syndrome', 'emergency', 'paracetamol', 'aspirin',
+    'ibuprofen', 'antibiotic', 'antibiotics', 'inhaler', 'insulin',
+
+    # Kannada keywords (native script)
+    'ನೋವು', 'ಉರಿ', 'ಜ್ವರ', 'ಕೆಮ್ಮು', 'ಶೀತ', 'ನೆಗಡಿ', 'ಚಳಿ', 'ನಡುಕ', 'ಬೆವರು',
+    'ತಲೆಸುತ್ತು', 'ವಾಂತಿ', 'ವಾಕರಿಕೆ', 'ಬೇದಿ', 'ಅತಿಸಾರ', 'ಮಲಬದ್ಧತೆ', 'ಸೆಳೆತ', 'ತುರಿಕೆ',
+    'ದದ್ದು', 'ಗಾಯ', 'ಕೀವು', 'ಸುಸ್ತು', 'ಆಯಾಸ', 'ದಣಿವು', 'ನಿಶ್ಯಕ್ತಿ', 'ಉಸಿರಾಟ',
+    'ದಮ್ಮು', 'ಉಬ್ಬಸ', 'ಬಿಗಿತ', 'ಮರಗಟ್ಟುವಿಕೆ', 'ಬಾಯಾರಿಕೆ', 'ಹಸಿವು', 'ತೂಕ', 'ದೃಷ್ಟಿ',
+    'ನಿದ್ದೆ', 'ಸೋಂಕು', 'ಅಲರ್ಜಿ', 'ಕಫ', 'ಲೋಳೆ', 'ತಲೆ', 'ಕಣ್ಣು', 'ಕಿವಿ', 'ಮೂಗು',
+    'ಬಾಯಿ', 'ಗಂಟಲು', 'ಕುತ್ತಿಗೆ', 'ಎದೆ', 'ಹೃದಯ', 'ಶ್ವಾಸಕೋಶ', 'ತೋಳು', 'ಕೈ', 'ಬೆರಳು',
+    'ಬೆನ್ನು', 'ಹೊಟ್ಟೆ', 'ಸೊಂಟ', 'ಕಾಲು', 'ಮಂಡಿ', 'ಪಾದ', 'ಚರ್ಮ', 'ರಕ್ತ', 'ಮೂತ್ರ',
+    'ಮಲ', 'ಮೂಳೆ', 'ಕೀಲು', 'ಸ್ನಾಯು', 'ನರ', 'ಔಷಧ', 'ಮಾತ್ರೆ',
+    'ಗುಳಿಗೆ', 'ಚಿಕಿತ್ಸೆ', 'ಆರೋಗ್ಯ', 'ರೋಗ', 'ಕಾಯಿಲೆ', 'ತುರ್ತು',
+
+    # Transliterated Kanglish keywords
+    'jwara', 'talenovu', 'tale novu', 'kemmu', 'sheetha', 'negadi', 'chali', 'vaanthi',
+    'vanti', 'vakarike', 'bedi', 'bhedi', 'hotte novu', 'ede novu', 'susthu', 'ayasa',
+    'maikai novu', 'keelu novu', 'bennu novu', 'gantalu novu', 'usirata', 'kaalu novu',
+    'kai novu', 'raktha', 'matre', 'roga'
+}
+
+GREETING_WORDS = {
+    'hello', 'hi', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening',
+    'namaste', 'namaskara', 'namaskar', 'ನಮಸ್ಕಾರ', 'ಹಲೋ', 'ಹಾಯ್', 'who are you', 'help',
+    'how are you', 'how do you do', 'what can you do', 'what is this', 'start', 'test',
+    'hello doctor', 'hi doctor', 'hey doctor', 'hello doc', 'hi doc', 'good morning doctor'
+}
 
 class MedicalResponseGenerator:
     """Generates structured medical responses with integrated disease predictions"""
@@ -22,6 +82,145 @@ class MedicalResponseGenerator:
         self.vitals_monitor = VitalsMonitor()
         self.follow_up_gen = FollowUpGenerator()
 
+    def classify_clinical_input(self, text: str, symptoms_list: list = None, vitals: dict = None) -> str:
+        """
+        Classifies incoming input into 'clinical', 'greeting', or 'invalid'.
+        Guarantees that only valid medical symptoms or clinical concerns receive diagnoses.
+        """
+        if symptoms_list and len(symptoms_list) > 0:
+            return 'clinical'
+
+        if vitals and any(vitals.get(k) is not None for k in ['systolic_bp', 'heart_rate', 'spo2', 'temperature', 'blood_sugar']):
+            return 'clinical'
+
+        text_str = (text or '').strip()
+        if not text_str:
+            return 'invalid'
+
+        # Normalize text while preserving unicode letters
+        cleaned = ''.join(' ' if unicodedata.category(c).startswith(('P', 'S')) else c for c in text_str.lower())
+        clean_text = ' ' + ' '.join(cleaned.split()) + ' '
+        raw_clean = clean_text.strip()
+
+        # Check for polite greetings first (exact or common greeting phrases)
+        greeting_patterns = [
+            r'^(?:hello|hi|hey|greetings|good\s+(?:morning|afternoon|evening)|namaste|namaskara|namaskar|ಹಲೋ|ಹಾಯ್|ನಮಸ್ಕಾರ)(?:\s+(?:doctor|doc|there|assistant|carepulse|bot|ವೈದ್ಯರೇ))?[!\.\?\s]*$',
+            r'^(?:who\s+are\s+you|what\s+can\s+you\s+do|how\s+are\s+you|help|start)[!\.\?\s]*$'
+        ]
+        for gp in greeting_patterns:
+            if re.match(gp, raw_clean, re.IGNORECASE):
+                return 'greeting'
+
+        for gr in sorted(GREETING_WORDS, key=len, reverse=True):
+            if raw_clean == gr:
+                return 'greeting'
+
+        # Check for recognized symptoms via disease predictor
+        extracted = self.predictor.extract_symptoms_from_text(text_str)
+        if extracted and len(extracted) > 0:
+            return 'clinical'
+
+        # Check for clinical and health vocabulary keywords
+        for kw in sorted(CLINICAL_KEYWORDS, key=len, reverse=True):
+            pattern = r'(?:^|[\s\b])' + re.escape(kw.lower()) + r'(?:$|[\s\b])'
+            if re.search(pattern, clean_text, re.IGNORECASE):
+                return 'clinical'
+
+        # Unrecognized / non-medical input
+        return 'invalid'
+
+    def _build_invalid_input_response(self, language: str = 'english') -> Dict[str, Any]:
+        """Generate clear localized notice when user inputs non-medical or invalid text"""
+        lang = (language or 'english').lower()
+        if lang == 'kannada':
+            return {
+                'summary': "ನಮೂದಿಸಿದ ಮಾಹಿತಿ ಅಮಾನ್ಯವಾಗಿದೆ (Input is not valid). ದಯವಿಟ್ಟು ಸರಿಯಾದ ಆರೋಗ್ಯ ರೋಗಲಕ್ಷಣ ಅಥವಾ ಸಮಸ್ಯೆಯನ್ನು ನಮೂದಿಸಿ (ಉದಾಹರಣೆಗೆ: 'ನನಗೆ ಜ್ವರ ಮತ್ತು ತಲೆನೋವು ಇದೆ' ಅಥವಾ 'ಕೆಮ್ಮು ಮತ್ತು ಎದೆ ನೋವು').",
+                'home_care': "ಮಾನ್ಯವಾದ ರೋಗಲಕ್ಷಣಗಳನ್ನು ನಮೂದಿಸಿದಾಗ ಮಾತ್ರ ಸೂಕ್ತ ಆರೈಕೆ ಸಲಹೆಗಳನ್ನು ನೀಡಲಾಗುತ್ತದೆ. ದಯವಿಟ್ಟು ಸರಿಯಾದ ರೋಗಲಕ್ಷಣಗಳನ್ನು ತಿಳಿಸಿ.",
+                'medical_attention': "ತುರ್ತು ವೈದ್ಯಕೀಯ ಪರಿಸ್ಥಿತಿಯಲ್ಲಿದ್ದರೆ ತಕ್ಷಣ 108 ಅಥವಾ 112 ಗೆ ಕರೆ ಮಾಡಿ ಆಸ್ಪತ್ರೆಗೆ ತೆರಳಿ.",
+                'possible_causes': "ನಮೂದಿಸಿದ ಮಾಹಿತಿಯಲ್ಲಿ ಯಾವುದೇ ವೈದ್ಯಕೀಯ ಲಕ್ಷಣಗಳು ಕಂಡುಬಂದಿಲ್ಲವಾದ್ದರಿಂದ ರೋಗನಿರ್ಣಯ ಲಭ್ಯವಿಲ್ಲ.",
+                'disclaimer': self._get_disclaimer(language),
+                'is_valid': False
+            }
+        elif lang == 'hindi':
+            return {
+                'summary': "दर्ज किया गया इनपुट अमान्य है (Input is not valid)। कृपया वैध स्वास्थ्य लक्षण या समस्या दर्ज करें (जैसे: 'मुझे तेज बुखार और सिरदर्द है' या 'खांसी और सीने में दर्द')।",
+                'home_care': "उचित घरेलू देखभाल केवल मान्य लक्षणों के लिए दी जाती है। कृपया अपने लक्षण स्पष्ट रूप से बताएं।",
+                'medical_attention': "यदि यह एक आपातकालीन स्थिति है, तो तुरंत आपातकालीन सेवाओं (108/112) से संपर्क करें।",
+                'possible_causes': "अमान्य इनपुट के कारण किसी भी रोग का मूल्यांकन नहीं किया जा सका।",
+                'disclaimer': self._get_disclaimer(language),
+                'is_valid': False
+            }
+        elif lang == 'telugu':
+            return {
+                'summary': "నమోదు చేసిన సమాచారం చెల్లదు (Input is not valid). దయచేసి సరైన ఆరోగ్య లక్షణాలను నమోదు చేయండి (ఉదాహరణకు: 'నాకు తీవ్ర జ్వరం మరియు తలనొప్పి ఉంది').",
+                'home_care': "సరైన లక్షణాలు తెలిపినప్పుడు మాత్రమే గృహ సంరక్షణ సూచనలు అందించబడతాయి.",
+                'medical_attention': "అత్యవసర పరిస్థితి ఉంటే వెంటనే 108 లేదా 112 కి కాల్ చేయండి.",
+                'possible_causes': "నమోదు చేసిన సమాచారంలో ఎటువంటి వైద్య లక్షణాలు లేనందున నిర్ధారణ సాధ్యం కాలేదు.",
+                'disclaimer': self._get_disclaimer(language),
+                'is_valid': False
+            }
+        elif lang in ('spanish', 'español'):
+            return {
+                'summary': "La entrada ingresada no es válida (Input is not valid). Por favor ingrese síntomas médicos válidos (por ejemplo: 'Tengo fiebre y dolor de cabeza').",
+                'home_care': "Las instrucciones de cuidado solo se generan para síntomas clínicos válidos.",
+                'medical_attention': "En caso de emergencia médica, comuníquese inmediatamente con el 911 o centro de urgencias.",
+                'possible_causes': "No se pudieron evaluar afecciones clínicas porque la entrada no contiene síntomas médicos válidos.",
+                'disclaimer': self._get_disclaimer(language),
+                'is_valid': False
+            }
+        elif lang in ('french', 'français'):
+            return {
+                'summary': "L'entrée fournie n'est pas valide (Input is not valid). Veuillez saisir des symptômes médicaux valides (par exemple: 'J'ai de la fièvre et des maux de tête').",
+                'home_care': "Les conseils de soins à domicile ne sont générés que pour des symptômes cliniques reconnus.",
+                'medical_attention': "En cas d'urgence médicale, contactez immédiatement les services de secours (112 / 15).",
+                'possible_causes': "Aucune affection n'a pu être évaluée car l'entrée ne correspond à aucun symptôme médical.",
+                'disclaimer': self._get_disclaimer(language),
+                'is_valid': False
+            }
+        else:
+            return {
+                'summary': "Input is not valid. Please enter a valid medical symptom, health condition, or clinical description (for example: 'I have high fever and headache' or 'cough with chest pain') to receive clinical evaluation.",
+                'home_care': "Home care instructions are only generated for recognized clinical symptoms. Please provide valid health symptoms.",
+                'medical_attention': "If you are experiencing a medical emergency, please dial emergency services immediately (911 / 112 / 108).",
+                'possible_causes': "No clinical conditions could be evaluated because the entered input was not recognized as a medical symptom or question.",
+                'disclaimer': self._get_disclaimer(language),
+                'is_valid': False
+            }
+
+    def _build_greeting_response(self, language: str = 'english') -> Dict[str, Any]:
+        """Generate welcoming response guiding user to enter medical symptoms"""
+        lang = (language or 'english').lower()
+        if lang == 'kannada':
+            return {
+                'summary': "ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ ಕೇರ್‌ಪಲ್ಸ್ ಕ್ಲಿನಿಕಲ್ ಕನ್ಸಲ್ಟೆಂಟ್. ನಿಮ್ಮ ಆರೋಗ್ಯ ತಪಾಸಣೆ ಮತ್ತು ಸಲಹೆಗಾಗಿ ದಯವಿಟ್ಟು ನಿಮ್ಮ ರೋಗಲಕ್ಷಣಗಳನ್ನು ವಿವರಿಸಿ (ಉದಾಹರಣೆಗೆ: 'ನನಗೆ ಜ್ವರ ಮತ್ತು ಮೈಕೈ ನೋವು ಇದೆ').",
+                'home_care': "ವೈಯಕ್ತಿಕ ಆರೈಕೆ ಸಲಹೆಗಳನ್ನು ಪಡೆಯಲು ನಿಮ್ಮ ರೋಗಲಕ್ಷಣಗಳನ್ನು ನಮೂದಿಸಿ.",
+                'medical_attention': "ತೀವ್ರ ಉಸಿರಾಟದ ತೊಂದರೆ ಅಥವಾ ಎದೆ ನೋವು ಇದ್ದಲ್ಲಿ ತಕ್ಷಣ ತುರ್ತು ಆಸ್ಪತ್ರೆಗೆ ಭೇಟಿ ನೀಡಿ.",
+                'possible_causes': "ಮೌಲ್ಯಮಾಪನಕ್ಕೆ ಸಿದ್ಧವಾಗಿದೆ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ರೋಗಲಕ್ಷಣಗಳನ್ನು ತಿಳಿಸಿ.",
+                'disclaimer': self._get_disclaimer(language),
+                'is_valid': True,
+                'input_type': 'greeting'
+            }
+        elif lang == 'hindi':
+            return {
+                'summary': "नमस्ते! मैं आपका केयरपल्स क्लिनिकल सहायक हूं। क्लिनिकल मूल्यांकन शुरू करने के लिए कृपया अपने लक्षण बताएं (जैसे: 'मुझे तेज बुखार और सिरदर्द है')।",
+                'home_care': "लक्षण बताने पर आपको उचित घरेलू देखभाल मार्गदर्शन दिया जाएगा।",
+                'medical_attention': "गंभीर लक्षणों के लिए तुरंत अस्पताल जाएं।",
+                'possible_causes': "मूल्यांकन के लिए तैयार। कृपया अपने लक्षण दर्ज करें।",
+                'disclaimer': self._get_disclaimer(language),
+                'is_valid': True,
+                'input_type': 'greeting'
+            }
+        else:
+            return {
+                'summary': "Hello! I am your CarePulse Clinical Consultant. Please describe your health symptoms, medical concerns, or select symptoms from the list to begin clinical evaluation (for example: 'I have fever and body pain').",
+                'home_care': "Describe your symptoms to receive personalized, age-appropriate home care instructions.",
+                'medical_attention': "For severe symptoms such as difficulty breathing or intense chest pressure, seek emergency medical care immediately.",
+                'possible_causes': "Ready to evaluate. Please enter symptoms or select from the symptoms list to begin.",
+                'disclaimer': self._get_disclaimer(language),
+                'is_valid': True,
+                'input_type': 'greeting'
+            }
+
     def generate_medical_response(
         self,
         symptoms: str,
@@ -33,8 +232,35 @@ class MedicalResponseGenerator:
     ) -> Dict[str, Any]:
         """
         Generate structured clinical response with disease prediction and health guidance.
+        Validates that user input is medically relevant before producing diagnoses.
         """
-        # Run disease prediction engine first
+        # Validate input validity
+        input_type = self.classify_clinical_input(symptoms, symptoms_list, vitals)
+
+        if input_type == 'invalid':
+            invalid_response = self._build_invalid_input_response(language)
+            return {
+                'success': False,
+                'is_valid': False,
+                'input_type': 'invalid',
+                'error': invalid_response['summary'],
+                'response': invalid_response,
+                'disease_prediction': None,
+                'raw_response': 'Input Validation'
+            }
+
+        if input_type == 'greeting':
+            greeting_response = self._build_greeting_response(language)
+            return {
+                'success': True,
+                'is_valid': True,
+                'input_type': 'greeting',
+                'response': greeting_response,
+                'disease_prediction': None,
+                'raw_response': 'Clinical Greeting'
+            }
+
+        # Run disease prediction engine for valid clinical input
         prediction_result = self.predictor.predict(
             symptoms=symptoms_list or [],
             age=age or 'Adult',
@@ -103,8 +329,13 @@ Please provide medical guidance in the following structured format:
                 if vitals_result:
                     structured['vitals_analysis'] = vitals_result
 
+                structured['is_valid'] = True
+                structured['input_type'] = 'clinical'
+
                 return {
                     'success': True,
+                    'is_valid': True,
+                    'input_type': 'clinical',
                     'response': structured,
                     'disease_prediction': prediction_result,
                     'raw_response': raw_response
@@ -121,9 +352,13 @@ Please provide medical guidance in the following structured format:
             language=language,
             follow_ups=follow_ups
         )
+        structured_response['is_valid'] = True
+        structured_response['input_type'] = 'clinical'
 
         return {
             'success': True,
+            'is_valid': True,
+            'input_type': 'clinical',
             'response': structured_response,
             'disease_prediction': prediction_result,
             'raw_response': 'Clinical Knowledge Engine'
@@ -144,17 +379,25 @@ Please provide medical guidance in the following structured format:
         urgency = prediction_result.get('urgency', 'mild')
         emergency_flags = prediction_result.get('emergency_flags', [])
 
-        dis_name = primary.get('name', 'Acute Viral Syndrome / Non-Specific Discomfort')
-        confidence = primary.get('confidence', 50.0)
+        has_primary = bool(primary.get('name'))
+        dis_name = primary.get('name', 'General Symptom Evaluation')
+        confidence = primary.get('confidence', 0.0)
         matched = primary.get('matched_symptoms', [])
 
         # Section A: Summary & Assessment
         matched_str = ", ".join(matched) if matched else (symptoms or 'Reported symptoms')
-        summary = (
-            f"CLINICAL ASSESSMENT FOR {str(age).upper()} PATIENT:\n"
-            f"Based on reported symptoms ({matched_str}), the primary suspected condition is "
-            f"**{dis_name}** with a calculated **{confidence}% clinical match**."
-        )
+        if has_primary:
+            summary = (
+                f"CLINICAL ASSESSMENT FOR {str(age).upper()} PATIENT:\n"
+                f"Based on reported symptoms ({matched_str}), the primary suspected condition is "
+                f"**{dis_name}** with a calculated **{confidence}% clinical match**."
+            )
+        else:
+            summary = (
+                f"CLINICAL ASSESSMENT FOR {str(age).upper()} PATIENT:\n"
+                f"Based on reported symptoms ({matched_str}), no single condition reached primary diagnostic certainty. "
+                f"A general clinical evaluation is recommended."
+            )
 
         if differentials:
             diff_names = [f"{d['name']} ({d['confidence']}%)" for d in differentials[:2]]
@@ -246,17 +489,26 @@ Please provide medical guidance in the following structured format:
                 f"Consultez un médecin pour confirmer le diagnostic et recevoir un traitement adapté."
             )
         elif lang_lower == 'hindi':
-            summary = f"लक्षणों का नैदानिक मूल्यांकन: '{matched_str}' ({age} के लिए)। संभावित स्थिति: **{dis_name}** ({confidence}% मिलान)।"
+            if has_primary:
+                summary = f"लक्षणों का नैदानिक मूल्यांकन: '{matched_str}' ({age} के लिए)। संभावित स्थिति: **{dis_name}** ({confidence}% मिलान)।"
+            else:
+                summary = f"लक्षणों का नैदानिक मूल्यांकन: '{matched_str}' ({age} के लिए)। किसी एक विशिष्ट रोग का पूर्ण मिलान नहीं मिला। सामान्य चिकित्सकीय परामर्श की सलाह दी जाती है।"
             home_care = "• पर्याप्त मात्रा में ओआरएस, सूप और पानी पिएं।\n• पूर्ण शारीरिक आराम करें।\n• डॉक्टर के परामर्श के बिना कोई नई दवा न लें।"
             medical_attention = f"गंभीरता स्तर: {urgency.upper()}\nयदि सांस लेने में कठिनाई, तेज बुखार या तीव्र दर्द हो तो तुरंत अस्पताल जाएं।"
             possible_causes = f"संभावित कारण: {dis_name}। सटीक निदान के लिए रक्त परीक्षण या डॉक्टर से परामर्श आवश्यक है।"
         elif lang_lower == 'telugu':
-            summary = f"లక్షణాల విశ్లేషణ: '{matched_str}' ({age} కొరకు). ప్రాథమిక రోగ నిర్ధారణ: **{dis_name}** ({confidence}% సరిపోలిక)."
+            if has_primary:
+                summary = f"లక్షణాల విశ్లేషణ: '{matched_str}' ({age} కొరకు). ప్రాథమిక రోగ నిర్ధారణ: **{dis_name}** ({confidence}% సరిపోలిక)."
+            else:
+                summary = f"లక్షణాల విశ్లేషణ: '{matched_str}' ({age} కొరకు). నిర్దిష్ట వ్యాధి నిర్ధారణ కాలేదు. సాధారణ వైద్య పరీక్ష అవసరం."
             home_care = "• తగినంత ఓఆర్‌ఎస్ మరియు ద్రవపదార్థాలు తీసుకోండి.\n• సరైన విశ్రాంతి తీసుకోండి.\n• వైద్యుని సలహా లేకుండా మందులు వాడవద్దు."
             medical_attention = f"తీవ్రత స్థాయి: {urgency.upper()}\nశ్వాస తీసుకోవడంలో ఇబ్బంది లేదా అధిక జ్వరం ఉంటే వెంటనే ఆసుపత్రిని సంప్రదించండి."
             possible_causes = f"సంభావ్య కారణం: {dis_name}. ఖచ్చితమైన నిర్ధారణ కోసం వైద్యుడిని సంప్రదించండి."
         elif lang_lower == 'kannada':
-            summary = f"ರೋಗಲಕ್ಷಣಗಳ ವೈದ್ಯಕೀಯ ಮೌಲ್ಯಮಾಪನ: '{matched_str}' ({age} ರೋಗಿಗೆ). ಪ್ರಾಥಮಿಕ ಶಂಕಿತ ರೋಗ: **{dis_name}** ({confidence}% ಹೊಂದಾಣಿಕೆ)."
+            if has_primary:
+                summary = f"ರೋಗಲಕ್ಷಣಗಳ ವೈದ್ಯಕೀಯ ಮೌಲ್ಯಮಾಪನ: '{matched_str}' ({age} ರೋಗಿಗೆ). ಪ್ರಾಥಮಿಕ ಶಂಕಿತ ರೋಗ: **{dis_name}** ({confidence}% ಹೊಂದಾಣಿಕೆ)."
+            else:
+                summary = f"ರೋಗಲಕ್ಷಣಗಳ ವೈದ್ಯಕೀಯ ಮೌಲ್ಯಮಾಪನ: '{matched_str}' ({age} ರೋಗಿಗೆ). ಯಾವುದೇ ನಿರ್ದಿಷ್ಟ ಕಾಯಿಲೆಯೊಂದಿಗೆ ಪೂರ್ಣ ಹೊಂದಾಣಿಕೆ ಕಂಡುಬಂದಿಲ್ಲ. ವೈದ್ಯಕೀಯ ತಪಾಸಣೆ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ."
             home_care = "• ಸಾಕಷ್ಟು ಓಆರ್‌ಎಸ್, ಸೂಪ್ ಮತ್ತು ಶುದ್ಧ ನೀರನ್ನು ಸೇವಿಸಿ ನಿರ್ಜಲೀಕರಣ ತಪ್ಪಿಸಿ.\n• ರೋಗನಿರೋಧಕ ಶಕ್ತಿ ಹೆಚ್ಚಿಸಲು ಸಂಪೂರ್ಣ ದೈಹಿಕ ವಿಶ್ರಾಂತಿ ಪಡೆಯಿರಿ.\n• ವೈದ್ಯರ ಸಲಹೆಯಿಲ್ಲದೆ ಯಾವುದೇ ಆಂಟಿಬಯೋಟಿಕ್ ಅಥವಾ ಔಷಧಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳಬೇಡಿ."
             medical_attention = f"ತುರ್ತು ಮಟ್ಟ: {urgency.upper()}\nಉಸಿರಾಟದ ತೊಂದರೆ, ತೀವ್ರ ಜ್ವರ ಅಥವಾ ಅತಿಯಾದ ಎದೆ ನೋವು ಕಂಡುಬಂದರೆ ತಕ್ಷಣ ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆಗೆ ಭೇಟಿ ನೀಡಿ."
             possible_causes = f"ಸಾಧ್ಯವಿರುವ ಕಾರಣ: {dis_name}.\nಖಚಿತವಾದ ರೋಗನಿರ್ಣಯಕ್ಕಾಗಿ ನೋಂದಾಯಿತ ವೈದ್ಯರನ್ನು ಸಂಪರ್ಕಿಸಿ ರಕ್ತ ಪರೀಕ್ಷೆ ಮಾಡಿಸಿಕೊಳ್ಳಿ."

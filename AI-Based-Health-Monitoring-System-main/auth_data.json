@@ -35,6 +35,112 @@
       ],
       "role": "patient",
       "last_login": "2026-09-17T14:03:32.009669"
+    },
+    "patient_1789635304@example.com": {
+      "id": "2c85ce01aa2d9205cb867cd2de0841d8",
+      "full_name": "Ravi Kumar",
+      "date_of_birth": "1992-05-15",
+      "email": "patient_1789635304@example.com",
+      "password_hash": "scrypt:32768:8:1$K7WTwu1k57STy0PQ$caf15dee39ebffcbbe4effee896f25dfbdfbb4dafa8b288918d0c9fe33663040800423f098e2d7df4e9162237a9e8b1b73116be6d84a91bd9ffe23f33580325d",
+      "created_at": "2026-09-17T14:25:06.608090",
+      "conversations": [],
+      "role": "patient",
+      "last_login": "2026-09-17T14:25:08.827535"
+    },
+    "dr.watson@carepulse.local": {
+      "id": "5365152b2ad7a3f46181be5b0d4e82e0",
+      "full_name": "Dr. Emily Watson, MD",
+      "date_of_birth": "1984-06-15",
+      "email": "dr.watson@carepulse.local",
+      "password_hash": "scrypt:32768:8:1$Aci9BZ5E2gGoVVRY$148c0d12478ffd5f3a7eb62b538a33f5d8bb7ebfca4bfa3c1d46807104feb41e27c3ed6d107115ac892e931c9266c9c89baf1da30d5adb0ffa211896719891ac",
+      "created_at": "2026-09-17T14:25:11.043229",
+      "conversations": [],
+      "role": "patient",
+      "last_login": "2026-09-17T14:26:06.054029"
+    },
+    "patient_1789635325@example.com": {
+      "id": "504acd49c3ab9f9839cd372678b30671",
+      "full_name": "Ravi Kumar",
+      "date_of_birth": "1992-05-15",
+      "email": "patient_1789635325@example.com",
+      "password_hash": "scrypt:32768:8:1$yXQjvNZYi7gqaXL4$da5a48429ce2b4452ea970e0f5cbd8eea5d984b7e94c028c1f712a7d8bdd95a531cca8d32e9cbbdb14158758eccddd987686b63b87e674bf365ba76fc3977d3f",
+      "created_at": "2026-09-17T14:25:27.694664",
+      "conversations": [
+        {
+          "id": "d354c7a2-3ae1-4c28-91b8-1c6f06b81a24",
+          "title": "New Conversation",
+          "created_at": "2026-09-17T14:25:38.248062",
+          "updated_at": "2026-09-17T14:25:38.248101"
+        }
+      ],
+      "role": "patient",
+      "last_login": "2026-09-17T14:25:29.896512"
+    },
+    "patient_1789635359@example.com": {
+      "id": "39abbd6deba52467788c0104e98da589",
+      "full_name": "Ravi Kumar",
+      "date_of_birth": "1992-05-15",
+      "email": "patient_1789635359@example.com",
+      "password_hash": "scrypt:32768:8:1$ZKVbiIj2IT32ZOFn$50b8345b85cf662d4c081eb586392fbbca9a7915e73a45fbdaf6d002d708029c8838b258798b081043652ddca5b8e49df008737ea6bab6a39533976da1826672",
+      "created_at": "2026-09-17T14:26:01.625128",
+      "conversations": [
+        {
+          "id": "cc6db5e5-efb1-4cf3-8de7-f01da6aeeb4e",
+          "title": "New Conversation",
+          "created_at": "2026-09-17T14:26:12.217987",
+          "updated_at": "2026-09-17T14:26:12.218024"
+        }
+      ],
+      "role": "patient",
+      "last_login": "2026-09-17T14:26:03.849427"
+    },
+    "legendofcricket18@gmail.com": {
+      "id": "c532ed2b3c8873dc4c9e0f256fc3a760",
+      "full_name": "prajwal",
+      "date_of_birth": "1995-01-01",
+      "email": "legendofcricket18@gmail.com",
+      "password_hash": "scrypt:32768:8:1$jFXJ2j14cmwMC58p$586152eeba2d04e9dd469025b51a4702f370392ad8ac5408bc509bf8649c801ef5d8047774a5ea7345c3b87f599073cef5d395af2d9ed067a34ec7cc00fa000f",
+      "created_at": "2026-09-17T14:31:34.738558",
+      "conversations": [
+        {
+          "id": "c0eacfd1-e803-4046-85ca-83a7e4852733",
+          "title": "New Conversation",
+          "created_at": "2026-09-17T14:31:34.745305",
+          "updated_at": "2026-09-17T14:31:34.745334"
+        },
+        {
+          "id": "8b92cfb5-a8bc-41a5-98c6-e5a6fa575991",
+          "title": "New Conversation",
+          "created_at": "2026-09-17T14:33:47.950525",
+          "updated_at": "2026-09-17T14:33:47.950566"
+        }
+      ],
+      "role": "patient",
+      "last_login": "2026-09-17T14:31:34.738588"
+    },
+    "ashwinichavan52385@gmail.com": {
+      "id": "c57e09ce161142af73385207fda0b58e",
+      "full_name": "mahantesh",
+      "date_of_birth": "1995-01-01",
+      "email": "ashwinichavan52385@gmail.com",
+      "password_hash": "scrypt:32768:8:1$HwpwAvJXObfCszVN$fa5a5f02d6402974f026314479ec8ef417b56d1d7b58ad03a6ad979705a1be6ed8ccdf33f685153324373c5fb49951224609ca8fe07d2d0894289cc593f83d62",
+      "created_at": "2026-09-17T14:34:10.887573",
+      "conversations": [
+        {
+          "id": "601b9f13-83a8-46f8-95cc-fac67bab84f1",
+          "title": "New Conversation",
+          "created_at": "2026-09-17T14:34:10.894741",
+          "updated_at": "2026-09-17T14:34:10.894766"
+        },
+        {
+          "id": "1a3cb555-23ad-4b74-8d82-b30459fc9650",
+          "title": "New Conversation",
+          "created_at": "2026-09-17T14:40:18.994127",
+          "updated_at": "2026-09-17T14:40:18.994162"
+        }
+      ],
+      "role": "patient",
+      "last_login": "2026-09-17T14:34:10.887608"
     }
   },
   "conversations": {
@@ -68,6 +174,140 @@
       "language": "english",
       "created_at": "2026-09-17T14:03:34.059740",
       "updated_at": "2026-09-17T14:03:40.207641"
+    },
+    "d354c7a2-3ae1-4c28-91b8-1c6f06b81a24": {
+      "id": "d354c7a2-3ae1-4c28-91b8-1c6f06b81a24",
+      "user_id": "504acd49c3ab9f9839cd372678b30671",
+      "title": "New Conversation",
+      "messages": [
+        {
+          "role": "user",
+          "content": "\u0ca8\u0ca8\u0c97\u0cc6 \u0c95\u0cc6\u0cae\u0ccd\u0cae\u0cc1 \u0cae\u0ca4\u0ccd\u0ca4\u0cc1 \u0c8e\u0ca6\u0cc6 \u0ca8\u0ccb\u0cb5\u0cc1 \u0c87\u0ca6\u0cc6",
+          "timestamp": "2026-09-17T14:25:40.309702"
+        },
+        {
+          "role": "assistant",
+          "content": "Summary: \u0cb0\u0ccb\u0c97\u0cb2\u0c95\u0ccd\u0cb7\u0ca3\u0c97\u0cb3 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0c95\u0cc0\u0caf \u0cae\u0ccc\u0cb2\u0ccd\u0caf\u0cae\u0cbe\u0caa\u0ca8: 'Chest Pressure / Squeezing Pain' (18-64 years (Adult) \u0cb0\u0ccb\u0c97\u0cbf\u0c97\u0cc6). \u0caa\u0ccd\u0cb0\u0cbe\u0ca5\u0cae\u0cbf\u0c95 \u0cb6\u0c82\u0c95\u0cbf\u0ca4 \u0cb0\u0ccb\u0c97: **Angina Pectoris / Suspected Acute Coronary Syndrome** (17.9% \u0cb9\u0cca\u0c82\u0ca6\u0cbe\u0ca3\u0cbf\u0c95\u0cc6).\n\nHome Care: \u2022 \u0cb8\u0cbe\u0c95\u0cb7\u0ccd\u0c9f\u0cc1 \u0c93\u0c86\u0cb0\u0ccd\u200c\u0c8e\u0cb8\u0ccd, \u0cb8\u0cc2\u0caa\u0ccd \u0cae\u0ca4\u0ccd\u0ca4\u0cc1 \u0cb6\u0cc1\u0ca6\u0ccd\u0ca7 \u0ca8\u0cc0\u0cb0\u0ca8\u0ccd\u0ca8\u0cc1 \u0cb8\u0cc7\u0cb5\u0cbf\u0cb8\u0cbf \u0ca8\u0cbf\u0cb0\u0ccd\u0c9c\u0cb2\u0cc0\u0c95\u0cb0\u0ca3 \u0ca4\u0caa\u0ccd\u0caa\u0cbf\u0cb8\u0cbf.\n\u2022 \u0cb0\u0ccb\u0c97\u0ca8\u0cbf\u0cb0\u0ccb\u0ca7\u0c95 \u0cb6\u0c95\u0ccd\u0ca4\u0cbf \u0cb9\u0cc6\u0c9a\u0ccd\u0c9a\u0cbf\u0cb8\u0cb2\u0cc1 \u0cb8\u0c82\u0caa\u0cc2\u0cb0\u0ccd\u0ca3 \u0ca6\u0cc8\u0cb9\u0cbf\u0c95 \u0cb5\u0cbf\u0cb6\u0ccd\u0cb0\u0cbe\u0c82\u0ca4\u0cbf \u0caa\u0ca1\u0cc6\u0caf\u0cbf\u0cb0\u0cbf.\n\u2022 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0cb0 \u0cb8\u0cb2\u0cb9\u0cc6\u0caf\u0cbf\u0cb2\u0ccd\u0cb2\u0ca6\u0cc6 \u0caf\u0cbe\u0cb5\u0cc1\u0ca6\u0cc7 \u0c86\u0c82\u0c9f\u0cbf\u0cac\u0caf\u0ccb\u0c9f\u0cbf\u0c95\u0ccd \u0c85\u0ca5\u0cb5\u0cbe \u0c94\u0cb7\u0ca7\u0c97\u0cb3\u0ca8\u0ccd\u0ca8\u0cc1 \u0ca4\u0cc6\u0c97\u0cc6\u0ca6\u0cc1\u0c95\u0cca\u0cb3\u0ccd\u0cb3\u0cac\u0cc7\u0ca1\u0cbf.\n\nMedical Attention: \u0ca4\u0cc1\u0cb0\u0ccd\u0ca4\u0cc1 \u0cae\u0c9f\u0ccd\u0c9f: CRITICAL\n\u0c89\u0cb8\u0cbf\u0cb0\u0cbe\u0c9f\u0ca6 \u0ca4\u0cca\u0c82\u0ca6\u0cb0\u0cc6, \u0ca4\u0cc0\u0cb5\u0ccd\u0cb0 \u0c9c\u0ccd\u0cb5\u0cb0 \u0c85\u0ca5\u0cb5\u0cbe \u0c85\u0ca4\u0cbf\u0caf\u0cbe\u0ca6 \u0c8e\u0ca6\u0cc6 \u0ca8\u0ccb\u0cb5\u0cc1 \u0c95\u0c82\u0ca1\u0cc1\u0cac\u0c82\u0ca6\u0cb0\u0cc6 \u0ca4\u0c95\u0ccd\u0cb7\u0ca3 \u0cb9\u0ca4\u0ccd\u0ca4\u0cbf\u0cb0\u0ca6 \u0c86\u0cb8\u0ccd\u0caa\u0ca4\u0ccd\u0cb0\u0cc6\u0c97\u0cc6 \u0cad\u0cc7\u0c9f\u0cbf \u0ca8\u0cc0\u0ca1\u0cbf.\n\nPossible Causes: \u0cb8\u0cbe\u0ca7\u0ccd\u0caf\u0cb5\u0cbf\u0cb0\u0cc1\u0cb5 \u0c95\u0cbe\u0cb0\u0ca3: Angina Pectoris / Suspected Acute Coronary Syndrome.\n\u0c96\u0c9a\u0cbf\u0ca4\u0cb5\u0cbe\u0ca6 \u0cb0\u0ccb\u0c97\u0ca8\u0cbf\u0cb0\u0ccd\u0ca3\u0caf\u0c95\u0ccd\u0c95\u0cbe\u0c97\u0cbf \u0ca8\u0ccb\u0c82\u0ca6\u0cbe\u0caf\u0cbf\u0ca4 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0cb0\u0ca8\u0ccd\u0ca8\u0cc1 \u0cb8\u0c82\u0caa\u0cb0\u0ccd\u0c95\u0cbf\u0cb8\u0cbf \u0cb0\u0c95\u0ccd\u0ca4 \u0caa\u0cb0\u0cc0\u0c95\u0ccd\u0cb7\u0cc6 \u0cae\u0cbe\u0ca1\u0cbf\u0cb8\u0cbf\u0c95\u0cca\u0cb3\u0ccd\u0cb3\u0cbf.",
+          "timestamp": "2026-09-17T14:25:40.312899"
+        }
+      ],
+      "age": null,
+      "language": "english",
+      "created_at": "2026-09-17T14:25:38.248062",
+      "updated_at": "2026-09-17T14:25:40.312917"
+    },
+    "cc6db5e5-efb1-4cf3-8de7-f01da6aeeb4e": {
+      "id": "cc6db5e5-efb1-4cf3-8de7-f01da6aeeb4e",
+      "user_id": "39abbd6deba52467788c0104e98da589",
+      "title": "New Conversation",
+      "messages": [
+        {
+          "role": "user",
+          "content": "\u0ca8\u0ca8\u0c97\u0cc6 \u0c95\u0cc6\u0cae\u0ccd\u0cae\u0cc1 \u0cae\u0ca4\u0ccd\u0ca4\u0cc1 \u0c8e\u0ca6\u0cc6 \u0ca8\u0ccb\u0cb5\u0cc1 \u0c87\u0ca6\u0cc6",
+          "timestamp": "2026-09-17T14:26:14.257297"
+        },
+        {
+          "role": "assistant",
+          "content": "Summary: \u0cb0\u0ccb\u0c97\u0cb2\u0c95\u0ccd\u0cb7\u0ca3\u0c97\u0cb3 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0c95\u0cc0\u0caf \u0cae\u0ccc\u0cb2\u0ccd\u0caf\u0cae\u0cbe\u0caa\u0ca8: 'Chest Pressure / Squeezing Pain' (18-64 years (Adult) \u0cb0\u0ccb\u0c97\u0cbf\u0c97\u0cc6). \u0caa\u0ccd\u0cb0\u0cbe\u0ca5\u0cae\u0cbf\u0c95 \u0cb6\u0c82\u0c95\u0cbf\u0ca4 \u0cb0\u0ccb\u0c97: **Angina Pectoris / Suspected Acute Coronary Syndrome** (17.9% \u0cb9\u0cca\u0c82\u0ca6\u0cbe\u0ca3\u0cbf\u0c95\u0cc6).\n\nHome Care: \u2022 \u0cb8\u0cbe\u0c95\u0cb7\u0ccd\u0c9f\u0cc1 \u0c93\u0c86\u0cb0\u0ccd\u200c\u0c8e\u0cb8\u0ccd, \u0cb8\u0cc2\u0caa\u0ccd \u0cae\u0ca4\u0ccd\u0ca4\u0cc1 \u0cb6\u0cc1\u0ca6\u0ccd\u0ca7 \u0ca8\u0cc0\u0cb0\u0ca8\u0ccd\u0ca8\u0cc1 \u0cb8\u0cc7\u0cb5\u0cbf\u0cb8\u0cbf \u0ca8\u0cbf\u0cb0\u0ccd\u0c9c\u0cb2\u0cc0\u0c95\u0cb0\u0ca3 \u0ca4\u0caa\u0ccd\u0caa\u0cbf\u0cb8\u0cbf.\n\u2022 \u0cb0\u0ccb\u0c97\u0ca8\u0cbf\u0cb0\u0ccb\u0ca7\u0c95 \u0cb6\u0c95\u0ccd\u0ca4\u0cbf \u0cb9\u0cc6\u0c9a\u0ccd\u0c9a\u0cbf\u0cb8\u0cb2\u0cc1 \u0cb8\u0c82\u0caa\u0cc2\u0cb0\u0ccd\u0ca3 \u0ca6\u0cc8\u0cb9\u0cbf\u0c95 \u0cb5\u0cbf\u0cb6\u0ccd\u0cb0\u0cbe\u0c82\u0ca4\u0cbf \u0caa\u0ca1\u0cc6\u0caf\u0cbf\u0cb0\u0cbf.\n\u2022 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0cb0 \u0cb8\u0cb2\u0cb9\u0cc6\u0caf\u0cbf\u0cb2\u0ccd\u0cb2\u0ca6\u0cc6 \u0caf\u0cbe\u0cb5\u0cc1\u0ca6\u0cc7 \u0c86\u0c82\u0c9f\u0cbf\u0cac\u0caf\u0ccb\u0c9f\u0cbf\u0c95\u0ccd \u0c85\u0ca5\u0cb5\u0cbe \u0c94\u0cb7\u0ca7\u0c97\u0cb3\u0ca8\u0ccd\u0ca8\u0cc1 \u0ca4\u0cc6\u0c97\u0cc6\u0ca6\u0cc1\u0c95\u0cca\u0cb3\u0ccd\u0cb3\u0cac\u0cc7\u0ca1\u0cbf.\n\nMedical Attention: \u0ca4\u0cc1\u0cb0\u0ccd\u0ca4\u0cc1 \u0cae\u0c9f\u0ccd\u0c9f: CRITICAL\n\u0c89\u0cb8\u0cbf\u0cb0\u0cbe\u0c9f\u0ca6 \u0ca4\u0cca\u0c82\u0ca6\u0cb0\u0cc6, \u0ca4\u0cc0\u0cb5\u0ccd\u0cb0 \u0c9c\u0ccd\u0cb5\u0cb0 \u0c85\u0ca5\u0cb5\u0cbe \u0c85\u0ca4\u0cbf\u0caf\u0cbe\u0ca6 \u0c8e\u0ca6\u0cc6 \u0ca8\u0ccb\u0cb5\u0cc1 \u0c95\u0c82\u0ca1\u0cc1\u0cac\u0c82\u0ca6\u0cb0\u0cc6 \u0ca4\u0c95\u0ccd\u0cb7\u0ca3 \u0cb9\u0ca4\u0ccd\u0ca4\u0cbf\u0cb0\u0ca6 \u0c86\u0cb8\u0ccd\u0caa\u0ca4\u0ccd\u0cb0\u0cc6\u0c97\u0cc6 \u0cad\u0cc7\u0c9f\u0cbf \u0ca8\u0cc0\u0ca1\u0cbf.\n\nPossible Causes: \u0cb8\u0cbe\u0ca7\u0ccd\u0caf\u0cb5\u0cbf\u0cb0\u0cc1\u0cb5 \u0c95\u0cbe\u0cb0\u0ca3: Angina Pectoris / Suspected Acute Coronary Syndrome.\n\u0c96\u0c9a\u0cbf\u0ca4\u0cb5\u0cbe\u0ca6 \u0cb0\u0ccb\u0c97\u0ca8\u0cbf\u0cb0\u0ccd\u0ca3\u0caf\u0c95\u0ccd\u0c95\u0cbe\u0c97\u0cbf \u0ca8\u0ccb\u0c82\u0ca6\u0cbe\u0caf\u0cbf\u0ca4 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0cb0\u0ca8\u0ccd\u0ca8\u0cc1 \u0cb8\u0c82\u0caa\u0cb0\u0ccd\u0c95\u0cbf\u0cb8\u0cbf \u0cb0\u0c95\u0ccd\u0ca4 \u0caa\u0cb0\u0cc0\u0c95\u0ccd\u0cb7\u0cc6 \u0cae\u0cbe\u0ca1\u0cbf\u0cb8\u0cbf\u0c95\u0cca\u0cb3\u0ccd\u0cb3\u0cbf.",
+          "timestamp": "2026-09-17T14:26:14.259362"
+        }
+      ],
+      "age": null,
+      "language": "english",
+      "created_at": "2026-09-17T14:26:12.217987",
+      "updated_at": "2026-09-17T14:26:14.259386"
+    },
+    "c0eacfd1-e803-4046-85ca-83a7e4852733": {
+      "id": "c0eacfd1-e803-4046-85ca-83a7e4852733",
+      "user_id": "c532ed2b3c8873dc4c9e0f256fc3a760",
+      "title": "New Conversation",
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi",
+          "timestamp": "2026-09-17T14:32:14.485681"
+        },
+        {
+          "role": "assistant",
+          "content": "Summary: \u0cb0\u0ccb\u0c97\u0cb2\u0c95\u0ccd\u0cb7\u0ca3\u0c97\u0cb3 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0c95\u0cc0\u0caf \u0cae\u0ccc\u0cb2\u0ccd\u0caf\u0cae\u0cbe\u0caa\u0ca8: 'hi' (18-64 years (Adult) \u0cb0\u0ccb\u0c97\u0cbf\u0c97\u0cc6). \u0caa\u0ccd\u0cb0\u0cbe\u0ca5\u0cae\u0cbf\u0c95 \u0cb6\u0c82\u0c95\u0cbf\u0ca4 \u0cb0\u0ccb\u0c97: **Acute Viral Syndrome / Non-Specific Discomfort** (50.0% \u0cb9\u0cca\u0c82\u0ca6\u0cbe\u0ca3\u0cbf\u0c95\u0cc6).\n\nHome Care: \u2022 \u0cb8\u0cbe\u0c95\u0cb7\u0ccd\u0c9f\u0cc1 \u0c93\u0c86\u0cb0\u0ccd\u200c\u0c8e\u0cb8\u0ccd, \u0cb8\u0cc2\u0caa\u0ccd \u0cae\u0ca4\u0ccd\u0ca4\u0cc1 \u0cb6\u0cc1\u0ca6\u0ccd\u0ca7 \u0ca8\u0cc0\u0cb0\u0ca8\u0ccd\u0ca8\u0cc1 \u0cb8\u0cc7\u0cb5\u0cbf\u0cb8\u0cbf \u0ca8\u0cbf\u0cb0\u0ccd\u0c9c\u0cb2\u0cc0\u0c95\u0cb0\u0ca3 \u0ca4\u0caa\u0ccd\u0caa\u0cbf\u0cb8\u0cbf.\n\u2022 \u0cb0\u0ccb\u0c97\u0ca8\u0cbf\u0cb0\u0ccb\u0ca7\u0c95 \u0cb6\u0c95\u0ccd\u0ca4\u0cbf \u0cb9\u0cc6\u0c9a\u0ccd\u0c9a\u0cbf\u0cb8\u0cb2\u0cc1 \u0cb8\u0c82\u0caa\u0cc2\u0cb0\u0ccd\u0ca3 \u0ca6\u0cc8\u0cb9\u0cbf\u0c95 \u0cb5\u0cbf\u0cb6\u0ccd\u0cb0\u0cbe\u0c82\u0ca4\u0cbf \u0caa\u0ca1\u0cc6\u0caf\u0cbf\u0cb0\u0cbf.\n\u2022 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0cb0 \u0cb8\u0cb2\u0cb9\u0cc6\u0caf\u0cbf\u0cb2\u0ccd\u0cb2\u0ca6\u0cc6 \u0caf\u0cbe\u0cb5\u0cc1\u0ca6\u0cc7 \u0c86\u0c82\u0c9f\u0cbf\u0cac\u0caf\u0ccb\u0c9f\u0cbf\u0c95\u0ccd \u0c85\u0ca5\u0cb5\u0cbe \u0c94\u0cb7\u0ca7\u0c97\u0cb3\u0ca8\u0ccd\u0ca8\u0cc1 \u0ca4\u0cc6\u0c97\u0cc6\u0ca6\u0cc1\u0c95\u0cca\u0cb3\u0ccd\u0cb3\u0cac\u0cc7\u0ca1\u0cbf.\n\nMedical Attention: \u0ca4\u0cc1\u0cb0\u0ccd\u0ca4\u0cc1 \u0cae\u0c9f\u0ccd\u0c9f: MILD\n\u0c89\u0cb8\u0cbf\u0cb0\u0cbe\u0c9f\u0ca6 \u0ca4\u0cca\u0c82\u0ca6\u0cb0\u0cc6, \u0ca4\u0cc0\u0cb5\u0ccd\u0cb0 \u0c9c\u0ccd\u0cb5\u0cb0 \u0c85\u0ca5\u0cb5\u0cbe \u0c85\u0ca4\u0cbf\u0caf\u0cbe\u0ca6 \u0c8e\u0ca6\u0cc6 \u0ca8\u0ccb\u0cb5\u0cc1 \u0c95\u0c82\u0ca1\u0cc1\u0cac\u0c82\u0ca6\u0cb0\u0cc6 \u0ca4\u0c95\u0ccd\u0cb7\u0ca3 \u0cb9\u0ca4\u0ccd\u0ca4\u0cbf\u0cb0\u0ca6 \u0c86\u0cb8\u0ccd\u0caa\u0ca4\u0ccd\u0cb0\u0cc6\u0c97\u0cc6 \u0cad\u0cc7\u0c9f\u0cbf \u0ca8\u0cc0\u0ca1\u0cbf.\n\nPossible Causes: \u0cb8\u0cbe\u0ca7\u0ccd\u0caf\u0cb5\u0cbf\u0cb0\u0cc1\u0cb5 \u0c95\u0cbe\u0cb0\u0ca3: Acute Viral Syndrome / Non-Specific Discomfort.\n\u0c96\u0c9a\u0cbf\u0ca4\u0cb5\u0cbe\u0ca6 \u0cb0\u0ccb\u0c97\u0ca8\u0cbf\u0cb0\u0ccd\u0ca3\u0caf\u0c95\u0ccd\u0c95\u0cbe\u0c97\u0cbf \u0ca8\u0ccb\u0c82\u0ca6\u0cbe\u0caf\u0cbf\u0ca4 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0cb0\u0ca8\u0ccd\u0ca8\u0cc1 \u0cb8\u0c82\u0caa\u0cb0\u0ccd\u0c95\u0cbf\u0cb8\u0cbf \u0cb0\u0c95\u0ccd\u0ca4 \u0caa\u0cb0\u0cc0\u0c95\u0ccd\u0cb7\u0cc6 \u0cae\u0cbe\u0ca1\u0cbf\u0cb8\u0cbf\u0c95\u0cca\u0cb3\u0ccd\u0cb3\u0cbf.",
+          "timestamp": "2026-09-17T14:32:14.487969"
+        },
+        {
+          "role": "user",
+          "content": "0",
+          "timestamp": "2026-09-17T14:32:43.908578"
+        },
+        {
+          "role": "assistant",
+          "content": "Summary: \u0cb0\u0ccb\u0c97\u0cb2\u0c95\u0ccd\u0cb7\u0ca3\u0c97\u0cb3 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0c95\u0cc0\u0caf \u0cae\u0ccc\u0cb2\u0ccd\u0caf\u0cae\u0cbe\u0caa\u0ca8: '0' (18-64 years (Adult) \u0cb0\u0ccb\u0c97\u0cbf\u0c97\u0cc6). \u0caa\u0ccd\u0cb0\u0cbe\u0ca5\u0cae\u0cbf\u0c95 \u0cb6\u0c82\u0c95\u0cbf\u0ca4 \u0cb0\u0ccb\u0c97: **Acute Viral Syndrome / Non-Specific Discomfort** (50.0% \u0cb9\u0cca\u0c82\u0ca6\u0cbe\u0ca3\u0cbf\u0c95\u0cc6).\n\nHome Care: \u2022 \u0cb8\u0cbe\u0c95\u0cb7\u0ccd\u0c9f\u0cc1 \u0c93\u0c86\u0cb0\u0ccd\u200c\u0c8e\u0cb8\u0ccd, \u0cb8\u0cc2\u0caa\u0ccd \u0cae\u0ca4\u0ccd\u0ca4\u0cc1 \u0cb6\u0cc1\u0ca6\u0ccd\u0ca7 \u0ca8\u0cc0\u0cb0\u0ca8\u0ccd\u0ca8\u0cc1 \u0cb8\u0cc7\u0cb5\u0cbf\u0cb8\u0cbf \u0ca8\u0cbf\u0cb0\u0ccd\u0c9c\u0cb2\u0cc0\u0c95\u0cb0\u0ca3 \u0ca4\u0caa\u0ccd\u0caa\u0cbf\u0cb8\u0cbf.\n\u2022 \u0cb0\u0ccb\u0c97\u0ca8\u0cbf\u0cb0\u0ccb\u0ca7\u0c95 \u0cb6\u0c95\u0ccd\u0ca4\u0cbf \u0cb9\u0cc6\u0c9a\u0ccd\u0c9a\u0cbf\u0cb8\u0cb2\u0cc1 \u0cb8\u0c82\u0caa\u0cc2\u0cb0\u0ccd\u0ca3 \u0ca6\u0cc8\u0cb9\u0cbf\u0c95 \u0cb5\u0cbf\u0cb6\u0ccd\u0cb0\u0cbe\u0c82\u0ca4\u0cbf \u0caa\u0ca1\u0cc6\u0caf\u0cbf\u0cb0\u0cbf.\n\u2022 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0cb0 \u0cb8\u0cb2\u0cb9\u0cc6\u0caf\u0cbf\u0cb2\u0ccd\u0cb2\u0ca6\u0cc6 \u0caf\u0cbe\u0cb5\u0cc1\u0ca6\u0cc7 \u0c86\u0c82\u0c9f\u0cbf\u0cac\u0caf\u0ccb\u0c9f\u0cbf\u0c95\u0ccd \u0c85\u0ca5\u0cb5\u0cbe \u0c94\u0cb7\u0ca7\u0c97\u0cb3\u0ca8\u0ccd\u0ca8\u0cc1 \u0ca4\u0cc6\u0c97\u0cc6\u0ca6\u0cc1\u0c95\u0cca\u0cb3\u0ccd\u0cb3\u0cac\u0cc7\u0ca1\u0cbf.\n\nMedical Attention: \u0ca4\u0cc1\u0cb0\u0ccd\u0ca4\u0cc1 \u0cae\u0c9f\u0ccd\u0c9f: MILD\n\u0c89\u0cb8\u0cbf\u0cb0\u0cbe\u0c9f\u0ca6 \u0ca4\u0cca\u0c82\u0ca6\u0cb0\u0cc6, \u0ca4\u0cc0\u0cb5\u0ccd\u0cb0 \u0c9c\u0ccd\u0cb5\u0cb0 \u0c85\u0ca5\u0cb5\u0cbe \u0c85\u0ca4\u0cbf\u0caf\u0cbe\u0ca6 \u0c8e\u0ca6\u0cc6 \u0ca8\u0ccb\u0cb5\u0cc1 \u0c95\u0c82\u0ca1\u0cc1\u0cac\u0c82\u0ca6\u0cb0\u0cc6 \u0ca4\u0c95\u0ccd\u0cb7\u0ca3 \u0cb9\u0ca4\u0ccd\u0ca4\u0cbf\u0cb0\u0ca6 \u0c86\u0cb8\u0ccd\u0caa\u0ca4\u0ccd\u0cb0\u0cc6\u0c97\u0cc6 \u0cad\u0cc7\u0c9f\u0cbf \u0ca8\u0cc0\u0ca1\u0cbf.\n\nPossible Causes: \u0cb8\u0cbe\u0ca7\u0ccd\u0caf\u0cb5\u0cbf\u0cb0\u0cc1\u0cb5 \u0c95\u0cbe\u0cb0\u0ca3: Acute Viral Syndrome / Non-Specific Discomfort.\n\u0c96\u0c9a\u0cbf\u0ca4\u0cb5\u0cbe\u0ca6 \u0cb0\u0ccb\u0c97\u0ca8\u0cbf\u0cb0\u0ccd\u0ca3\u0caf\u0c95\u0ccd\u0c95\u0cbe\u0c97\u0cbf \u0ca8\u0ccb\u0c82\u0ca6\u0cbe\u0caf\u0cbf\u0ca4 \u0cb5\u0cc8\u0ca6\u0ccd\u0caf\u0cb0\u0ca8\u0ccd\u0ca8\u0cc1 \u0cb8\u0c82\u0caa\u0cb0\u0ccd\u0c95\u0cbf\u0cb8\u0cbf \u0cb0\u0c95\u0ccd\u0ca4 \u0caa\u0cb0\u0cc0\u0c95\u0ccd\u0cb7\u0cc6 \u0cae\u0cbe\u0ca1\u0cbf\u0cb8\u0cbf\u0c95\u0cca\u0cb3\u0ccd\u0cb3\u0cbf.",
+          "timestamp": "2026-09-17T14:32:43.910722"
+        }
+      ],
+      "age": "18-64 years (Adult)",
+      "language": "english",
+      "created_at": "2026-09-17T14:31:34.745305",
+      "updated_at": "2026-09-17T14:32:43.910787"
+    },
+    "8b92cfb5-a8bc-41a5-98c6-e5a6fa575991": {
+      "id": "8b92cfb5-a8bc-41a5-98c6-e5a6fa575991",
+      "user_id": "c532ed2b3c8873dc4c9e0f256fc3a760",
+      "title": "New Conversation",
+      "messages": [],
+      "age": "18-64 years (Adult)",
+      "language": "english",
+      "created_at": "2026-09-17T14:33:47.950525",
+      "updated_at": "2026-09-17T14:33:47.986754"
+    },
+    "601b9f13-83a8-46f8-95cc-fac67bab84f1": {
+      "id": "601b9f13-83a8-46f8-95cc-fac67bab84f1",
+      "user_id": "c57e09ce161142af73385207fda0b58e",
+      "title": "New Conversation",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I have high fever, chills, and shivering",
+          "timestamp": "2026-09-17T14:34:47.458085"
+        },
+        {
+          "role": "assistant",
+          "content": "Summary: CLINICAL ASSESSMENT FOR 18-64 YEARS (ADULT) PATIENT:\nBased on reported symptoms (Chills & Shivering, High Fever (>102\u00b0F), Shivering), the primary suspected condition is **Malaria** with a calculated **50.7% clinical match**.\nDifferential considerations include: Pneumonia (23.3%), Bronchial Asthma / Asthma Exacerbation (17.9%).\n\nHome Care: \u2022 Seek formal blood smear (microscopy) or rapid diagnostic test (RDT) urgently.\n\u2022 Drink plenty of fluids with electrolytes to replace fluid lost from sweating.\n\u2022 Rest in a cool room; lukewarm sponging during high fever spikes.\n\nMedical Attention: URGENCY LEVEL: HIGH\nWatch for the following Warning Signs:\n\u2022 Confusion or delirium\n\u2022 Severe breathlessness\n\u2022 Yellowish eyes/skin (jaundice)\n\u2022 Dark or tea-colored urine\n\nClinical Recommendation: Consult a doctor within 24 hours of suspected symptoms for blood testing and targeted prescription antimalarials.\n\nPossible Causes: Primary Pathophysiology: A life-threatening disease caused by Plasmodium parasites transmitted through infected Anopheles mosquito bites, marked by cyclical fever episodes.\n\nRecommended Tests / Confirmation: Consult a physician for formal clinical verification and diagnostic confirmation.",
+          "timestamp": "2026-09-17T14:34:47.460976"
+        },
+        {
+          "role": "user",
+          "content": "Severe abdominal cramps, watery diarrhea, and vomiting",
+          "timestamp": "2026-09-17T14:35:40.591550"
+        },
+        {
+          "role": "assistant",
+          "content": "Summary: CLINICAL ASSESSMENT FOR 18-64 YEARS (ADULT) PATIENT:\nBased on reported symptoms (Watery Diarrhea, Vomiting, Abdominal Cramps), the primary suspected condition is **Acute Gastroenteritis / Food Poisoning** with a calculated **67.0% clinical match**.\nDifferential considerations include: Bronchial Asthma / Asthma Exacerbation (17.9%), Acute Appendicitis (16.1%).\n\nHome Care: \u2022 Rehydrate vigorously: sip Oral Rehydration Solution (ORS) every 10-15 minutes.\n\u2022 Transition slowly to the BRAT diet: Bananas, Rice, Applesauce, Toast.\n\u2022 Avoid dairy, spicy food, caffeine, and greasy meals for 48 hours.\n\nMedical Attention: URGENCY LEVEL: MODERATE\nWatch for the following Warning Signs:\n\u2022 Inability to keep liquids down for 12+ hours\n\u2022 Blood in stool or vomit\n\u2022 High fever > 102\u00b0F\n\u2022 Sunken eyes, no urination\n\nClinical Recommendation: If signs of severe dehydration, blood in stool, or vomiting persists over 24 hours.\n\nPossible Causes: Primary Pathophysiology: Inflammation of the stomach and intestines typically caused by bacterial, viral, or parasite-contaminated food or water.\n\nRecommended Tests / Confirmation: Consult a physician for formal clinical verification and diagnostic confirmation.",
+          "timestamp": "2026-09-17T14:35:40.593832"
+        },
+        {
+          "role": "user",
+          "content": "l",
+          "timestamp": "2026-09-17T14:36:00.691572"
+        },
+        {
+          "role": "assistant",
+          "content": "Summary: CLINICAL ASSESSMENT FOR 18-64 YEARS (ADULT) PATIENT:\nBased on reported symptoms (Wheezing / Whistling Breath), the primary suspected condition is **Bronchial Asthma / Asthma Exacerbation** with a calculated **17.9% clinical match**.\n\nHome Care: \u2022 Use rescue bronchodilator inhaler (e.g. Salbutamol / Albuterol) immediately via spacer as per your action plan.\n\u2022 Sit upright; do NOT lie flat.\n\u2022 Move away from smoke, dust, cold air, or pet dander triggers.\n\u2022 Practice pursed-lip breathing to slow respiratory rate.\n\nMedical Attention: URGENCY LEVEL: MILD\nWatch for the following Warning Signs:\n\u2022 Severe struggle for breath\n\u2022 Inhaler provides no relief\n\u2022 Ribs sucking in during breaths (retractions)\n\u2022 Bluish tint around lips\n\nClinical Recommendation: If rescue inhaler doesn't bring relief within 15 minutes, proceed to emergency room.\n\nPossible Causes: Primary Pathophysiology: A chronic inflammatory airway condition where bronchial tubes narrow, swell, and produce excess mucus in response to triggers.\n\nRecommended Tests / Confirmation: Consult a physician for formal clinical verification and diagnostic confirmation.",
+          "timestamp": "2026-09-17T14:36:00.693967"
+        }
+      ],
+      "age": "18-64 years (Adult)",
+      "language": "english",
+      "created_at": "2026-09-17T14:34:10.894741",
+      "updated_at": "2026-09-17T14:36:00.694033"
+    },
+    "1a3cb555-23ad-4b74-8d82-b30459fc9650": {
+      "id": "1a3cb555-23ad-4b74-8d82-b30459fc9650",
+      "user_id": "c57e09ce161142af73385207fda0b58e",
+      "title": "New Conversation",
+      "messages": [],
+      "age": "18-64 years (Adult)",
+      "language": "english",
+      "created_at": "2026-09-17T14:40:18.994127",
+      "updated_at": "2026-09-17T14:40:19.026543"
     }
   }
 }

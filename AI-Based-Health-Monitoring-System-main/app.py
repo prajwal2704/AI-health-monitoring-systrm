@@ -472,14 +472,18 @@ def set_language(conversation_id):
 def chat(conversation_id):
     """Handle chat messages"""
     try:
-        data = request.json
+        data = request.json or {}
         message = data.get('message', '').strip()
-        
-        if not message:
+        symptoms_list = data.get('symptoms_list', [])
+
+        if not message and not symptoms_list:
             return jsonify({
                 'success': False,
-                'error': 'Message is required'
+                'error': 'Message or symptoms are required'
             }), 400
+
+        if not message and symptoms_list:
+            message = f"Symptoms: {', '.join(symptoms_list)}"
         
         conv = conversation_manager.get_conversation(conversation_id)
         
@@ -535,6 +539,50 @@ def chat(conversation_id):
                 }
             }
         
+        is_valid = result.get('is_valid', True)
+        input_type = result.get('input_type', 'clinical')
+
+        if not is_valid:
+            warning_msg = result.get('response', {}).get('summary', 'Input is not valid. Please enter valid medical symptoms.')
+            conversation_manager.add_message(conversation_id, 'assistant', warning_msg)
+            try:
+                user_email = request.user['email']
+                updated_conv = conversation_manager.get_conversation(conversation_id)
+                if updated_conv:
+                    auth_store.update_conversation_messages(conversation_id, updated_conv['messages'], user_email)
+            except Exception as persist_err:
+                print(f"Warning: Could not persist conversation messages: {persist_err}")
+
+            return jsonify({
+                'success': True,
+                'is_valid': False,
+                'input_type': 'invalid',
+                'error': warning_msg,
+                'response': result.get('response'),
+                'disease_prediction': None,
+                'conversation_id': conversation_id
+            }), 200
+
+        if input_type == 'greeting':
+            greeting_msg = result.get('response', {}).get('summary', 'Hello! Please describe your symptoms.')
+            conversation_manager.add_message(conversation_id, 'assistant', greeting_msg)
+            try:
+                user_email = request.user['email']
+                updated_conv = conversation_manager.get_conversation(conversation_id)
+                if updated_conv:
+                    auth_store.update_conversation_messages(conversation_id, updated_conv['messages'], user_email)
+            except Exception as persist_err:
+                print(f"Warning: Could not persist conversation messages: {persist_err}")
+
+            return jsonify({
+                'success': True,
+                'is_valid': True,
+                'input_type': 'greeting',
+                'response': result.get('response'),
+                'disease_prediction': None,
+                'conversation_id': conversation_id
+            }), 200
+
         # Add assistant response to history
         assistant_message = f"Summary: {result['response']['summary']}\n\nHome Care: {result['response']['home_care']}\n\nMedical Attention: {result['response']['medical_attention']}\n\nPossible Causes: {result['response']['possible_causes']}"
         conversation_manager.add_message(conversation_id, 'assistant', assistant_message)
@@ -550,6 +598,8 @@ def chat(conversation_id):
         
         return jsonify({
             'success': True,
+            'is_valid': True,
+            'input_type': 'clinical',
             'response': result['response'],
             'disease_prediction': result.get('disease_prediction'),
             'conversation_id': conversation_id
@@ -604,8 +654,19 @@ def predict_disease():
             vitals=vitals
         )
 
+        if not result.get('is_valid', True):
+            error_msg = result.get('response', {}).get('summary', 'Input is not valid. Please enter valid medical symptoms.')
+            return jsonify({
+                'success': False,
+                'is_valid': False,
+                'error': error_msg,
+                'response': result.get('response'),
+                'prediction': None
+            }), 400
+
         return jsonify({
             'success': True,
+            'is_valid': True,
             'prediction': result.get('disease_prediction'),
             'response': result.get('response')
         }), 200
