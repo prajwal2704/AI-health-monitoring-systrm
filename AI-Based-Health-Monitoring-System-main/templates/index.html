@@ -1274,7 +1274,992 @@
       </div>
     </div>
   </div>
+  <script>
+    // State management
+    let isRegisterMode = false;
+    let currentUser = null;
+    let currentConversationId = null;
+    let currentAge = '18-64 years (Adult)';
+    let currentLanguage = 'english';
+    let selectedSymptoms = new Set();
+    let symptomCategories = {};
+    let latestPrediction = null;
+    let speechRecognition = null;
+    let isRecording = false;
 
+    const AGE_GROUPS = [
+      '0-2 years (Infant)',
+      '3-5 years (Toddler)',
+      '6-12 years (Child)',
+      '13-17 years (Adolescent)',
+      '18-64 years (Adult)',
+      '65+ years (Senior)'
+    ];
+
+    window.onload = async () => {
+      renderAgeModalOptions();
+      loadSymptomsList();
+
+      const token = localStorage.getItem('session_token');
+      const cachedUser = localStorage.getItem('user');
+
+      if (token && cachedUser) {
+        try {
+          currentUser = JSON.parse(cachedUser);
+          showApp();
+        } catch (e) {
+          setAuthMode(false);
+        }
+      } else {
+        setAuthMode(false);
+      }
+    };
+
+    function toggleMobileSidebar() {
+      const sb = document.querySelector('.sidebar');
+      const bd = document.getElementById('sidebar-backdrop');
+      if (sb) sb.classList.toggle('open');
+      if (bd) bd.classList.toggle('open');
+    }
+
+    function closeMobileSidebar() {
+      const sb = document.querySelector('.sidebar');
+      const bd = document.getElementById('sidebar-backdrop');
+      if (sb) sb.classList.remove('open');
+      if (bd) bd.classList.remove('open');
+    }
+
+    function switchMobileNav(tabId, btn) {
+      document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      const tabIndex = { 'tab-predictor': 0, 'tab-chat': 1, 'tab-vitals': 2, 'tab-reports': 3 }[tabId] || 0;
+      const desktopBtns = document.querySelectorAll('.nav-tab-btn');
+      if (desktopBtns[tabIndex]) {
+        switchTab(tabId, desktopBtns[tabIndex]);
+      } else {
+        switchTab(tabId);
+      }
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.content-view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      const targetView = document.getElementById(tabId);
+      if (targetView) targetView.classList.add('active');
+      if (btn) btn.classList.add('active');
+
+      const bNavMap = { 'tab-predictor': 'bnav-predictor', 'tab-chat': 'bnav-chat', 'tab-vitals': 'bnav-vitals', 'tab-reports': 'bnav-reports' };
+      const bnavId = bNavMap[tabId];
+      if (bnavId) {
+        document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
+        const bEl = document.getElementById(bnavId);
+        if (bEl) bEl.classList.add('active');
+      }
+
+      if (tabId === 'tab-reports') {
+        updateReportView();
+      }
+      closeMobileSidebar();
+    }
+
+    /* ==========================================================================
+       AUTHENTICATION & SESSION MANAGEMENT
+       ========================================================================== */
+    function setAuthMode(register) {
+      isRegisterMode = register;
+      const tabLogin = document.getElementById('tab-btn-login');
+      const tabReg = document.getElementById('tab-btn-register');
+      if (tabLogin && tabReg) {
+        tabLogin.classList.toggle('active', !register);
+        tabReg.classList.toggle('active', register);
+      }
+
+      const nameGroup = document.getElementById('group-fullname');
+      const nameInput = document.getElementById('auth-fullname');
+      const dobGroup = document.getElementById('group-dob');
+      const dobInput = document.getElementById('auth-dob');
+      const emailInput = document.getElementById('auth-email');
+      const pwInput = document.getElementById('auth-password');
+      const submitBtn = document.getElementById('auth-submit-btn');
+      const heading = document.getElementById('auth-heading');
+      const err = document.getElementById('auth-error');
+
+      if (register) {
+        if (nameGroup) nameGroup.style.display = 'block';
+        if (nameInput) nameInput.required = true;
+        if (dobGroup) dobGroup.style.display = 'block';
+        if (dobInput) dobInput.required = true;
+        if (submitBtn) submitBtn.innerText = 'Register Patient Profile';
+        if (heading) heading.innerText = 'Create Clinical Record';
+      } else {
+        if (nameGroup) nameGroup.style.display = 'block';
+        if (nameInput) nameInput.required = false;
+        if (dobGroup) dobGroup.style.display = 'none';
+        if (dobInput) dobInput.required = false;
+        if (submitBtn) submitBtn.innerText = 'Sign In to CarePulse';
+        if (heading) heading.innerText = 'Portal Access';
+      }
+
+      if (emailInput) emailInput.required = true;
+      if (pwInput) pwInput.required = true;
+      if (err) { err.style.display = 'none'; err.innerText = ''; }
+    }
+
+    function toggleAuthMode() {
+      setAuthMode(!isRegisterMode);
+    }
+
+    function togglePasswordVisibility() {
+      const pwInput = document.getElementById('auth-password');
+      const hint = document.getElementById('pw-hint');
+      if (!pwInput) return;
+      if (pwInput.type === 'password') {
+        pwInput.type = 'text';
+        if (hint) hint.innerText = 'Hide';
+      } else {
+        pwInput.type = 'password';
+        if (hint) hint.innerText = 'Show';
+      }
+    }
+
+    function fillDemoCredentials(role) {
+      setAuthMode(false);
+      const nameInput = document.getElementById('auth-fullname');
+      const emailInput = document.getElementById('auth-email');
+      const pwInput = document.getElementById('auth-password');
+      const dobInput = document.getElementById('auth-dob');
+      if (role === 'doctor') {
+        if (nameInput) nameInput.value = 'Dr. Emily Watson, MD';
+        if (dobInput) dobInput.value = '1982-04-12';
+        if (emailInput) emailInput.value = 'dr.watson@carepulse.local';
+        if (pwInput) pwInput.value = 'CarePulse2026!';
+      } else {
+        if (nameInput) nameInput.value = 'John Doe';
+        if (dobInput) dobInput.value = '1995-08-20';
+        if (emailInput) emailInput.value = 'patient@carepulse.local';
+        if (pwInput) pwInput.value = 'CarePulse2026!';
+      }
+      if (emailInput) emailInput.focus();
+    }
+
+    function syncAuthLanguage(lang) {
+      changeLanguage(lang);
+      const topSelect = document.getElementById('lang-select');
+      if (topSelect) topSelect.value = lang;
+    }
+
+    async function startGuestMode() {
+      try {
+        const res = await fetch('/api/auth/guest', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          currentUser = data.user;
+          localStorage.setItem('user', JSON.stringify(currentUser));
+          localStorage.setItem('session_token', data.session_token);
+        } else {
+          currentUser = { email: 'guest@healthcheck.local', full_name: 'Guest Patient' };
+          localStorage.setItem('user', JSON.stringify(currentUser));
+          localStorage.setItem('session_token', 'guest_token_' + Date.now());
+        }
+      } catch (e) {
+        currentUser = { email: 'guest@healthcheck.local', full_name: 'Guest Patient' };
+        localStorage.setItem('user', JSON.stringify(currentUser));
+        localStorage.setItem('session_token', 'guest_token_' + Date.now());
+      }
+      showApp();
+    }
+
+    async function handleAuthSubmit(e) {
+      if (e) e.preventDefault();
+      const errorDiv = document.getElementById('auth-error');
+      if (errorDiv) {
+        errorDiv.style.display = 'none';
+        errorDiv.innerText = '';
+      }
+
+      const fullName = (document.getElementById('auth-fullname') ? document.getElementById('auth-fullname').value : '').trim();
+      const dob = document.getElementById('auth-dob') ? document.getElementById('auth-dob').value : '';
+      const email = (document.getElementById('auth-email') ? document.getElementById('auth-email').value : '').trim();
+      const password = document.getElementById('auth-password') ? document.getElementById('auth-password').value : '';
+
+      if (isRegisterMode) {
+        if (!fullName) {
+          if (errorDiv) { errorDiv.innerText = 'Full Name is required for registration.'; errorDiv.style.display = 'block'; }
+          document.getElementById('auth-fullname').focus();
+          return;
+        }
+        if (!dob) {
+          if (errorDiv) { errorDiv.innerText = 'Date of Birth is required for clinical safety.'; errorDiv.style.display = 'block'; }
+          document.getElementById('auth-dob').focus();
+          return;
+        }
+      }
+
+      if (!email) {
+        if (errorDiv) { errorDiv.innerText = 'Email address is required.'; errorDiv.style.display = 'block'; }
+        document.getElementById('auth-email').focus();
+        return;
+      }
+      if (!password || password.length < 6) {
+        if (errorDiv) { errorDiv.innerText = 'Password is required (minimum 6 characters).'; errorDiv.style.display = 'block'; }
+        document.getElementById('auth-password').focus();
+        return;
+      }
+
+      const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
+      const payload = isRegisterMode ? {
+        full_name: fullName,
+        date_of_birth: dob,
+        email: email,
+        password: password
+      } : {
+        full_name: fullName,
+        email: email,
+        password: password
+      };
+
+      const btn = document.getElementById('auth-submit-btn');
+      if (btn) btn.disabled = true;
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          localStorage.setItem('session_token', data.session_token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          currentUser = data.user;
+          showApp();
+        } else {
+          if (errorDiv) {
+            errorDiv.innerText = data.error || 'Authentication failed. Please check credentials.';
+            errorDiv.style.display = 'block';
+          }
+        }
+      } catch (err) {
+        if (errorDiv) {
+          errorDiv.innerText = 'Connecting in offline guest mode...';
+          errorDiv.style.display = 'block';
+        }
+        currentUser = { email: email, full_name: fullName || 'Patient' };
+        localStorage.setItem('user', JSON.stringify(currentUser));
+        localStorage.setItem('session_token', 'user_session_' + Date.now());
+        setTimeout(() => showApp(), 800);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function showApp() {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('app-container').style.display = 'flex';
+
+      const displayNameEl = document.getElementById('user-display-name');
+      if (displayNameEl && currentUser) {
+        displayNameEl.innerText = currentUser.full_name || currentUser.email;
+      }
+
+      const avatarEl = document.getElementById('user-avatar');
+      if (avatarEl && currentUser) {
+        const initial = (currentUser.full_name || currentUser.email || 'P')[0].toUpperCase();
+        avatarEl.innerText = initial;
+      }
+      initChatSession();
+    }
+
+    function handleLogout() {
+      localStorage.clear();
+      location.reload();
+    }
+
+    /* ==========================================================================
+       SYMPTOM CHECKER & DISEASE PREDICTION LOGIC
+       ========================================================================== */
+    async function loadSymptomsList() {
+      try {
+        const res = await fetch('/api/symptoms-list');
+        const data = await res.json();
+        if (data.success) {
+          symptomCategories = data.categories;
+          renderSymptomCategories();
+        }
+      } catch (err) {
+        console.error('Failed to load symptoms list:', err);
+      }
+    }
+
+    function renderSymptomCategories(filter = '') {
+      const container = document.getElementById('symptom-categories-container');
+      if (!container) return;
+      container.innerHTML = '';
+      const filterLower = filter.toLowerCase().trim();
+
+      for (const [category, symptoms] of Object.entries(symptomCategories)) {
+        const matchingSymptoms = symptoms.filter(s =>
+          !filterLower || s.name.toLowerCase().includes(filterLower) || s.token.includes(filterLower)
+        );
+
+        if (matchingSymptoms.length === 0) continue;
+
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'cat-group';
+
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'cat-title';
+        titleDiv.innerText = category;
+        groupDiv.appendChild(titleDiv);
+
+        const chipsDiv = document.createElement('div');
+        chipsDiv.className = 'chips-cluster';
+
+        matchingSymptoms.forEach(sym => {
+          const chip = document.createElement('div');
+          chip.className = `chip ${selectedSymptoms.has(sym.token) ? 'active' : ''}`;
+          chip.innerText = sym.name;
+          chip.onclick = () => toggleSymptom(sym.token, sym.name);
+          chipsDiv.appendChild(chip);
+        });
+
+        groupDiv.appendChild(chipsDiv);
+        container.appendChild(groupDiv);
+      }
+    }
+
+    function toggleSymptom(token, name) {
+      if (selectedSymptoms.has(token)) {
+        selectedSymptoms.delete(token);
+      } else {
+        selectedSymptoms.add(token);
+      }
+      renderSelectedTray();
+      const searchEl = document.getElementById('symptom-search');
+      renderSymptomCategories(searchEl ? searchEl.value : '');
+    }
+
+    function filterSymptoms(query) {
+      renderSymptomCategories(query);
+    }
+
+    function renderSelectedTray() {
+      const tray = document.getElementById('selected-symptoms-tray');
+      const countEl = document.getElementById('selected-count');
+      if (countEl) countEl.innerText = selectedSymptoms.size;
+      if (!tray) return;
+
+      if (selectedSymptoms.size === 0) {
+        tray.innerHTML = '<span style="font-size: 12px; color: #94a3b8;">Click symptom chips below or type symptoms to evaluate...</span>';
+        return;
+      }
+
+      tray.innerHTML = '';
+      selectedSymptoms.forEach(token => {
+        let readable = token.replace(/_/g, ' ');
+        for (const cat in symptomCategories) {
+          const found = symptomCategories[cat].find(s => s.token === token);
+          if (found) { readable = found.name; break; }
+        }
+
+        const chip = document.createElement('div');
+        chip.className = 'selected-chip';
+        chip.innerHTML = `${escapeHtml(readable)} <span onclick="removeSymptom('${token}')">&times;</span>`;
+        tray.appendChild(chip);
+      });
+    }
+
+    function removeSymptom(token) {
+      selectedSymptoms.delete(token);
+      renderSelectedTray();
+      const searchEl = document.getElementById('symptom-search');
+      renderSymptomCategories(searchEl ? searchEl.value : '');
+    }
+
+    function clearSelectedSymptoms() {
+      selectedSymptoms.clear();
+      const freeText = document.getElementById('free-symptom-text');
+      if (freeText) freeText.value = '';
+      renderSelectedTray();
+      renderSymptomCategories();
+    }
+
+    async function executeDiseasePrediction() {
+      const symptomsList = Array.from(selectedSymptoms);
+      const textEl = document.getElementById('free-symptom-text');
+      const text = textEl ? textEl.value.trim() : '';
+
+      if (symptomsList.length === 0 && !text) {
+        alert('Please select at least one symptom or describe what you are experiencing.');
+        return;
+      }
+
+      const resultsArea = document.getElementById('prediction-results-area');
+      if (resultsArea) {
+        resultsArea.innerHTML = `
+          <div style="text-align: center; padding: 50px 20px; color: var(--primary);">
+            <div style="font-size: 18px; font-weight: 700;">Evaluating Clinical Knowledge Engine...</div>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">Analyzing symptom combinations, confidence scoring, and guidance...</p>
+          </div>
+        `;
+      }
+
+      try {
+        const res = await fetch('/api/predict-disease', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            symptoms: symptomsList,
+            text: text,
+            age: currentAge,
+            language: currentLanguage
+          })
+        });
+        const data = await res.json();
+
+        if (data.success && data.prediction) {
+          latestPrediction = data;
+          renderPredictionResult(data.prediction, data.response);
+          const expBtn = document.getElementById('export-btn');
+          if (expBtn) expBtn.style.display = 'inline-block';
+        } else {
+          if (resultsArea) resultsArea.innerHTML = `<div class="empty-prediction" style="color:var(--danger)">Evaluation notice: ${data.error || 'Unable to evaluate.'}</div>`;
+        }
+      } catch (err) {
+        if (resultsArea) resultsArea.innerHTML = '<div class="empty-prediction" style="color:var(--danger)">Network error connecting to diagnostic engine.</div>';
+      }
+    }
+
+    function renderPredictionResult(pred, resp) {
+      const resultsArea = document.getElementById('prediction-results-area');
+      if (!resultsArea) return;
+      const primary = pred.primary_diagnosis || {};
+      const urgency = (pred.urgency || 'mild').toLowerCase();
+
+      const urgBadge = document.getElementById('badge-urgency');
+      if (urgBadge) {
+        urgBadge.style.display = 'inline-block';
+        urgBadge.className = `badge badge-urgency-${urgency}`;
+        urgBadge.innerText = `Urgency: ${urgency.toUpperCase()}`;
+      }
+
+      let differentialsHtml = '';
+      if (pred.differential_diagnoses && pred.differential_diagnoses.length > 0) {
+        differentialsHtml = `
+          <div style="margin-top: 16px;">
+            <h4 style="font-size: 13.5px; font-weight: 700; color: #334155; margin-bottom: 8px;">Differential Diagnoses to Consider</h4>
+            ${pred.differential_diagnoses.map(d => `
+              <div class="differential-item">
+                <div>
+                  <h4>${escapeHtml(d.name)}</h4>
+                  <span style="font-size: 11.5px; color: #64748b;">${escapeHtml(d.category)}</span>
+                </div>
+                <div style="text-align: right;">
+                  <span style="font-size: 13px; font-weight: 700; color: #4f46e5;">${d.confidence}% match</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      let followUpsHtml = '';
+      if (resp && resp.follow_up_questions && resp.follow_up_questions.length > 0) {
+        followUpsHtml = `
+          <div class="follow-up-card">
+            <h5>Targeted Follow-up Questions (Refine Diagnosis)</h5>
+            ${resp.follow_up_questions.map(q => `
+              <div class="q-item">
+                <span>• ${escapeHtml(q.question)}</span>
+                <div class="q-btns">
+                  <button class="q-btn yes" onclick="confirmSymptomFromFollowUp('${q.symptom_token}')">Yes</button>
+                  <button class="q-btn no" onclick="this.parentElement.parentElement.style.opacity='0.4'">No</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      resultsArea.innerHTML = `
+        <div class="primary-diagnosis-card">
+          <div class="diagnosis-top">
+            <div>
+              <div class="diagnosis-name">${escapeHtml(primary.name || 'Clinical Syndrome')}</div>
+              <div class="diagnosis-category">${escapeHtml(primary.category || 'Clinical Assessment')}</div>
+            </div>
+            <span class="badge badge-urgency-${urgency}" style="font-size: 12px; padding: 5px 12px;">
+              ${urgency.toUpperCase()} URGENCY
+            </span>
+          </div>
+
+          <div class="confidence-meter">
+            <div class="meter-label">
+              <span>Diagnostic Confidence</span>
+              <span>${primary.confidence || 0}% Match</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill" style="width: ${Math.min(primary.confidence || 0, 100)}%;"></div>
+            </div>
+          </div>
+
+          <div class="symptoms-comparison">
+            <div class="symptom-sublist">
+              <h5>Matched Symptoms</h5>
+              ${(primary.matched_symptoms || []).map(s => `<div>• ${escapeHtml(s)}</div>`).join('') || '<div>None detected</div>'}
+            </div>
+            <div class="symptom-sublist">
+              <h5>Symptoms to Monitor</h5>
+              ${(primary.unmatched_symptoms_to_watch || []).map(s => `<div>• ${escapeHtml(s)}</div>`).join('') || '<div>None listed</div>'}
+            </div>
+          </div>
+
+          ${followUpsHtml}
+
+          <div class="guidelines-box">
+            <div class="guideline-section">
+              <h4>Age-Appropriate Home Care Instructions</h4>
+              <p style="white-space: pre-wrap;">${escapeHtml(resp ? (resp.home_care || 'Maintain rest and adequate hydration.') : 'Maintain rest.')}</p>
+            </div>
+
+            <div class="guideline-section" style="background:#fff1f2; border-color:#fecdd3;">
+              <h4 style="color:#be123c;">Medical Attention & Red Flag Warnings</h4>
+              <p style="color:#9f1239; white-space: pre-wrap;">${escapeHtml(resp ? (resp.medical_attention || 'Seek emergency care if symptoms escalate.') : 'Consult a doctor.')}</p>
+            </div>
+
+            <div class="guideline-section">
+              <h4>Clinical Description & Pathophysiology</h4>
+              <p style="white-space: pre-wrap;">${escapeHtml(resp ? (resp.possible_causes || primary.description) : (primary.description || 'Clinical evaluation.'))}</p>
+            </div>
+          </div>
+
+          ${differentialsHtml}
+        </div>
+      `;
+    }
+
+    function confirmSymptomFromFollowUp(symptomToken) {
+      selectedSymptoms.add(symptomToken);
+      renderSelectedTray();
+      const searchEl = document.getElementById('symptom-search');
+      renderSymptomCategories(searchEl ? searchEl.value : '');
+      executeDiseasePrediction();
+    }
+
+    /* ==========================================================================
+       CHAT TAB & SPEECH INTEGRATION
+       ========================================================================== */
+    async function initChatSession() {
+      let token = localStorage.getItem('session_token');
+      if (!token) {
+        try {
+          const gRes = await fetch('/api/auth/guest', { method: 'POST' });
+          const gData = await gRes.json();
+          if (gData.success) {
+            token = gData.session_token;
+            localStorage.setItem('session_token', token);
+            localStorage.setItem('user', JSON.stringify(gData.user));
+          }
+        } catch (e) {}
+      }
+
+      try {
+        const res = await fetch('/api/conversation/start', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (data.success) {
+          currentConversationId = data.conversation_id;
+          await fetch(`/api/conversation/${currentConversationId}/age`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ age: currentAge })
+          });
+          await fetch(`/api/conversation/${currentConversationId}/language`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ language: currentLanguage })
+          });
+        }
+      } catch (err) {
+        console.error('Could not start session:', err);
+      }
+    }
+
+    function sendQuickPrompt(promptText) {
+      const input = document.getElementById('chat-input-field');
+      if (input) {
+        input.value = promptText;
+        handleChatMessageSubmit(new Event('submit'));
+      }
+    }
+
+    async function handleChatMessageSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('chat-input-field');
+      if (!input) return;
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+      appendChatMessage('user', text);
+
+      let token = localStorage.getItem('session_token');
+      if (!currentConversationId) {
+        await initChatSession();
+      }
+
+      const convId = currentConversationId || 'new';
+
+      try {
+        const res = await fetch(`/api/conversation/${convId}/chat`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: text,
+            symptoms_list: Array.from(selectedSymptoms),
+            age: currentAge,
+            language: currentLanguage
+          })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          if (data.conversation_id) currentConversationId = data.conversation_id;
+          appendChatMessage('assistant', data.response, data.disease_prediction);
+        } else {
+          if (data.error && data.error.toLowerCase().includes('session')) {
+            await startGuestMode();
+            token = localStorage.getItem('session_token');
+            const retryRes = await fetch(`/api/conversation/new/chat`, {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                message: text,
+                symptoms_list: Array.from(selectedSymptoms),
+                age: currentAge,
+                language: currentLanguage
+              })
+            });
+            const retryData = await retryRes.json();
+            if (retryData.success) {
+              if (retryData.conversation_id) currentConversationId = retryData.conversation_id;
+              appendChatMessage('assistant', retryData.response, retryData.disease_prediction);
+              return;
+            }
+          }
+          appendChatMessage('assistant', data.error || 'Unable to generate response.');
+        }
+      } catch (err) {
+        appendChatMessage('assistant', 'Server connection error. Please verify the backend is running.');
+      }
+    }
+
+    function appendChatMessage(role, content, prediction = null) {
+      const stream = document.getElementById('chat-stream');
+      if (!stream) return;
+      const row = document.createElement('div');
+      row.className = `msg-row ${role}`;
+
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+
+      if (role === 'user') {
+        bubble.innerText = content;
+      } else {
+        if (typeof content === 'object' && content && content.summary) {
+          let predBadge = '';
+          if (prediction && prediction.primary_diagnosis) {
+            predBadge = `
+              <div style="background:#eef2ff; border:1px solid #c7d2fe; padding:8px 12px; border-radius:8px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <span style="font-size:11px; font-weight:700; color:#4f46e5; text-transform:uppercase;">Predicted Condition</span>
+                  <div style="font-size:15px; font-weight:800; color:#1e1b4b;">${escapeHtml(prediction.primary_diagnosis.name)} (${prediction.primary_diagnosis.confidence}% Match)</div>
+                </div>
+                <span class="badge badge-urgency-${prediction.urgency || 'mild'}">${(prediction.urgency || 'mild').toUpperCase()}</span>
+              </div>
+            `;
+          }
+
+          bubble.innerHTML = `
+            ${predBadge}
+            <div style="margin-bottom:10px;">
+              <h4 style="font-size:13px; font-weight:700; color:#1e1b4b; margin-bottom:4px;">Clinical Assessment</h4>
+              <p style="font-size:13.5px; color:#334155; line-height:1.5;">${escapeHtml(content.summary)}</p>
+            </div>
+            <div style="margin-bottom:10px;">
+              <h4 style="font-size:13px; font-weight:700; color:#15803d; margin-bottom:4px;">Home Care Instructions</h4>
+              <p style="font-size:13px; color:#334155; white-space:pre-wrap;">${escapeHtml(content.home_care || 'Rest and hydrate.')}</p>
+            </div>
+            <div style="margin-bottom:10px; background:#fff1f2; padding:10px; border-radius:8px; border:1px solid #fecdd3;">
+              <h4 style="font-size:13px; font-weight:700; color:#be123c; margin-bottom:4px;">Warning Signs</h4>
+              <p style="font-size:12.5px; color:#9f1239; white-space:pre-wrap;">${escapeHtml(content.medical_attention)}</p>
+            </div>
+            <button class="btn-secondary" style="font-size:11.5px; padding:3px 8px; margin-top:6px;" onclick="speakText(this)">Listen</button>
+          `;
+        } else {
+          bubble.innerText = typeof content === 'string' ? content : JSON.stringify(content);
+        }
+      }
+
+      row.appendChild(bubble);
+      stream.appendChild(row);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function speakText(btn) {
+      const text = btn.parentElement.innerText.replace('Listen', '').trim();
+      const utterance = new SpeechSynthesisUtterance(text);
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function toggleSpeechRecognition() {
+      const micBtn = document.getElementById('mic-btn');
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRec) {
+        alert('Speech Recognition is not supported in this browser. Please use Chrome or Edge.');
+        return;
+      }
+
+      if (isRecording) {
+        if (speechRecognition) speechRecognition.stop();
+        if (micBtn) micBtn.classList.remove('recording');
+        isRecording = false;
+        return;
+      }
+
+      speechRecognition = new SpeechRec();
+      speechRecognition.continuous = false;
+      speechRecognition.interimResults = false;
+      const langVoiceMap = {
+        'hindi': 'hi-IN',
+        'spanish': 'es-ES',
+        'french': 'fr-FR',
+        'telugu': 'te-IN',
+        'tamil': 'ta-IN',
+        'bengali': 'bn-IN',
+        'marathi': 'mr-IN',
+        'gujarati': 'gu-IN',
+        'kannada': 'kn-IN',
+        'malayalam': 'ml-IN',
+        'punjabi': 'pa-IN',
+        'urdu': 'ur-PK'
+      };
+      speechRecognition.lang = langVoiceMap[currentLanguage] || 'en-US';
+
+      speechRecognition.onstart = () => {
+        isRecording = true;
+        if (micBtn) micBtn.classList.add('recording');
+      };
+
+      speechRecognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        const inputField = document.getElementById('chat-input-field');
+        if (inputField) inputField.value = transcript;
+        if (micBtn) micBtn.classList.remove('recording');
+        isRecording = false;
+      };
+
+      speechRecognition.onerror = () => {
+        if (micBtn) micBtn.classList.remove('recording');
+        isRecording = false;
+      };
+
+      speechRecognition.onend = () => {
+        if (micBtn) micBtn.classList.remove('recording');
+        isRecording = false;
+      };
+
+      speechRecognition.start();
+    }
+
+    /* ==========================================================================
+       TAB 3: VITALS TRACKER LOGIC
+       ========================================================================== */
+    async function evaluateVitalsPanel() {
+      const sbp = document.getElementById('vital-sbp') ? document.getElementById('vital-sbp').value : null;
+      const dbp = document.getElementById('vital-dbp') ? document.getElementById('vital-dbp').value : null;
+      const hr = document.getElementById('vital-hr') ? document.getElementById('vital-hr').value : null;
+      const spo2 = document.getElementById('vital-spo2') ? document.getElementById('vital-spo2').value : null;
+      const temp = document.getElementById('vital-temp') ? document.getElementById('vital-temp').value : null;
+      const tempUnit = document.getElementById('vital-temp-unit') ? document.getElementById('vital-temp-unit').value : 'F';
+      const sugar = document.getElementById('vital-sugar') ? document.getElementById('vital-sugar').value : null;
+      const sugarType = document.getElementById('vital-sugar-type') ? document.getElementById('vital-sugar-type').value : 'random';
+
+      const payload = {
+        systolic_bp: sbp ? parseFloat(sbp) : null,
+        diastolic_bp: dbp ? parseFloat(dbp) : null,
+        heart_rate: hr ? parseFloat(hr) : null,
+        spo2: spo2 ? parseFloat(spo2) : null,
+        temperature: temp ? parseFloat(temp) : null,
+        temp_unit: tempUnit,
+        blood_sugar: sugar ? parseFloat(sugar) : null,
+        sugar_type: sugarType
+      };
+
+      try {
+        const res = await fetch('/api/vitals/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.success && data.analysis) {
+          renderVitalsEvaluation(data.analysis);
+        }
+      } catch (err) {
+        alert('Failed to analyze vitals.');
+      }
+    }
+
+    function renderVitalsEvaluation(analysis) {
+      const alertBox = document.getElementById('vitals-alert-box');
+      if (!alertBox) return;
+      alertBox.style.display = 'block';
+
+      if (analysis.risk_score >= 5) {
+        alertBox.style.background = '#fee2e2';
+        alertBox.style.border = '1px solid #fca5a5';
+        alertBox.style.color = '#991b1b';
+      } else if (analysis.risk_score >= 3) {
+        alertBox.style.background = '#ffedd5';
+        alertBox.style.border = '1px solid #fdba74';
+        alertBox.style.color = '#9a3412';
+      } else {
+        alertBox.style.background = '#f0fdf4';
+        alertBox.style.border = '1px solid #bbf7d0';
+        alertBox.style.color = '#166534';
+      }
+
+      alertBox.innerHTML = `
+        <h4 style="font-weight: 800; font-size: 15px; margin-bottom: 4px;">Overall Vitals Status: ${escapeHtml(analysis.overall_status)} (Risk Score: ${analysis.risk_score}/10)</h4>
+        ${analysis.alerts && analysis.alerts.length > 0 ? analysis.alerts.map(a => `<div>${escapeHtml(a)}</div>`).join('') : '<div>All evaluated parameters are within acceptable clinical limits.</div>'}
+      `;
+
+      const v = analysis.vitals || {};
+      if (v.blood_pressure) updatePill('bp-pill', v.blood_pressure.status, v.blood_pressure.level);
+      if (v.heart_rate) updatePill('hr-pill', v.heart_rate.status, v.heart_rate.level);
+      if (v.spo2) updatePill('spo2-pill', v.spo2.status, v.spo2.level);
+      if (v.temperature) updatePill('temp-pill', v.temperature.status, v.temperature.level);
+      if (v.blood_sugar) updatePill('sugar-pill', v.blood_sugar.status, v.blood_sugar.level);
+    }
+
+    function updatePill(id, text, level) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerText = text;
+      if (level === 'critical' || level === 'high') {
+        el.style.background = '#fee2e2'; el.style.color = '#b91c1c';
+      } else if (level === 'moderate') {
+        el.style.background = '#fef3c7'; el.style.color = '#b45309';
+      } else {
+        el.style.background = '#dcfce7'; el.style.color = '#15803d';
+      }
+    }
+
+    /* ==========================================================================
+       TAB 4: REPORTS & AGE MODAL
+       ========================================================================== */
+    function updateReportView() {
+      const nameEl = document.getElementById('rep-name');
+      if (nameEl) nameEl.innerText = currentUser ? (currentUser.full_name || currentUser.email) : 'Guest Patient';
+      const ageEl = document.getElementById('rep-age');
+      if (ageEl) ageEl.innerText = currentAge;
+      const dateEl = document.getElementById('rep-date');
+      if (dateEl) dateEl.innerText = new Date().toLocaleString();
+
+      if (latestPrediction && latestPrediction.prediction) {
+        const pred = latestPrediction.prediction;
+        const primary = pred.primary_diagnosis || {};
+        const urgEl = document.getElementById('rep-urgency');
+        if (urgEl) urgEl.innerText = (pred.urgency || 'Mild').toUpperCase();
+        const symEl = document.getElementById('rep-symptoms');
+        if (symEl) symEl.innerText = pred.active_symptoms ? pred.active_symptoms.join(', ') : 'None listed';
+        const diagEl = document.getElementById('rep-diagnosis');
+        if (diagEl) diagEl.innerText = `${primary.name || 'Condition'} (${primary.confidence || 0}% Match)`;
+        const careEl = document.getElementById('rep-care');
+        if (careEl) careEl.innerText = latestPrediction.response ? latestPrediction.response.home_care : 'None';
+      }
+    }
+
+    function exportCurrentToReport() {
+      updateReportView();
+      switchTab('tab-reports', document.querySelectorAll('.nav-tab-btn')[3]);
+    }
+
+    function printClinicalReport() {
+      window.print();
+    }
+
+    function renderAgeModalOptions() {
+      const container = document.getElementById('age-options-container');
+      if (!container) return;
+      container.innerHTML = '';
+      AGE_GROUPS.forEach(age => {
+        const div = document.createElement('div');
+        div.className = `age-option ${age === currentAge ? 'selected' : ''}`;
+        div.innerText = age;
+        div.onclick = () => {
+          document.querySelectorAll('.age-option').forEach(el => el.classList.remove('selected'));
+          div.classList.add('selected');
+          currentAge = age;
+        };
+        container.appendChild(div);
+      });
+    }
+
+    function openAgeModal() {
+      const modal = document.getElementById('age-modal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeAgeModal() {
+      const modal = document.getElementById('age-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function confirmAgeSelection() {
+      const badge = document.getElementById('badge-age');
+      if (badge) badge.innerText = `Age: ${currentAge}`;
+      closeAgeModal();
+      if (latestPrediction) executeDiseasePrediction();
+    }
+
+    function changeLanguage(lang) {
+      currentLanguage = lang;
+      const authSelect = document.getElementById('auth-lang-select');
+      if (authSelect && authSelect.value !== lang) authSelect.value = lang;
+      const topSelect = document.getElementById('lang-select');
+      if (topSelect && topSelect.value !== lang) topSelect.value = lang;
+
+      if (currentConversationId) {
+        fetch(`/api/conversation/${currentConversationId}/language`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('session_token') || ''}`
+          },
+          body: JSON.stringify({ language: lang })
+        }).catch(() => {});
+      }
+
+      if (latestPrediction) executeDiseasePrediction();
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return String(text).replace(/[&<>"']/g, m => map[m]);
+    }
   </script>
+
 </body>
 </html>

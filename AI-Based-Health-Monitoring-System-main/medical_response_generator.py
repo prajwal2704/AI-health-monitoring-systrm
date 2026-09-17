@@ -219,7 +219,7 @@ Please provide medical guidance in the following structured format:
                 "• Mantenga un ambiente ventilado y una temperatura ambiente confortable."
             )
             medical_attention = (
-                f"{urgency_emoji} NIVEL DE URGENCIA: {urgency.upper()}\n"
+                f"NIVEL DE URGENCIA: {urgency.upper()}\n"
                 "Busque atención médica de emergencia si experimenta dificultad para respirar, dolor torácico severo o fiebre persistente alta."
             )
             possible_causes = (
@@ -238,7 +238,7 @@ Please provide medical guidance in the following structured format:
                 "• Veiller à un environnement bien aéré à température tempérée."
             )
             medical_attention = (
-                f"{urgency_emoji} NIVEAU D'URGENCE: {urgency.upper()}\n"
+                f"NIVEAU D'URGENCE: {urgency.upper()}\n"
                 "Consultez immédiatement un service d'urgence en cas de détresse respiratoire ou de douleur thoracique aiguë."
             )
             possible_causes = (
@@ -248,17 +248,17 @@ Please provide medical guidance in the following structured format:
         elif lang_lower == 'hindi':
             summary = f"लक्षणों का नैदानिक मूल्यांकन: '{matched_str}' ({age} के लिए)। संभावित स्थिति: **{dis_name}** ({confidence}% मिलान)।"
             home_care = "• पर्याप्त मात्रा में ओआरएस, सूप और पानी पिएं।\n• पूर्ण शारीरिक आराम करें।\n• डॉक्टर के परामर्श के बिना कोई नई दवा न लें।"
-            medical_attention = f"{urgency_emoji} गंभीरता स्तर: {urgency.upper()}\nयदि सांस लेने में कठिनाई, तेज बुखार या तीव्र दर्द हो तो तुरंत अस्पताल जाएं।"
+            medical_attention = f"गंभीरता स्तर: {urgency.upper()}\nयदि सांस लेने में कठिनाई, तेज बुखार या तीव्र दर्द हो तो तुरंत अस्पताल जाएं।"
             possible_causes = f"संभावित कारण: {dis_name}। सटीक निदान के लिए रक्त परीक्षण या डॉक्टर से परामर्श आवश्यक है।"
         elif lang_lower == 'telugu':
             summary = f"లక్షణాల విశ్లేషణ: '{matched_str}' ({age} కొరకు). ప్రాథమిక రోగ నిర్ధారణ: **{dis_name}** ({confidence}% సరిపోలిక)."
             home_care = "• తగినంత ఓఆర్‌ఎస్ మరియు ద్రవపదార్థాలు తీసుకోండి.\n• సరైన విశ్రాంతి తీసుకోండి.\n• వైద్యుని సలహా లేకుండా మందులు వాడవద్దు."
-            medical_attention = f"{urgency_emoji} తీవ్రత స్థాయి: {urgency.upper()}\nశ్వాస తీసుకోవడంలో ఇబ్బంది లేదా అధిక జ్వరం ఉంటే వెంటనే ఆసుపత్రిని సంప్రదించండి."
+            medical_attention = f"తీవ్రత స్థాయి: {urgency.upper()}\nశ్వాస తీసుకోవడంలో ఇబ్బంది లేదా అధిక జ్వరం ఉంటే వెంటనే ఆసుపత్రిని సంప్రదించండి."
             possible_causes = f"సంభావ్య కారణం: {dis_name}. ఖచ్చితమైన నిర్ధారణ కోసం వైద్యుడిని సంప్రదించండి."
         elif lang_lower == 'kannada':
             summary = f"ರೋಗಲಕ್ಷಣಗಳ ವೈದ್ಯಕೀಯ ಮೌಲ್ಯಮಾಪನ: '{matched_str}' ({age} ರೋಗಿಗೆ). ಪ್ರಾಥಮಿಕ ಶಂಕಿತ ರೋಗ: **{dis_name}** ({confidence}% ಹೊಂದಾಣಿಕೆ)."
             home_care = "• ಸಾಕಷ್ಟು ಓಆರ್‌ಎಸ್, ಸೂಪ್ ಮತ್ತು ಶುದ್ಧ ನೀರನ್ನು ಸೇವಿಸಿ ನಿರ್ಜಲೀಕರಣ ತಪ್ಪಿಸಿ.\n• ರೋಗನಿರೋಧಕ ಶಕ್ತಿ ಹೆಚ್ಚಿಸಲು ಸಂಪೂರ್ಣ ದೈಹಿಕ ವಿಶ್ರಾಂತಿ ಪಡೆಯಿರಿ.\n• ವೈದ್ಯರ ಸಲಹೆಯಿಲ್ಲದೆ ಯಾವುದೇ ಆಂಟಿಬಯೋಟಿಕ್ ಅಥವಾ ಔಷಧಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳಬೇಡಿ."
-            medical_attention = f"{urgency_emoji} ತುರ್ತು ಮಟ್ಟ: {urgency.upper()}\nಉಸಿರಾಟದ ತೊಂದರೆ, ತೀವ್ರ ಜ್ವರ ಅಥವಾ ಅತಿಯಾದ ಎದೆ ನೋವು ಕಂಡುಬಂದರೆ ತಕ್ಷಣ ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆಗೆ ಭೇಟಿ ನೀಡಿ."
+            medical_attention = f"ತುರ್ತು ಮಟ್ಟ: {urgency.upper()}\nಉಸಿರಾಟದ ತೊಂದರೆ, ತೀವ್ರ ಜ್ವರ ಅಥವಾ ಅತಿಯಾದ ಎದೆ ನೋವು ಕಂಡುಬಂದರೆ ತಕ್ಷಣ ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆಗೆ ಭೇಟಿ ನೀಡಿ."
             possible_causes = f"ಸಾಧ್ಯವಿರುವ ಕಾರಣ: {dis_name}.\nಖಚಿತವಾದ ರೋಗನಿರ್ಣಯಕ್ಕಾಗಿ ನೋಂದಾಯಿತ ವೈದ್ಯರನ್ನು ಸಂಪರ್ಕಿಸಿ ರಕ್ತ ಪರೀಕ್ಷೆ ಮಾಡಿಸಿಕೊಳ್ಳಿ."
 
         return {

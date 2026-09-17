@@ -170,7 +170,7 @@ def run_tests():
     csv_text = csv_res.data.decode('utf-8')
     assert 'User ID,Full Name,Email Address (Login)' in csv_text
     assert 'admin@carepulse.local' in csv_text
-    assert 'patient_test@carepulse.local' in csv_text
+    assert test_patient_email in csv_text
     print(f"[{total}] Export User Accounts to CSV: PASS")
     passed += 1
 

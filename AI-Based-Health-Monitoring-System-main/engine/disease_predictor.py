@@ -19,18 +19,24 @@ class DiseasePredictor:
         self.synonyms = SYMPTOM_SYNONYMS
 
     def extract_symptoms_from_text(self, text: str) -> List[str]:
-        """Extract standardized symptom tokens from free-text user descriptions"""
+        """Extract standardized symptom tokens from free-text user descriptions in any language"""
         if not text:
             return []
 
-        cleaned_text = re.sub(r'[^\w\s]', ' ', text.lower())
+        import unicodedata
+        # Strip punctuation and symbols, preserve letters, marks, numbers and spaces
+        cleaned = ''.join(' ' if unicodedata.category(c).startswith(('P', 'S')) else c for c in text.lower())
+        padded_text = ' ' + ' '.join(cleaned.split()) + ' '
         detected_tokens = set()
 
         # 1. Match multi-word synonyms first (longer phrases first)
         sorted_phrases = sorted(self.synonyms.keys(), key=len, reverse=True)
         for phrase in sorted_phrases:
-            pattern = r'\b' + re.escape(phrase) + r'\b'
-            if re.search(pattern, cleaned_text):
+            clean_phrase = phrase.lower().strip()
+            if not clean_phrase:
+                continue
+            pattern = r'(?:^|[\s\b])' + re.escape(clean_phrase) + r'(?:$|[\s\b])'
+            if re.search(pattern, padded_text, re.IGNORECASE):
                 token = self.synonyms[phrase]
                 detected_tokens.add(token)
 
@@ -38,7 +44,8 @@ class DiseasePredictor:
         for dis_id, data in self.database.items():
             for sym in data['primary_symptoms'] + data['secondary_symptoms']:
                 readable = sym.replace('_', ' ')
-                if re.search(r'\b' + re.escape(readable) + r'\b', cleaned_text):
+                pattern = r'(?:^|[\s\b])' + re.escape(readable) + r'(?:$|[\s\b])'
+                if re.search(pattern, padded_text, re.IGNORECASE):
                     detected_tokens.add(sym)
 
         return list(detected_tokens)

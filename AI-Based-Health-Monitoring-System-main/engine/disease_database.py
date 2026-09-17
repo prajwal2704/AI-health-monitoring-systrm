@@ -732,5 +732,55 @@ SYMPTOM_SYNONYMS = {
     "back pain": "lower_back_pain_stiffness", "lower back pain": "lower_back_pain_stiffness",
     "rash": "skin_rash", "spots": "skin_rash", "itching": "intense_skin_itching", "itchy": "intense_skin_itching",
     "hives": "raised_red_itchy_welts_wheals", "welts": "raised_red_itchy_welts_wheals",
-    "ringworm": "circular_ring_shaped_red_rash", "scaly skin": "dry_cracked_scaly_skin"
+    "ringworm": "circular_ring_shaped_red_rash", "scaly skin": "dry_cracked_scaly_skin",
+
+    # ==================== KANNADA LANGUAGE SYNONYMS ====================
+    # Fever & Chills (ಜ್ವರ / ಚಳಿ)
+    "ಜ್ವರ": "fever", "ತೀವ್ರ ಜ್ವರ": "high_fever", "ಅತಿಯಾದ ಜ್ವರ": "high_fever",
+    "ಸಾಧಾರಣ ಜ್ವರ": "mild_fever", "ಚಳಿ": "chills", "ನಡುಕ": "chills",
+    "ಬೆವರು": "sweating", "ರಾತ್ರಿ ಬೆವರು": "night_sweats", "ಬಿಸಿ ಮೈ": "fever",
+    "jwara": "fever", "tivra jwara": "high_fever", "chali": "chills", "naduka": "chills",
+
+    # Head & Neurological (ತಲೆ / ನರಗಳು)
+    "ತಲೆನೋವು": "headache", "ತೀವ್ರ ತಲೆನೋವು": "severe_headache", "ಮೈಗ್ರೇನ್": "throbbing_one_sided_headache",
+    "ತಲೆಸುತ್ತು": "dizziness", "ತಲೆ ತಿರುಗುವುದು": "dizziness", "ತಲೆ ಗಿರ್ರೆನ್ನುವುದು": "spinning_sensation",
+    "ಬೆಳಕಿನ ಸೂಕ್ಷ್ಮತೆ": "sensitivity_to_light_photophobia",
+    "talenovu": "headache", "tale novu": "headache", "talesuttu": "dizziness",
+
+    # Eyes & ENT (ಕಣ್ಣು / ಕಿವಿ / ಮೂಗು / ಗಂಟಲು)
+    "ಗಂಟಲು ನೋವು": "sore_throat", "ಗಂಟಲು ಕೆರೆತ": "sore_throat",
+    "ನೆಗಡಿ": "runny_nose", "ಶೀತ": "runny_nose", "ಮೂಗು ಕಟ್ಟುವುದು": "nasal_congestion",
+    "ಸೀನು": "sneezing", "ಕಣ್ಣು ನೋವು": "pain_behind_eyes", "ಕಣ್ಣಿನ ಹಿಂಭಾಗದ ನೋವು": "pain_behind_eyes",
+    "ಹಳದಿ ಕಣ್ಣುಗಳು": "yellow_eyes_skin", "ಹಳದಿ ಚರ್ಮ": "yellow_eyes_skin", "ಕಾಮಾಲೆ": "yellow_eyes_skin",
+    "ರುಚಿ ನಷ್ಟ": "loss_of_taste_smell", "ವಾಸನೆ ನಷ್ಟ": "loss_of_taste_smell",
+    "gantalu novu": "sore_throat", "negadi": "runny_nose", "sheetha": "runny_nose", "kamale": "yellow_eyes_skin",
+
+    # Respiratory & Cardiac (ಉಸಿರಾಟ / ಎದೆ)
+    "ಕೆಮ್ಮು": "dry_cough", "ಒಣ ಕೆಮ್ಮು": "dry_cough", "ನೆಗಡಿ ಕೆಮ್ಮು": "dry_cough",
+    "ಕಫ": "persistent_cough_with_mucus", "ಲೋಳೆ": "persistent_cough_with_mucus",
+    "ರಕ್ತ ಕೆಮ್ಮು": "coughing_blood", "ಉಸಿರಾಟದ ತೊಂದರೆ": "shortness_of_breath",
+    "ಉಸಿರು ಕಟ್ಟುವಿಕೆ": "shortness_of_breath", "ದಮ್ಮು": "shortness_of_breath", "ಉಬ್ಬಸ": "wheezing",
+    "ಎದೆ ನೋವು": "chest_pressure_squeezing", "ಎದೆ ಬಿಗಿತ": "chest_tightness",
+    "ಎದೆ ಬಡಿತ": "palpitations_racing_heart", "ಗುಂಡಿಗೆ ಬಡಿತ": "palpitations_racing_heart",
+    "ತಣ್ಣನೆಯ ಬೆವರು": "cold_sweating",
+    "kemmu": "dry_cough", "ede novu": "chest_pressure_squeezing", "usirata samasye": "shortness_of_breath",
+
+    # Gastrointestinal (ಹೊಟ್ಟೆ / ಜೀರ್ಣಾಂಗ)
+    "ವಾಂತಿ": "vomiting", "ವಾಕರಿಕೆ": "nausea", "ಹೊಟ್ಟೆ ನೋವು": "stomach_pain",
+    "ಹೊಟ್ಟೆ ಸೆಳೆತ": "abdominal_cramps", "ಹೊಟ್ಟೆ ಉಬ್ಬರ": "bloating",
+    "ಬೇದಿ": "watery_diarrhea", "ಅತಿಸಾರ": "watery_diarrhea", "ನೀರು ಬೇದಿ": "watery_diarrhea",
+    "ಎದೆಯುರಿ": "heartburn_burning_chest", "ಅಸಿಡಿಟಿ": "heartburn_burning_chest",
+    "ಹಸಿವಿಲ್ಲದಿರುವುದು": "loss_of_appetite", "ಹಸಿವಿಲ್ಲ": "loss_of_appetite", "ಹಸಿವಾಗದಿರುವುದು": "loss_of_appetite",
+    "vaanthi": "vomiting", "vanti": "vomiting", "vakarike": "nausea", "hotte novu": "stomach_pain",
+    "bedi": "watery_diarrhea", "bhedi": "watery_diarrhea",
+
+    # Endocrine, Musculoskeletal & Skin (ದೇಹ / ಚರ್ಮ / ಮೂತ್ರ)
+    "ಸುಸ್ತು": "fatigue", "ಆಯಾಸ": "fatigue", "ದಣಿವು": "fatigue", "ನಿಶ್ಯಕ್ತಿ": "fatigue",
+    "ಮೈಕೈ ನೋವು": "muscle_pain", "ಮೈ ನೋವು": "severe_body_ache", "ಕೀಲು ನೋವು": "joint_pain",
+    "ಮಂಡಿ ನೋವು": "joint_pain", "ಬೆನ್ನು ನೋವು": "lower_back_pain_stiffness",
+    "ತುರಿಕೆ": "intense_skin_itching", "ದದ್ದು": "skin_rash", "ಚರ್ಮದ ದದ್ದು": "skin_rash",
+    "ಮೂತ್ರದಲ್ಲಿ ಉರಿ": "burning_pain_with_urination_dysuria", "ಹೆಚ್ಚು ಮೂತ್ರ": "frequent_urination",
+    "ಹೆಚ್ಚು ಬಾಯಾರಿಕೆ": "excessive_thirst", "ಬಾಯಾರಿಕೆ": "excessive_thirst", "ತೂಕ ನಷ್ಟ": "unexplained_weight_loss",
+    "susthu": "fatigue", "ayasa": "fatigue", "maikai novu": "muscle_pain", "keelu novu": "joint_pain",
+    "bennu novu": "lower_back_pain_stiffness"
 }

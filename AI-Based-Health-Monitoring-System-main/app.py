@@ -491,11 +491,13 @@ def chat(conversation_id):
             conversation_manager.set_language(conversation_id, data.get('language', 'english'))
             conv = conversation_manager.get_conversation(conversation_id)
         
-        # Ensure age and language are set so patient is never blocked
-        if not conv.get('age'):
-            conversation_manager.set_age(conversation_id, data.get('age', '18-64 years (Adult)'))
-        if not conv.get('language'):
-            conversation_manager.set_language(conversation_id, data.get('language', 'english'))
+        # Ensure age and language stay synchronized with request
+        req_age = data.get('age') or (conv.get('age') if conv else None) or '18-64 years (Adult)'
+        req_lang = data.get('language') or (conv.get('language') if conv else None) or 'english'
+        if not conv.get('age') or (data.get('age') and conv.get('age') != data.get('age')):
+            conversation_manager.set_age(conversation_id, req_age)
+        if not conv.get('language') or (data.get('language') and conv.get('language') != data.get('language')):
+            conversation_manager.set_language(conversation_id, req_lang)
         conv = conversation_manager.get_conversation(conversation_id)
         
         # Add user message to history
