@@ -14,23 +14,30 @@ import config
 # Clinical and anatomical keywords used to validate medical domain relevance
 CLINICAL_KEYWORDS = {
     # English keywords
-    'pain', 'pains', 'ache', 'aches', 'aching', 'sore', 'soreness', 'hurt', 'hurts', 'hurting',
+    'pain', 'pains', 'paining', 'ache', 'aches', 'aching', 'sore', 'soreness', 'hurt', 'hurts', 'hurting',
     'swelling', 'swollen', 'swell', 'bleeding', 'bleed', 'bleeds', 'blood', 'bloody',
-    'fever', 'feverish', 'temperature', 'pyrexia', 'cough', 'coughing', 'coughs', 'cold', 'colds',
-    'chills', 'shivering', 'shiver', 'sweat', 'sweats', 'sweating', 'night sweats', 'dizzy',
-    'dizziness', 'vertigo', 'lightheaded', 'faint', 'fainting', 'nausea', 'nauseous', 'vomit',
-    'vomiting', 'vomited', 'vomits', 'throw up', 'throwing up', 'diarrhea', 'loose motions',
-    'watery stool', 'constipation', 'cramp', 'cramps', 'cramping', 'burn', 'burning', 'itch',
-    'itching', 'itchy', 'rash', 'rashes', 'wound', 'wounds', 'cut', 'cuts', 'bruise', 'bruises',
-    'pus', 'discharge', 'fatigue', 'tired', 'tiredness', 'weak', 'weakness', 'exhaustion',
-    'breath', 'breathing', 'breathless', 'breathlessness', 'shortness of breath', 'wheeze',
-    'wheezing', 'chest', 'pressure', 'tight', 'tightness', 'spasm', 'spasms', 'stiffness',
-    'stiff', 'numb', 'numbness', 'tingling', 'thirst', 'thirsty', 'appetite', 'weight',
-    'vision', 'blur', 'blurry', 'blurred', 'hearing', 'earache', 'sleep', 'insomnia',
-    'infection', 'infected', 'allergy', 'allergic', 'allergies', 'virus', 'viral', 'bacteria',
-    'bacterial', 'flu', 'influenza', 'phlegm', 'mucus', 'sputum', 'sugar', 'glucose', 'bp',
-    'blood pressure', 'pulse', 'heart rate', 'palpitations', 'headache', 'headaches', 'migraine',
-    'asthma', 'diabetes', 'cancer', 'covid', 'coronavirus', 'typhoid', 'malaria', 'dengue',
+    'fever', 'fevers', 'feverish', 'temperature', 'pyrexia', 'cough', 'coughing', 'coughs', 'coughed',
+    'cold', 'colds', 'chills', 'shivering', 'shiver', 'shivers', 'sweat', 'sweats', 'sweating', 'night sweats',
+    'dizzy', 'dizziness', 'giddiness', 'giddy', 'vertigo', 'lightheaded', 'lightheadedness',
+    'faint', 'fainting', 'nausea', 'nauseous', 'nauseated', 'vomit', 'vomiting', 'vomited', 'vomits',
+    'throw up', 'throwing up', 'vomit sensation', 'vomiting sensation',
+    'diarrhea', 'diarrhoea', 'motions', 'loose motion', 'loose motions', 'loose stool', 'loose stools',
+    'watery stool', 'watery stools', 'motions problem', 'frequent motions', 'constipation',
+    'food poisoning', 'stomach upset', 'upset stomach', 'indigestion',
+    'cramp', 'cramps', 'cramping', 'burn', 'burning', 'burning sensation', 'itch', 'itching', 'itchy',
+    'rash', 'rashes', 'wound', 'wounds', 'cut', 'cuts', 'bruise', 'bruises', 'pus', 'discharge',
+    'fatigue', 'tired', 'tiredness', 'weak', 'weakness', 'exhaustion', 'exhausted', 'drowsy',
+    'unwell', 'feeling unwell', 'not feeling well', 'not well', 'feeling sick', 'sick', 'sickness',
+    'breath', 'breathing', 'breathless', 'breathlessness', 'shortness of breath', 'wheeze', 'wheezing',
+    'chest', 'pressure', 'tight', 'tightness', 'chest tightness', 'spasm', 'spasms', 'stiffness', 'stiff',
+    'numb', 'numbness', 'tingling', 'thirst', 'thirsty', 'appetite', 'weight', 'vision', 'blur', 'blurry',
+    'hearing', 'earache', 'sleep', 'insomnia', 'infection', 'infected', 'allergy', 'allergic', 'allergies',
+    'virus', 'viral', 'bacteria', 'bacterial', 'flu', 'influenza', 'phlegm', 'mucus', 'sputum',
+    'sugar', 'glucose', 'bp', 'blood pressure', 'pulse', 'heart rate', 'palpitation', 'palpitations',
+    'fast heartbeat', 'heart racing', 'headache', 'headaches', 'head pain', 'heavy head', 'head heaviness',
+    'migraine', 'asthma', 'diabetes', 'cancer', 'covid', 'coronavirus', 'typhoid', 'malaria', 'dengue',
+    'piles', 'hemorrhoids', 'sprain', 'gastric', 'gas trouble', 'gastric trouble', 'gastric problem',
+    'acidity', 'heartburn', 'acid reflux', 'gerd',
     'head', 'brain', 'eye', 'eyes', 'ear', 'ears', 'nose', 'mouth', 'throat', 'neck',
     'shoulder', 'shoulders', 'heart', 'lung', 'lungs', 'rib', 'ribs', 'arm', 'arms',
     'hand', 'hands', 'finger', 'fingers', 'back', 'spine', 'abdomen', 'abdominal', 'stomach',
@@ -40,9 +47,8 @@ CLINICAL_KEYWORDS = {
     'joints', 'muscle', 'muscles', 'nerve', 'nerves', 'vein', 'veins', 'artery', 'liver',
     'kidney', 'kidneys', 'medicine', 'medicines', 'medication', 'medications', 'drug', 'drugs',
     'pill', 'pills', 'tablet', 'tablets', 'prescription', 'treatment', 'treatments',
-    'sick', 'sickness', 'ill', 'illness', 'disease', 'diseases',
-    'symptom', 'symptoms', 'syndrome', 'emergency', 'paracetamol', 'aspirin',
-    'ibuprofen', 'antibiotic', 'antibiotics', 'inhaler', 'insulin',
+    'ill', 'illness', 'disease', 'diseases', 'symptom', 'symptoms', 'syndrome', 'emergency',
+    'paracetamol', 'aspirin', 'ibuprofen', 'antibiotic', 'antibiotics', 'inhaler', 'insulin',
 
     # Kannada keywords (native script)
     'ನೋವು', 'ಉರಿ', 'ಜ್ವರ', 'ಕೆಮ್ಮು', 'ಶೀತ', 'ನೆಗಡಿ', 'ಚಳಿ', 'ನಡುಕ', 'ಬೆವರು',
@@ -52,14 +58,24 @@ CLINICAL_KEYWORDS = {
     'ನಿದ್ದೆ', 'ಸೋಂಕು', 'ಅಲರ್ಜಿ', 'ಕಫ', 'ಲೋಳೆ', 'ತಲೆ', 'ಕಣ್ಣು', 'ಕಿವಿ', 'ಮೂಗು',
     'ಬಾಯಿ', 'ಗಂಟಲು', 'ಕುತ್ತಿಗೆ', 'ಎದೆ', 'ಹೃದಯ', 'ಶ್ವಾಸಕೋಶ', 'ತೋಳು', 'ಕೈ', 'ಬೆರಳು',
     'ಬೆನ್ನು', 'ಹೊಟ್ಟೆ', 'ಸೊಂಟ', 'ಕಾಲು', 'ಮಂಡಿ', 'ಪಾದ', 'ಚರ್ಮ', 'ರಕ್ತ', 'ಮೂತ್ರ',
-    'ಮಲ', 'ಮೂಳೆ', 'ಕೀಲು', 'ಸ್ನಾಯು', 'ನರ', 'ಔಷಧ', 'ಮಾತ್ರೆ',
-    'ಗುಳಿಗೆ', 'ಚಿಕಿತ್ಸೆ', 'ಆರೋಗ್ಯ', 'ರೋಗ', 'ಕಾಯಿಲೆ', 'ತುರ್ತು',
+    'ಮಲ', 'ಮೂಳೆ', 'ಕೀಲು', 'ಸ್ನಾಯು', 'ನರ', 'ಔಷಧ', 'ಮಾತ್ರೆ', 'ಗುಳಿಗೆ', 'ಚಿಕಿತ್ಸೆ',
+    'ಆರೋಗ್ಯ', 'ರೋಗ', 'ಕಾಯಿಲೆ', 'ತುರ್ತು', 'ಹುಷಾರಿಲ್ಲ', 'ಆರಾಮ ಇಲ್ಲ', 'ಅಜೀರ್ಣ',
+    'ಮೂಲವ್ಯಾಧಿ', 'ವಿಷಾಹಾರ', 'ಹೊಟ್ಟೆ ಕೆಟ್ಟಿದೆ', 'ಮೈ ಕೈ ನೋವು', 'ಮೈಕೈನೋವು', 'ತಲೆ ಭಾರ',
+    'ಕಾಲಿನಲ್ಲಿ ನೋವು', 'ಕೈಯಲ್ಲಿ ನೋವು', 'ಬೆನ್ನಿನಲ್ಲಿ ನೋವು', 'ಹೊಟ್ಟೆಯಲ್ಲಿ ನೋವು', 'ಎದೆಯಲ್ಲಿ ನೋವು',
+    'ಜ್ವರ ಬಂದಿದೆ', 'ಕೆಮ್ಮು ಬರ್ತಿದೆ', 'ವಾಂತಿ ಆಗ್ತಿದೆ', 'ಬೇದಿ ಆಗ್ತಿದೆ', 'ನೆಗಡಿ ಆಗಿದೆ',
 
     # Transliterated Kanglish keywords
-    'jwara', 'talenovu', 'tale novu', 'kemmu', 'sheetha', 'negadi', 'chali', 'vaanthi',
-    'vanti', 'vakarike', 'bedi', 'bhedi', 'hotte novu', 'ede novu', 'susthu', 'ayasa',
-    'maikai novu', 'keelu novu', 'bennu novu', 'gantalu novu', 'usirata', 'kaalu novu',
-    'kai novu', 'raktha', 'matre', 'roga'
+    'jwara', 'jvara', 'talenovu', 'tale novu', 'thale novu', 'thalenovu', 'kemmu', 'sheetha', 'sheeta',
+    'negadi', 'chali', 'vaanthi', 'vaanti', 'vanti', 'vakarike', 'bedi', 'bhedi', 'hotte novu', 'hottenovu',
+    'ede novu', 'edenovu', 'susthu', 'sustu', 'ayasa', 'maikai novu', 'mai kai novu', 'maikainovu',
+    'keelu novu', 'bennu novu', 'bennunovu', 'gantalu novu', 'gantlu novu', 'usirata', 'kaalu novu',
+    'kalu novu', 'kalunovu', 'kaalunovu', 'mandi novu', 'mandinovu', 'kai novu', 'raktha', 'matre',
+    'roga', 'hushaarilla', 'husharilla', 'arama illa', 'aarama illa',
+
+    # Hindi keywords
+    'बुखार', 'सिरदर्द', 'खांसी', 'जुकाम', 'सर्दी', 'दर्द', 'उल्टी', 'दस्त', 'कमजोरी',
+    'चक्कर', 'पेट दर्द', 'सीने में दर्द', 'गले में खराश', 'बदन दर्द', 'तबीयत खराब', 'बीमार',
+    'tabiyat kharab', 'bimar', 'sirdard', 'pet dard', 'dast', 'ulti', 'chakkar', 'kamzori', 'badan dard'
 }
 
 GREETING_WORDS = {
@@ -127,7 +143,7 @@ class MedicalResponseGenerator:
 
             # 4. Check for clinical and health vocabulary keywords
             for kw in sorted(CLINICAL_KEYWORDS, key=len, reverse=True):
-                pattern = r'(?:^|[\s\b])' + re.escape(kw.lower()) + r'(?:$|[\s\b])'
+                pattern = r'(?:\s|^)' + re.escape(kw.lower()) + r'(?:\s|$)'
                 if re.search(pattern, clean_text, re.IGNORECASE):
                     return 'clinical'
 

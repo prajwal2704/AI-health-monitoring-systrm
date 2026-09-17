@@ -35,7 +35,7 @@ class DiseasePredictor:
             clean_phrase = phrase.lower().strip()
             if not clean_phrase:
                 continue
-            pattern = r'(?:^|[\s\b])' + re.escape(clean_phrase) + r'(?:$|[\s\b])'
+            pattern = r'(?:\s|^)' + re.escape(clean_phrase) + r'(?:\s|$)'
             if re.search(pattern, padded_text, re.IGNORECASE):
                 token = self.synonyms[phrase]
                 detected_tokens.add(token)
@@ -44,7 +44,7 @@ class DiseasePredictor:
         for dis_id, data in self.database.items():
             for sym in data['primary_symptoms'] + data['secondary_symptoms']:
                 readable = sym.replace('_', ' ')
-                pattern = r'(?:^|[\s\b])' + re.escape(readable) + r'(?:$|[\s\b])'
+                pattern = r'(?:\s|^)' + re.escape(readable) + r'(?:\s|$)'
                 if re.search(pattern, padded_text, re.IGNORECASE):
                     detected_tokens.add(sym)
 
