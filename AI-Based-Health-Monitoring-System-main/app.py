@@ -821,6 +821,7 @@ def switch_provider():
 def admin_stats():
     """Get high-level system usage KPI statistics"""
     try:
+        auth_store._sync_from_disk()
         stats = auth_store.get_admin_stats()
         return jsonify({
             'success': True,
@@ -838,6 +839,7 @@ def admin_stats():
 def admin_get_users():
     """Get all registered user accounts with activity stats for admin monitoring"""
     try:
+        auth_store._sync_from_disk()
         users = auth_store.get_all_users_admin()
         return jsonify({
             'success': True,
@@ -848,6 +850,24 @@ def admin_get_users():
         return jsonify({
             'success': False,
             'error': f'Failed to retrieve users: {e}'
+        }), 500
+
+
+@app.route('/api/admin/recent-logins', methods=['GET'])
+@require_admin
+def admin_recent_logins():
+    """Get recent login audit history across all users"""
+    try:
+        auth_store._sync_from_disk()
+        limit = min(int(request.args.get('limit', 20)), 100)
+        return jsonify({
+            'success': True,
+            'logins': auth_store.login_history[:limit]
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'Failed to retrieve login history: {e}'
         }), 500
 
 

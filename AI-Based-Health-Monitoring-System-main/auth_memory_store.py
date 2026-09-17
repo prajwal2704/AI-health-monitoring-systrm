@@ -41,14 +41,19 @@ class Conversation:
     created_at: str
     updated_at: str
 
-class InMemoryAuthStore:
-    """In-Memory authentication and data store with file persistence"""
+# Absolute path to ensure both Patient Portal and Admin Server share the exact same file
+DEFAULT_AUTH_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "auth_data.json")
 
-    def __init__(self, data_file="auth_data.json"):
-        self.data_file = data_file
+class InMemoryAuthStore:
+    """In-Memory authentication and data store with file persistence and multi-process auto-sync"""
+
+    def __init__(self, data_file=None):
+        self.data_file = data_file or DEFAULT_AUTH_FILE
+        self._last_mtime = 0.0
         self.users: Dict[str, User] = {}  # email -> User
         self.conversations: Dict[str, Conversation] = {}  # conversation_id -> Conversation
         self.active_sessions: Dict[str, str] = {}  # session_token -> email
+        self.login_history: List[Dict] = []  # List of recent login audit entries
         self._load_data()
         self._ensure_admin_user()
 
@@ -67,18 +72,30 @@ class InMemoryAuthStore:
                 password_hash=self.hash_password(admin_password),
                 created_at=datetime.now().isoformat(),
                 role="admin",
-                last_login=None
+                last_login=datetime.now().isoformat()
             )
             self.users[admin_email] = admin_user
             self._save_data()
         else:
             self.users[admin_email].role = "admin"
 
+    def _sync_from_disk(self):
+        """Automatically re-sync in-memory state if another server process updated auth_data.json on disk"""
+        if not os.path.exists(self.data_file):
+            return
+        try:
+            current_mtime = os.path.getmtime(self.data_file)
+            if current_mtime > self._last_mtime:
+                self._load_data()
+        except Exception:
+            pass
+
     def _load_data(self):
         """Load data from file if it exists with full backward compatibility"""
         if os.path.exists(self.data_file):
             try:
-                with open(self.data_file, 'r') as f:
+                self._last_mtime = os.path.getmtime(self.data_file)
+                with open(self.data_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
 
                 # Load users safely
@@ -102,19 +119,39 @@ class InMemoryAuthStore:
                     conversation = Conversation(**conv_data)
                     self.conversations[conv_id] = conversation
 
+                # Load login history audit stream
+                self.login_history = data.get('login_history', [])
+                if not self.login_history:
+                    # Seed login history from existing users who have last_login
+                    for email, user in self.users.items():
+                        if user.last_login:
+                            self.login_history.append({
+                                "id": secrets.token_hex(8),
+                                "email": user.email,
+                                "full_name": user.full_name,
+                                "role": user.role,
+                                "login_type": "password" if user.role != 'admin' else "admin",
+                                "timestamp": user.last_login,
+                                "ip": "127.0.0.1",
+                                "user_agent": "Web Client"
+                            })
+                    self.login_history.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
+
             except Exception as e:
                 print(f"Warning: Could not load data from {self.data_file}: {e}")
 
     def _save_data(self):
-        """Save data to file"""
+        """Save data to file and update last modified tracking"""
         try:
             data = {
                 'users': {email: asdict(user) for email, user in self.users.items()},
-                'conversations': {conv_id: asdict(conv) for conv_id, conv in self.conversations.items()}
+                'conversations': {conv_id: asdict(conv) for conv_id, conv in self.conversations.items()},
+                'login_history': self.login_history[:200]
             }
 
-            with open(self.data_file, 'w') as f:
+            with open(self.data_file, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=2)
+            self._last_mtime = os.path.getmtime(self.data_file)
         except Exception as e:
             print(f"Warning: Could not save data to {self.data_file}: {e}")
 
@@ -212,8 +249,20 @@ class InMemoryAuthStore:
         if not self.verify_password(password, user.password_hash):
             return {"success": False, "error": "User not found or invalid credentials"}
 
-        # Track last login
+        # Track last login and append to login history audit stream
         user.last_login = datetime.now().isoformat()
+        login_entry = {
+            "id": secrets.token_hex(8),
+            "email": user.email,
+            "full_name": user.full_name,
+            "role": getattr(user, 'role', 'patient'),
+            "login_type": "admin" if getattr(user, 'role', 'patient') == 'admin' else "password",
+            "timestamp": user.last_login,
+            "ip": "127.0.0.1",
+            "user_agent": "Web Client"
+        }
+        self.login_history.insert(0, login_entry)
+        self.login_history = self.login_history[:200]
         self._save_data()
 
         # Generate session token

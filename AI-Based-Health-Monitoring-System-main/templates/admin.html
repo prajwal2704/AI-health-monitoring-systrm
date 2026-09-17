@@ -963,10 +963,40 @@
         </div>
       </div>
 
+      <!-- Recent Logins Card -->
+      <div class="table-card" style="margin-bottom: 24px;">
+        <div class="table-toolbar">
+          <div class="table-title">
+            <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" style="margin-right:6px;vertical-align:-2px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Recent Login Activity
+          </div>
+          <button type="button" class="btn-table-action" onclick="loadAdminData()" title="Refresh">
+            <svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            Refresh
+          </button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Login Time</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody id="recent-logins-body">
+              <tr><td colspan="5" class="empty-state">Loading login history...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- Users Table Card -->
       <div class="table-card">
         <div class="table-toolbar">
-          <div class="table-title">Registered Accounts & Credential Registry</div>
+          <div class="table-title">Registered Accounts &amp; Credential Registry</div>
           <div class="search-input-wrapper">
             <svg class="svg-icon input-icon-left" width="15" height="15" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <input type="text" id="user-search" class="search-input" placeholder="Search by name or email..." oninput="filterUsersTable()">
@@ -981,6 +1011,7 @@
                 <th>Login Email (Credential Identifier)</th>
                 <th>Date of Birth</th>
                 <th>Registered On</th>
+                <th>Last Login</th>
                 <th>Consultations</th>
                 <th>Credential Status</th>
                 <th style="text-align: right;">Actions</th>
@@ -988,7 +1019,7 @@
             </thead>
             <tbody id="users-table-body">
               <tr>
-                <td colspan="7" class="empty-state">Loading user registry...</td>
+                <td colspan="8" class="empty-state">Loading user registry...</td>
               </tr>
             </tbody>
           </table>
@@ -1205,7 +1236,18 @@
           }
         }
 
-        // 2. Users Table
+        // 2. Recent Logins
+        const loginsRes = await fetch('/api/admin/recent-logins?limit=20', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (loginsRes.ok) {
+          const ldata = await loginsRes.json();
+          if (ldata.success && Array.isArray(ldata.logins)) {
+            renderRecentLogins(ldata.logins);
+          }
+        }
+
+        // 3. Users Table
         const usersRes = await fetch('/api/admin/users', {
           headers: { 'Authorization': 'Bearer ' + token }
         });
@@ -1221,10 +1263,38 @@
       }
     }
 
+    function renderRecentLogins(logins) {
+      const tbody = document.getElementById('recent-logins-body');
+      if (!logins || logins.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No login history yet. Logins will appear here after users sign in.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = logins.map(l => {
+        const isAdmin = l.role === 'admin';
+        const initials = (l.full_name || l.email || 'U').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        const ts = l.timestamp ? new Date(l.timestamp).toLocaleString() : 'Unknown';
+        const loginTypeLabel = l.login_type === 'admin' ? '🔐 Admin' : '🔑 Password';
+        return `
+          <tr>
+            <td>
+              <div class="user-info-cell">
+                <div class="user-avatar-circle ${isAdmin ? 'admin-avatar' : ''}">${escapeHtml(initials)}</div>
+                <span class="user-name-text">${escapeHtml(l.full_name || 'Unknown')}</span>
+              </div>
+            </td>
+            <td>${escapeHtml(l.email)}</td>
+            <td><span class="user-role-badge ${isAdmin ? 'admin' : 'patient'}">${isAdmin ? 'Administrator' : 'Patient'}</span></td>
+            <td style="white-space:nowrap;">${escapeHtml(ts)}</td>
+            <td>${escapeHtml(loginTypeLabel)}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
     function renderUsersTable(users) {
       const tbody = document.getElementById('users-table-body');
       if (!users || users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No user records found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No user records found.</td></tr>';
         return;
       }
 
@@ -1232,6 +1302,7 @@
         const isAdmin = (u.role === 'admin');
         const initials = (u.full_name || u.email || 'U').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
         const regDate = u.created_at ? new Date(u.created_at).toLocaleDateString() : 'N/A';
+        const lastLogin = u.last_login ? new Date(u.last_login).toLocaleString() : 'Never';
         const dobStr = u.dob ? escapeHtml(u.dob) : 'Not specified';
 
         return `
@@ -1255,6 +1326,7 @@
             </td>
             <td>${dobStr}</td>
             <td>${regDate}</td>
+            <td style="white-space:nowrap; color: ${u.last_login ? 'inherit' : '#999'};">${escapeHtml(lastLogin)}</td>
             <td>
               <span style="font-weight: 600;">${u.conversation_count || 0}</span> sessions
             </td>
