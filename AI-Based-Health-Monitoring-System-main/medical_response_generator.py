@@ -65,7 +65,7 @@ CLINICAL_KEYWORDS = {
 GREETING_WORDS = {
     'hello', 'hi', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening',
     'namaste', 'namaskara', 'namaskar', 'ನಮಸ್ಕಾರ', 'ಹಲೋ', 'ಹಾಯ್', 'who are you', 'help',
-    'how are you', 'how do you do', 'what can you do', 'what is this', 'start', 'test',
+    'how are you', 'how do you do', 'what can you do',
     'hello doctor', 'hi doctor', 'hey doctor', 'hello doc', 'hi doc', 'good morning doctor'
 }
 
@@ -87,46 +87,58 @@ class MedicalResponseGenerator:
         Classifies incoming input into 'clinical', 'greeting', or 'invalid'.
         Guarantees that only valid medical symptoms or clinical concerns receive diagnoses.
         """
-        if symptoms_list and len(symptoms_list) > 0:
-            return 'clinical'
-
-        if vitals and any(vitals.get(k) is not None for k in ['systolic_bp', 'heart_rate', 'spo2', 'temperature', 'blood_sugar']):
-            return 'clinical'
-
         text_str = (text or '').strip()
-        if not text_str:
+        has_text = bool(text_str)
+        has_symptoms = bool(symptoms_list and len(symptoms_list) > 0)
+        has_vitals = bool(vitals and any(vitals.get(k) is not None for k in ['systolic_bp', 'heart_rate', 'spo2', 'temperature', 'blood_sugar']))
+
+        if not has_text and not has_symptoms and not has_vitals:
             return 'invalid'
 
-        # Normalize text while preserving unicode letters
-        cleaned = ''.join(' ' if unicodedata.category(c).startswith(('P', 'S')) else c for c in text_str.lower())
-        clean_text = ' ' + ' '.join(cleaned.split()) + ' '
-        raw_clean = clean_text.strip()
+        # If user explicitly provided a text message, validate the text message first!
+        if has_text:
+            # 1. Reject pure numbers or punctuation-only inputs (e.g. "552", "12345", "!@#")
+            has_letters = any(unicodedata.category(c).startswith('L') for c in text_str)
+            if not has_letters:
+                return 'invalid'
 
-        # Check for polite greetings first (exact or common greeting phrases)
-        greeting_patterns = [
-            r'^(?:hello|hi|hey|greetings|good\s+(?:morning|afternoon|evening)|namaste|namaskara|namaskar|ಹಲೋ|ಹಾಯ್|ನಮಸ್ಕಾರ)(?:\s+(?:doctor|doc|there|assistant|carepulse|bot|ವೈದ್ಯರೇ))?[!\.\?\s]*$',
-            r'^(?:who\s+are\s+you|what\s+can\s+you\s+do|how\s+are\s+you|help|start)[!\.\?\s]*$'
-        ]
-        for gp in greeting_patterns:
-            if re.match(gp, raw_clean, re.IGNORECASE):
-                return 'greeting'
+            # Normalize text while preserving unicode letters
+            cleaned = ''.join(' ' if unicodedata.category(c).startswith(('P', 'S')) else c for c in text_str.lower())
+            clean_text = ' ' + ' '.join(cleaned.split()) + ' '
+            raw_clean = clean_text.strip()
 
-        for gr in sorted(GREETING_WORDS, key=len, reverse=True):
-            if raw_clean == gr:
-                return 'greeting'
+            # 2. Check for polite greetings first (exact or common greeting phrases)
+            greeting_patterns = [
+                r'^(?:hello|hi|hey|greetings|good\s+(?:morning|afternoon|evening)|namaste|namaskara|namaskar|ಹಲೋ|ಹಾಯ್|ನಮಸ್ಕಾರ)(?:\s+(?:doctor|doc|there|assistant|carepulse|bot|ವೈದ್ಯರೇ))?[!\.\?\s]*$',
+                r'^(?:who\s+are\s+you|what\s+can\s+you\s+do|how\s+are\s+you|help)[!\.\?\s]*$'
+            ]
+            for gp in greeting_patterns:
+                if re.match(gp, raw_clean, re.IGNORECASE):
+                    return 'greeting'
 
-        # Check for recognized symptoms via disease predictor
-        extracted = self.predictor.extract_symptoms_from_text(text_str)
-        if extracted and len(extracted) > 0:
-            return 'clinical'
+            for gr in sorted(GREETING_WORDS, key=len, reverse=True):
+                if raw_clean == gr:
+                    return 'greeting'
 
-        # Check for clinical and health vocabulary keywords
-        for kw in sorted(CLINICAL_KEYWORDS, key=len, reverse=True):
-            pattern = r'(?:^|[\s\b])' + re.escape(kw.lower()) + r'(?:$|[\s\b])'
-            if re.search(pattern, clean_text, re.IGNORECASE):
+            # 3. Check for recognized symptoms via disease predictor
+            extracted = self.predictor.extract_symptoms_from_text(text_str)
+            if extracted and len(extracted) > 0:
                 return 'clinical'
 
-        # Unrecognized / non-medical input
+            # 4. Check for clinical and health vocabulary keywords
+            for kw in sorted(CLINICAL_KEYWORDS, key=len, reverse=True):
+                pattern = r'(?:^|[\s\b])' + re.escape(kw.lower()) + r'(?:$|[\s\b])'
+                if re.search(pattern, clean_text, re.IGNORECASE):
+                    return 'clinical'
+
+            # If the user explicitly typed a message and it lacks medical content/symptoms:
+            # It is invalid!
+            return 'invalid'
+
+        # If no text was entered, but valid symptom chips or vitals were provided
+        if has_symptoms or has_vitals:
+            return 'clinical'
+
         return 'invalid'
 
     def _build_invalid_input_response(self, language: str = 'english') -> Dict[str, Any]:

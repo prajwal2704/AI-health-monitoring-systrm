@@ -1934,7 +1934,7 @@
           },
           body: JSON.stringify({
             message: text,
-            symptoms_list: Array.from(selectedSymptoms),
+            symptoms_list: [],
             age: currentAge,
             language: currentLanguage
           })
@@ -1957,7 +1957,7 @@
               headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 message: text,
-                symptoms_list: Array.from(selectedSymptoms),
+                symptoms_list: [],
                 age: currentAge,
                 language: currentLanguage
               })
