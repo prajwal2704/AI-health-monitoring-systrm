@@ -35,6 +35,48 @@
       ],
       "role": "patient",
       "last_login": "2026-09-17T14:03:32.009669"
+    },
+    "dr.watson@carepulse.local": {
+      "id": "b577a61ec190a05facfefe910782323b",
+      "full_name": "Dr. Emily Watson, MD",
+      "date_of_birth": "1984-06-15",
+      "email": "dr.watson@carepulse.local",
+      "password_hash": "scrypt:32768:8:1$aLRU9e7tYglRoxWE$950cd0893c4299ce9ff615e41ff02207e559603c63f8abd34ab4c2135ca860f6efbce38d515646c19de967fafff6621fe0f0842fb2681439d9637ab9c27c8f4c",
+      "created_at": "2026-09-17T16:01:53.581700",
+      "conversations": [
+        {
+          "id": "1574fa55-820c-4c60-9604-588820a9453e",
+          "title": "New Conversation",
+          "created_at": "2026-09-17T16:01:53.821565",
+          "updated_at": "2026-09-17T16:01:53.821603"
+        }
+      ],
+      "role": "patient",
+      "last_login": "2026-09-17T16:01:53.795847"
+    },
+    "ashwinichavan52385@gmail.com": {
+      "id": "49635b863e492caa4c320a2f2765f19d",
+      "full_name": "prajwal",
+      "date_of_birth": "1995-01-01",
+      "email": "ashwinichavan52385@gmail.com",
+      "password_hash": "scrypt:32768:8:1$9fUCU6Lniuzokiup$ac63089aebf3b213c56445bc8ca4788acedd932eb076ef74f2a14613a66376fad3723dcc6ec60ba5b652da31d1fc12eb3b7f2e05dedc5f455e1a29396274be22",
+      "created_at": "2026-09-17T16:02:28.527307",
+      "conversations": [
+        {
+          "id": "716e0b4a-49bd-4828-ae36-028fe46542ac",
+          "title": "New Conversation",
+          "created_at": "2026-09-17T16:02:28.533808",
+          "updated_at": "2026-09-17T16:02:28.533839"
+        },
+        {
+          "id": "24c09c68-3e0c-4f15-82cf-5a49d12ceb69",
+          "title": "New Conversation",
+          "created_at": "2026-09-17T16:03:28.653950",
+          "updated_at": "2026-09-17T16:03:28.653985"
+        }
+      ],
+      "role": "patient",
+      "last_login": "2026-09-17T16:03:28.646440"
     }
   },
   "conversations": {
@@ -68,6 +110,78 @@
       "language": "english",
       "created_at": "2026-09-17T14:03:34.059740",
       "updated_at": "2026-09-17T14:03:40.207641"
+    },
+    "1574fa55-820c-4c60-9604-588820a9453e": {
+      "id": "1574fa55-820c-4c60-9604-588820a9453e",
+      "user_id": "b577a61ec190a05facfefe910782323b",
+      "title": "New Conversation",
+      "messages": [],
+      "age": "18-64 years (Adult)",
+      "language": "english",
+      "created_at": "2026-09-17T16:01:53.821565",
+      "updated_at": "2026-09-17T16:01:53.833045"
+    },
+    "716e0b4a-49bd-4828-ae36-028fe46542ac": {
+      "id": "716e0b4a-49bd-4828-ae36-028fe46542ac",
+      "user_id": "49635b863e492caa4c320a2f2765f19d",
+      "title": "New Conversation",
+      "messages": [],
+      "age": "18-64 years (Adult)",
+      "language": "english",
+      "created_at": "2026-09-17T16:02:28.533808",
+      "updated_at": "2026-09-17T16:02:28.553069"
+    },
+    "24c09c68-3e0c-4f15-82cf-5a49d12ceb69": {
+      "id": "24c09c68-3e0c-4f15-82cf-5a49d12ceb69",
+      "user_id": "49635b863e492caa4c320a2f2765f19d",
+      "title": "New Conversation",
+      "messages": [],
+      "age": "18-64 years (Adult)",
+      "language": "english",
+      "created_at": "2026-09-17T16:03:28.653950",
+      "updated_at": "2026-09-17T16:03:28.672617"
     }
-  }
+  },
+  "login_history": [
+    {
+      "id": "a9bb08c4defefab6",
+      "email": "ashwinichavan52385@gmail.com",
+      "full_name": "mahantesh",
+      "role": "patient",
+      "login_type": "password",
+      "timestamp": "2026-09-17T16:03:28.646440",
+      "ip": "127.0.0.1",
+      "user_agent": "Web Client"
+    },
+    {
+      "id": "7e9d085686995a0e",
+      "email": "dr.watson@carepulse.local",
+      "full_name": "Dr. Emily Watson, MD (Clinician)",
+      "role": "patient",
+      "login_type": "password",
+      "timestamp": "2026-09-17T16:01:53.795847",
+      "ip": "127.0.0.1",
+      "user_agent": "Web Client"
+    },
+    {
+      "id": "5b54364d19392a77",
+      "email": "admin@carepulse.local",
+      "full_name": "System Administrator",
+      "role": "admin",
+      "login_type": "admin",
+      "timestamp": "2026-09-17T15:18:56.417754",
+      "ip": "127.0.0.1",
+      "user_agent": "Web Client"
+    },
+    {
+      "id": "a1082ac5a11f541a",
+      "email": "testuser@healthcheck.local",
+      "full_name": "Test User",
+      "role": "patient",
+      "login_type": "password",
+      "timestamp": "2026-09-17T14:03:32.009669",
+      "ip": "127.0.0.1",
+      "user_agent": "Web Client"
+    }
+  ]
 }

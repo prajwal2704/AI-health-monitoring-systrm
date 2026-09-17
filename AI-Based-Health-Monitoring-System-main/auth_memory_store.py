@@ -80,13 +80,11 @@ class InMemoryAuthStore:
             self.users[admin_email].role = "admin"
 
     def _sync_from_disk(self):
-        """Automatically re-sync in-memory state if another server process updated auth_data.json on disk"""
+        """Force re-sync from disk so admin server always picks up logins written by patient portal process"""
         if not os.path.exists(self.data_file):
             return
         try:
-            current_mtime = os.path.getmtime(self.data_file)
-            if current_mtime > self._last_mtime:
-                self._load_data()
+            self._load_data()
         except Exception:
             pass
 

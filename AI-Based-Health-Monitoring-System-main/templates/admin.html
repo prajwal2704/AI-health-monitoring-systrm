@@ -1485,8 +1485,33 @@
       window.location.href = `/api/admin/export-users?token=${encodeURIComponent(token)}`;
     }
 
+    // Auto-refresh recent logins every 15 seconds so new patient logins appear immediately
+    async function refreshRecentLogins() {
+      const token = getSessionToken();
+      if (!token) return;
+      try {
+        const res = await fetch('/api/admin/recent-logins?limit=20', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.logins)) {
+            renderRecentLogins(data.logins);
+          }
+        }
+      } catch (e) { /* silent fail */ }
+    }
+
+    function startAutoRefresh() {
+      // Poll every 15 seconds for new logins
+      setInterval(refreshRecentLogins, 15000);
+    }
+
     // Initialize on page load
-    document.addEventListener('DOMContentLoaded', checkAuthAndInit);
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthAndInit();
+      startAutoRefresh();
+    });
   </script>
 </body>
 </html>
