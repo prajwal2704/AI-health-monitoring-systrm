@@ -20,10 +20,14 @@ class User:
     password_hash: str
     created_at: str
     conversations: List[Dict] = None
+    role: str = "patient"
+    last_login: Optional[str] = None
 
     def __post_init__(self):
         if self.conversations is None:
             self.conversations = []
+        if not self.role:
+            self.role = "patient"
 
 @dataclass
 class Conversation:
@@ -46,17 +50,51 @@ class InMemoryAuthStore:
         self.conversations: Dict[str, Conversation] = {}  # conversation_id -> Conversation
         self.active_sessions: Dict[str, str] = {}  # session_token -> email
         self._load_data()
+        self._ensure_admin_user()
+
+    def _ensure_admin_user(self):
+        """Ensure default system administrator account exists"""
+        admin_email = os.environ.get("ADMIN_EMAIL", "admin@carepulse.local").strip().lower()
+        admin_password = os.environ.get("ADMIN_PASSWORD", "Admin@CarePulse2026!").strip()
+        
+        if admin_email not in self.users:
+            user_id = "admin-" + secrets.token_hex(8)
+            admin_user = User(
+                id=user_id,
+                full_name="System Administrator",
+                date_of_birth="1985-01-01",
+                email=admin_email,
+                password_hash=self.hash_password(admin_password),
+                created_at=datetime.now().isoformat(),
+                role="admin",
+                last_login=None
+            )
+            self.users[admin_email] = admin_user
+            self._save_data()
+        else:
+            self.users[admin_email].role = "admin"
 
     def _load_data(self):
-        """Load data from file if it exists"""
+        """Load data from file if it exists with full backward compatibility"""
         if os.path.exists(self.data_file):
             try:
                 with open(self.data_file, 'r') as f:
                     data = json.load(f)
 
-                # Load users
+                # Load users safely
                 for email, user_data in data.get('users', {}).items():
-                    user = User(**user_data)
+                    safe_data = {
+                        'id': user_data.get('id', secrets.token_hex(16)),
+                        'full_name': user_data.get('full_name', 'Patient User'),
+                        'date_of_birth': user_data.get('date_of_birth', '1995-01-01'),
+                        'email': user_data.get('email', email),
+                        'password_hash': user_data.get('password_hash', ''),
+                        'created_at': user_data.get('created_at', datetime.now().isoformat()),
+                        'conversations': user_data.get('conversations', []),
+                        'role': user_data.get('role', 'patient'),
+                        'last_login': user_data.get('last_login', None)
+                    }
+                    user = User(**safe_data)
                     self.users[email] = user
 
                 # Load conversations
@@ -109,7 +147,7 @@ class InMemoryAuthStore:
         """Generate a secure session token"""
         return secrets.token_urlsafe(32)
 
-    def register_user(self, full_name: str, date_of_birth: str, email: str, password: str) -> Dict:
+    def register_user(self, full_name: str, date_of_birth: str, email: str, password: str, role: str = "patient") -> Dict:
         """Register a new user"""
         # Check if user already exists
         if email in self.users:
@@ -119,13 +157,19 @@ class InMemoryAuthStore:
         user_id = secrets.token_hex(16)
         password_hash = self.hash_password(password)
 
+        admin_email = os.environ.get("ADMIN_EMAIL", "admin@carepulse.local").strip().lower()
+        if email.lower() == admin_email or email.lower().startswith("admin@"):
+            role = "admin"
+
         user = User(
             id=user_id,
             full_name=full_name,
             date_of_birth=date_of_birth,
             email=email,
             password_hash=password_hash,
-            created_at=datetime.now().isoformat()
+            created_at=datetime.now().isoformat(),
+            role=role,
+            last_login=datetime.now().isoformat()
         )
 
         self.users[email] = user
@@ -141,7 +185,8 @@ class InMemoryAuthStore:
                 "id": user.id,
                 "full_name": user.full_name,
                 "email": user.email,
-                "date_of_birth": user.date_of_birth
+                "date_of_birth": user.date_of_birth,
+                "role": user.role
             },
             "session_token": session_token
         }
@@ -152,20 +197,24 @@ class InMemoryAuthStore:
         if not user:
             # Auto-provision standard demo accounts for instant seamless evaluation
             demo_accounts = {
-                "dr.watson@carepulse.local": ("Dr. Emily Watson, MD (Clinician)", "1984-06-15"),
-                "patient@carepulse.local": ("Sarah Jenkins (Patient)", "1992-11-20"),
-                "demo@carepulse.local": ("CarePulse Demo User", "1990-01-01"),
-                "dr.demo@carepulse.local": ("Dr. Marcus Vance, Chief of Triage", "1980-03-25")
+                "dr.watson@carepulse.local": ("Dr. Emily Watson, MD (Clinician)", "1984-06-15", "patient"),
+                "patient@carepulse.local": ("Sarah Jenkins (Patient)", "1992-11-20", "patient"),
+                "demo@carepulse.local": ("CarePulse Demo User", "1990-01-01", "patient"),
+                "dr.demo@carepulse.local": ("Dr. Marcus Vance, Chief of Triage", "1980-03-25", "patient")
             }
             if email in demo_accounts:
-                full_name, dob = demo_accounts[email]
-                self.register_user(full_name=full_name, date_of_birth=dob, email=email, password=password)
+                full_name, dob, role = demo_accounts[email]
+                self.register_user(full_name=full_name, date_of_birth=dob, email=email, password=password, role=role)
                 user = self.users.get(email)
             else:
                 return {"success": False, "error": "User not found or invalid credentials"}
 
         if not self.verify_password(password, user.password_hash):
             return {"success": False, "error": "User not found or invalid credentials"}
+
+        # Track last login
+        user.last_login = datetime.now().isoformat()
+        self._save_data()
 
         # Generate session token
         session_token = self.generate_session_token()
@@ -177,7 +226,8 @@ class InMemoryAuthStore:
                 "id": user.id,
                 "full_name": user.full_name,
                 "email": user.email,
-                "date_of_birth": user.date_of_birth
+                "date_of_birth": user.date_of_birth,
+                "role": getattr(user, "role", "patient")
             },
             "session_token": session_token
         }
@@ -193,7 +243,8 @@ class InMemoryAuthStore:
                 "id": "guest-user",
                 "full_name": "Guest Patient",
                 "email": "guest@healthcheck.local",
-                "date_of_birth": "1995-01-01"
+                "date_of_birth": "1995-01-01",
+                "role": "patient"
             }
 
         email = self.active_sessions.get(session_token)
@@ -203,7 +254,8 @@ class InMemoryAuthStore:
                 "id": "guest-user",
                 "full_name": "Guest Patient",
                 "email": "guest@healthcheck.local",
-                "date_of_birth": "1995-01-01"
+                "date_of_birth": "1995-01-01",
+                "role": "patient"
             }
 
         user = self.users.get(email)
@@ -212,15 +264,135 @@ class InMemoryAuthStore:
                 "id": "guest-user",
                 "full_name": "Guest Patient",
                 "email": email or "guest@healthcheck.local",
-                "date_of_birth": "1995-01-01"
+                "date_of_birth": "1995-01-01",
+                "role": "patient"
             }
 
         return {
             "id": user.id,
             "full_name": user.full_name,
             "email": user.email,
-            "date_of_birth": user.date_of_birth
+            "date_of_birth": user.date_of_birth,
+            "role": getattr(user, "role", "patient")
         }
+
+    # =========================================================================
+    # ADMINISTRATOR METHODS
+    # =========================================================================
+    def get_all_users_admin(self) -> List[Dict]:
+        """Get all registered user accounts with activity stats for admin monitoring"""
+        users_list = []
+        for email, u in self.users.items():
+            conv_count = len(u.conversations) if u.conversations else 0
+            users_list.append({
+                "id": u.id,
+                "full_name": u.full_name,
+                "email": u.email,
+                "date_of_birth": u.date_of_birth,
+                "role": getattr(u, "role", "patient"),
+                "created_at": u.created_at,
+                "last_login": getattr(u, "last_login", None),
+                "conversation_count": conv_count,
+                "password_status": "PBKDF2-SHA256 Encrypted (Protected)"
+            })
+        users_list.sort(key=lambda x: x.get("created_at", ""), reverse=True)
+        return users_list
+
+    def get_user_conversations_admin(self, user_id: str) -> Optional[Dict]:
+        """Get full consultation & diagnostic activity logs for a specific user"""
+        target_user = None
+        for u in self.users.values():
+            if u.id == user_id:
+                target_user = u
+                break
+        
+        if not target_user:
+            return None
+        
+        convs = []
+        for c_ref in target_user.conversations:
+            conv = self.conversations.get(c_ref.get('id'))
+            if conv:
+                convs.append(asdict(conv))
+        
+        return {
+            "user": {
+                "id": target_user.id,
+                "full_name": target_user.full_name,
+                "email": target_user.email,
+                "date_of_birth": target_user.date_of_birth,
+                "role": getattr(target_user, "role", "patient"),
+                "created_at": target_user.created_at,
+                "last_login": getattr(target_user, "last_login", None)
+            },
+            "conversations": convs
+        }
+
+    def admin_reset_password(self, user_id: str, new_password: str) -> Dict:
+        """Allow administrator to set a new password for any user"""
+        target_user = None
+        for u in self.users.values():
+            if u.id == user_id:
+                target_user = u
+                break
+        
+        if not target_user:
+            return {"success": False, "error": "User account not found"}
+        
+        if not new_password or len(new_password) < 6:
+            return {"success": False, "error": "Password must be at least 6 characters"}
+        
+        target_user.password_hash = self.hash_password(new_password)
+        self._save_data()
+        return {"success": True, "message": f"Password for {target_user.email} updated successfully"}
+
+    def delete_user_admin(self, user_id: str) -> Dict:
+        """Allow administrator to delete a user account and associated consultations"""
+        target_email = None
+        for email, u in self.users.items():
+            if u.id == user_id:
+                target_email = email
+                break
+        
+        if not target_email:
+            return {"success": False, "error": "User not found"}
+        
+        admin_email = os.environ.get("ADMIN_EMAIL", "admin@carepulse.local").strip().lower()
+        if target_email.lower() == admin_email:
+            return {"success": False, "error": "Cannot delete root system administrator account"}
+        
+        # Remove user conversations
+        u = self.users[target_email]
+        for c_ref in u.conversations:
+            cid = c_ref.get('id')
+            if cid in self.conversations:
+                del self.conversations[cid]
+        
+        # Invalidate active sessions
+        tokens_to_del = [tok for tok, em in self.active_sessions.items() if em == target_email]
+        for tok in tokens_to_del:
+            del self.active_sessions[tok]
+        
+        del self.users[target_email]
+        self._save_data()
+        return {"success": True, "message": f"User {target_email} deleted successfully"}
+
+    def get_admin_stats(self) -> Dict:
+        """Get high-level system usage KPI statistics"""
+        total_users = len(self.users)
+        total_conversations = len(self.conversations)
+        active_sessions = len(self.active_sessions)
+        patients_count = sum(1 for u in self.users.values() if getattr(u, 'role', 'patient') != 'admin')
+        admins_count = sum(1 for u in self.users.values() if getattr(u, 'role', 'patient') == 'admin')
+        
+        return {
+            "total_users": total_users,
+            "patients_count": patients_count,
+            "admins_count": admins_count,
+            "total_conversations": total_conversations,
+            "active_sessions": active_sessions
+        }
+
 
     def logout_user(self, session_token: str) -> bool:
         """Logout user by removing session"""

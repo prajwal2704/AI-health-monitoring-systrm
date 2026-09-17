@@ -14,7 +14,9 @@
           "created_at": "2025-12-15T21:30:39.247895",
           "updated_at": "2025-12-15T21:30:39.247950"
         }
-      ]
+      ],
+      "role": "patient",
+      "last_login": null
     },
     "deepak.omkar1234@gmail.com": {
       "id": "8172af8cea52f677af1d011236a97e70",
@@ -30,7 +32,9 @@
           "created_at": "2025-12-15T22:49:04.837306",
           "updated_at": "2025-12-15T22:49:04.837354"
         }
-      ]
+      ],
+      "role": "patient",
+      "last_login": null
     },
     "abcd@efgh.com": {
       "id": "d73c12f086617530cd60b869f1961ca5",
@@ -46,7 +50,9 @@
           "created_at": "2025-12-15T23:55:53.141340",
           "updated_at": "2025-12-15T23:55:53.141365"
         }
-      ]
+      ],
+      "role": "patient",
+      "last_login": null
     },
     "testuser@healthcheck.local": {
       "id": "a3767216a1aa9bf1d00cd737d6945ea2",
@@ -110,7 +116,9 @@
           "created_at": "2026-09-10T22:16:54.737223",
           "updated_at": "2026-09-10T22:16:54.737375"
         }
-      ]
+      ],
+      "role": "patient",
+      "last_login": null
     },
     "legendofcricket18@gmail.com": {
       "id": "34a60eb6012e6f65847b3e51ff271dad",
@@ -132,7 +140,9 @@
           "created_at": "2026-09-10T23:04:01.662840",
           "updated_at": "2026-09-10T23:04:01.662875"
         }
-      ]
+      ],
+      "role": "patient",
+      "last_login": null
     },
     "prajwalvanduvagali@gmail.com": {
       "id": "4c152c2af5f84378a7e59e6e25772ef5",
@@ -148,7 +158,9 @@
           "created_at": "2026-09-10T21:56:22.077832",
           "updated_at": "2026-09-10T21:56:22.077904"
         }
-      ]
+      ],
+      "role": "patient",
+      "last_login": null
     },
     "dr.watson@carepulse.local": {
       "id": "cbc512c20b21dac36a158016eb10864f",
@@ -200,7 +212,9 @@
           "created_at": "2026-09-10T23:56:48.420114",
           "updated_at": "2026-09-10T23:56:48.420161"
         }
-      ]
+      ],
+      "role": "patient",
+      "last_login": null
     },
     "y66#gg@gmail.com": {
       "id": "c6edec4df09498a60773797d99815643",
@@ -222,7 +236,9 @@
           "created_at": "2026-09-10T23:40:36.013737",
           "updated_at": "2026-09-10T23:40:36.013808"
         }
-      ]
+      ],
+      "role": "patient",
+      "last_login": null
     },
     "hajavv@gamil.com": {
       "id": "0e89f62e5004d50fc8d3d5f530404da7",
@@ -238,7 +254,9 @@
           "created_at": "2026-09-10T23:42:38.038340",
           "updated_at": "2026-09-10T23:42:38.038397"
         }
-      ]
+      ],
+      "role": "patient",
+      "last_login": null
     },
     "gahg@gamil.com": {
       "id": "fded50d11fcdceb60b9610bed25293d6",
@@ -254,7 +272,9 @@
           "created_at": "2026-09-10T23:43:23.544400",
           "updated_at": "2026-09-10T23:43:23.544440"
         }
-      ]
+      ],
+      "role": "patient",
+      "last_login": null
     },
     "kiran.reddy@carepulse.local": {
       "id": "5527cfe1c715e1c9dae80dcddd71ca18",
@@ -263,7 +283,9 @@
       "email": "kiran.reddy@carepulse.local",
       "password_hash": "scrypt:32768:8:1$hj3zsVDcPot4euDt$beb148d700a698e0e59d0226fb73ee5165de5699e698d89462685d72285e1ccc41dae4cc2eb94d5ee1d755af784fc1b483aa22bbec9eefb0e9ae24cbbb8411c4",
       "created_at": "2026-09-10T23:48:48.192868",
-      "conversations": []
+      "conversations": [],
+      "role": "patient",
+      "last_login": null
     },
     "sharma@carepulse.local": {
       "id": "8f1b9cb4036444ef88f78ae69c2f9806",
@@ -272,7 +294,31 @@
       "email": "sharma@carepulse.local",
       "password_hash": "scrypt:32768:8:1$LoqyLnDwxN7gg8JA$6cec6b202cb0e20337c01cfed93f6f3b6407f2518b5470b5f88eee74d0447abdd6aa58898633185b6a521b7ca8bbe65305d61fa8b51ce3aa432eef2767f01bec",
       "created_at": "2026-09-10T23:48:48.509059",
-      "conversations": []
+      "conversations": [],
+      "role": "patient",
+      "last_login": null
+    },
+    "admin@carepulse.local": {
+      "id": "admin-58f138b55f73df19",
+      "full_name": "System Administrator",
+      "date_of_birth": "1985-01-01",
+      "email": "admin@carepulse.local",
+      "password_hash": "scrypt:32768:8:1$QbCgmI3EvCziGTUM$a35aad0c9ee38f54ca3eeed54149e4556236a30eb7b846109559f5b590ca42d1c29ebb63d770c89d04306ebe02f5c74e3eb13559fe661e203429cfcb0baa517c",
+      "created_at": "2026-09-17T13:20:40.456890",
+      "conversations": [],
+      "role": "admin",
+      "last_login": "2026-09-17T13:25:31.713803"
+    },
+    "patient_test@carepulse.local": {
+      "id": "5eed493ce3ebc695709136fc8aee6c2e",
+      "full_name": "Test Regular Patient",
+      "date_of_birth": "1998-05-12",
+      "email": "patient_test@carepulse.local",
+      "password_hash": "scrypt:32768:8:1$YLJXuJoiQOmPvWoA$b423b61a48806133b081cec1f28a7b8844acdfa2cbaefde8cfb43c109229ef0badaec0fec962bbd48e3e23f35c4ee5e69f0b60a218115b742033360bd5c6ccd6",
+      "created_at": "2026-09-17T13:25:31.561217",
+      "conversations": [],
+      "role": "patient",
+      "last_login": "2026-09-17T13:25:32.018390"
     }
   },
   "conversations": {

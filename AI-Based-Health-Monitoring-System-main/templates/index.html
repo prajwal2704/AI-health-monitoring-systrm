@@ -766,7 +766,40 @@
     .age-option:hover, .age-option.selected { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
     .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
     .btn-secondary { background: #f1f5f9; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-    .btn-primary { background: var(--primary); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    /* ==========================================================================
+       TAB 5: ADMINISTRATOR DASHBOARD
+       ========================================================================== */
+    .admin-container { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 20px; }
+    .admin-header-bar { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; background: #fff; padding: 22px 26px; border-radius: 18px; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+    .btn-admin-action { padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1.5px solid var(--border); background: #f8fafc; color: #1e293b; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; }
+    .btn-admin-action:hover { background: #f1f5f9; border-color: #cbd5e1; }
+    
+    .admin-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .kpi-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+    .kpi-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .kpi-num { font-size: 24px; font-weight: 800; color: #0f172a; line-height: 1.1; }
+    .kpi-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 3px; }
+
+    .admin-table-controls { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .admin-search { width: 100%; max-width: 360px; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 13.5px; outline: none; background: #fff; }
+    .admin-search:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+
+    .admin-table-wrapper { background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.03); overflow-x: auto; }
+    .admin-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13.5px; }
+    .admin-table th { background: #f8fafc; padding: 14px 18px; font-weight: 700; color: #475569; border-bottom: 1.5px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .admin-table td { padding: 14px 18px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: #f8fafc; }
+
+    .role-badge-admin { background: #e0e7ff; color: #3730a3; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; }
+    .role-badge-patient { background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+    
+    .btn-tbl-action { padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: #fff; color: #1e293b; margin-left: 4px; transition: all 0.15s; }
+    .btn-tbl-action:hover { background: #f8fafc; border-color: #94a3b8; }
+    .btn-tbl-action.danger:hover { background: #fef2f2; color: #dc2626; border-color: #fca5a5; }
+
+    .copy-email-btn { background: none; border: none; cursor: pointer; font-size: 13px; color: #64748b; padding: 2px 4px; border-radius: 4px; }
+    .copy-email-btn:hover { background: #e2e8f0; color: #0f172a; }
   </style>
 </head>
 <body>
@@ -944,6 +977,7 @@
             <span class="quick-label">One-Click Demo Fill:</span>
             <button type="button" class="quick-cred-pill" onclick="fillDemoCredentials('doctor')">🩺 Clinician Demo</button>
             <button type="button" class="quick-cred-pill" onclick="fillDemoCredentials('patient')">👤 Patient Demo</button>
+            <button type="button" class="quick-cred-pill" style="background: #eef2ff; color: #4338ca; border-color: #c7d2fe; font-weight: 700;" onclick="fillDemoCredentials('admin')">👑 Admin Sign In</button>
           </div>
         </div>
 
@@ -983,6 +1017,9 @@
         </button>
         <button class="nav-tab-btn" onclick="switchTab('tab-reports', this)">
           <span>📑</span> Medical Report
+        </button>
+        <button class="nav-tab-btn" id="nav-btn-admin" style="display: none; background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe; font-weight: 700; margin-top: 6px;" onclick="switchTab('tab-admin', this)">
+          <span>👑</span> Admin Console
         </button>
       </nav>
 
@@ -1239,6 +1276,102 @@
         </div>
       </section>
 
+      <!-- TAB 5: ADMINISTRATOR & USER MANAGEMENT CONSOLE -->
+      <section id="tab-admin" class="content-view">
+        <div class="admin-container">
+          <!-- Admin Header Bar -->
+          <div class="admin-header-bar">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <span style="background: #e0e7ff; color: #3730a3; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">SYSTEM ADMINISTRATOR PORTAL</span>
+                <span style="background: #dcfce7; color: #166534; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">● Live Synchronized</span>
+              </div>
+              <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                👑 User Accounts & Activity Monitor
+              </h2>
+              <p style="font-size: 13px; color: var(--text-muted);">
+                Monitor registered users, inspect patient clinical consultations, check login credentials, and manage accounts.
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn-admin-action" onclick="loadAdminData()" title="Refresh user records">
+                🔄 Refresh
+              </button>
+              <button type="button" class="btn-admin-action" style="background: #10b981; color: #fff; border-color: #059669;" onclick="downloadUsersCSV()" title="Export user accounts to CSV spreadsheet">
+                📥 Export CSV
+              </button>
+            </div>
+          </div>
+
+          <!-- KPI Metric Cards -->
+          <div class="admin-kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon" style="background: #e0e7ff; color: #4338ca;">👥</div>
+              <div>
+                <div class="kpi-num" id="kpi-total-users">--</div>
+                <div class="kpi-label">Registered Accounts</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon" style="background: #fef3c7; color: #b45309;">💬</div>
+              <div>
+                <div class="kpi-num" id="kpi-total-convs">--</div>
+                <div class="kpi-label">Consultation Sessions</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon" style="background: #dcfce7; color: #15803d;">⚡</div>
+              <div>
+                <div class="kpi-num" id="kpi-active-sessions">--</div>
+                <div class="kpi-label">Active Sessions</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon" style="background: #ede9fe; color: #6d28d9;">🛡️</div>
+              <div>
+                <div class="kpi-num" style="font-size: 16px; font-weight: 800;">PBKDF2/scrypt</div>
+                <div class="kpi-label">Encrypted Credentials</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="admin-table-controls">
+            <div style="flex: 1; min-width: 240px; position: relative;">
+              <input type="text" id="admin-search-input" class="admin-search" placeholder="🔍 Search users by name, email, or date..." oninput="filterAdminUsers(this.value)">
+            </div>
+            <div style="font-size: 12.5px; color: var(--text-muted); font-weight: 600;">
+              Showing <span id="admin-user-count" style="color: var(--primary); font-weight: 800;">0</span> accounts
+            </div>
+          </div>
+
+          <!-- Users Table -->
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>User / Patient</th>
+                  <th>Login Email (Account)</th>
+                  <th>Date of Birth</th>
+                  <th>Role</th>
+                  <th>Registered</th>
+                  <th>Consultations</th>
+                  <th>Credential Security</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-users-tbody">
+                <tr>
+                  <td colspan="8" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                    Loading user records...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       <!-- Mobile Bottom Navigation Bar (Visible on phones) -->
       <nav class="mobile-bottom-nav">
         <button type="button" class="bottom-nav-btn active" id="bnav-predictor" onclick="switchMobileNav('tab-predictor', this)">
@@ -1257,6 +1390,10 @@
           <span class="bnav-icon">📑</span>
           <span>Report</span>
         </button>
+        <button type="button" class="bottom-nav-btn" id="bnav-admin" style="display: none;" onclick="switchMobileNav('tab-admin', this)">
+          <span class="bnav-icon">👑</span>
+          <span>Admin</span>
+        </button>
       </nav>
     </main>
   </div>
@@ -1272,6 +1409,40 @@
       <div class="modal-actions">
         <button class="btn-secondary" onclick="closeAgeModal()">Cancel</button>
         <button class="btn-primary" onclick="confirmAgeSelection()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin User Consultations Modal -->
+  <div id="admin-activity-modal" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 760px; width: 95%; max-height: 85vh; display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+        <div>
+          <h3 id="admin-act-modal-title" style="font-size: 17px; font-weight: 800; color: #0f172a;">Patient Consultation Activity</h3>
+          <p id="admin-act-modal-sub" style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;"></p>
+        </div>
+        <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 12px;" onclick="closeAdminActivityModal()">✕ Close</button>
+      </div>
+      <div id="admin-act-modal-body" style="overflow-y: auto; flex: 1; padding-right: 4px;">
+        <!-- Loaded conversation items -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Reset Password Modal -->
+  <div id="admin-reset-pw-modal" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 440px;">
+      <h3 style="font-size: 17px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">🔑 Reset User Password</h3>
+      <p id="admin-reset-target-user" style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;"></p>
+      <div class="form-group">
+        <label>New Temporary Password (min 6 characters) <span style="color: #ef4444;">*</span></label>
+        <input type="password" id="admin-new-pw-input" class="symptom-search-box" style="width: 100%;" placeholder="Enter new password for user">
+      </div>
+      <div id="admin-reset-error" class="auth-error"></div>
+      <div id="admin-reset-success" style="display: none; background: #f0fdf4; color: #166534; padding: 10px; border-radius: 8px; font-size: 12.5px; font-weight: 600; margin-top: 10px;"></div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
+        <button type="button" class="btn-secondary" onclick="closeAdminResetPwModal()">Cancel</button>
+        <button type="button" class="btn-primary" onclick="submitAdminResetPassword()">Update Password</button>
       </div>
     </div>
   </div>
@@ -1335,7 +1506,7 @@
     function switchMobileNav(tabId, btn) {
       document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
-      const tabIndex = { 'tab-predictor': 0, 'tab-chat': 1, 'tab-vitals': 2, 'tab-reports': 3 }[tabId] || 0;
+      const tabIndex = { 'tab-predictor': 0, 'tab-chat': 1, 'tab-vitals': 2, 'tab-reports': 3, 'tab-admin': 4 }[tabId] || 0;
       const desktopBtns = document.querySelectorAll('.nav-tab-btn');
       if (desktopBtns[tabIndex]) {
         switchTab(tabId, desktopBtns[tabIndex]);
@@ -1348,10 +1519,11 @@
       document.querySelectorAll('.content-view').forEach(v => v.classList.remove('active'));
       document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
 
-      document.getElementById(tabId).classList.add('active');
+      const targetView = document.getElementById(tabId);
+      if (targetView) targetView.classList.add('active');
       if (btn) btn.classList.add('active');
 
-      const bNavMap = { 'tab-predictor': 'bnav-predictor', 'tab-chat': 'bnav-chat', 'tab-vitals': 'bnav-vitals', 'tab-reports': 'bnav-reports' };
+      const bNavMap = { 'tab-predictor': 'bnav-predictor', 'tab-chat': 'bnav-chat', 'tab-vitals': 'bnav-vitals', 'tab-reports': 'bnav-reports', 'tab-admin': 'bnav-admin' };
       document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
       const activeBNav = document.getElementById(bNavMap[tabId]);
       if (activeBNav) activeBNav.classList.add('active');
@@ -1360,6 +1532,8 @@
 
       if (tabId === 'tab-reports') {
         updateReportView();
+      } else if (tabId === 'tab-admin') {
+        loadAdminData();
       }
     }
 
@@ -1422,6 +1596,11 @@
         if (dobInput) dobInput.value = '1982-04-12';
         emailInput.value = 'dr.watson@carepulse.local';
         pwInput.value = 'CarePulse2026!';
+      } else if (role === 'admin') {
+        if (nameInput) nameInput.value = 'System Administrator';
+        if (dobInput) dobInput.value = '1985-01-01';
+        emailInput.value = 'admin@carepulse.local';
+        pwInput.value = 'Admin@CarePulse2026!';
       } else {
         if (nameInput) nameInput.value = 'John Doe';
         if (dobInput) dobInput.value = '1995-08-20';
@@ -1536,14 +1715,325 @@
     function showApp() {
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('app-container').style.display = 'flex';
-      document.getElementById('user-display-name').innerText = currentUser.full_name || currentUser.email;
+      
+      const isAdmin = currentUser && (
+        currentUser.role === 'admin' ||
+        (currentUser.email && currentUser.email.toLowerCase() === 'admin@carepulse.local') ||
+        (currentUser.email && currentUser.email.toLowerCase().startsWith('admin@'))
+      );
+
+      const adminNavBtn = document.getElementById('nav-btn-admin');
+      const adminBNavBtn = document.getElementById('bnav-admin');
+      if (adminNavBtn) adminNavBtn.style.display = isAdmin ? 'flex' : 'none';
+      if (adminBNavBtn) adminBNavBtn.style.display = isAdmin ? 'flex' : 'none';
+
+      const displayNameEl = document.getElementById('user-display-name');
+      if (displayNameEl) {
+        if (isAdmin) {
+          displayNameEl.innerHTML = `${escapeHtml(currentUser.full_name || currentUser.email)} <span class="role-badge-admin" style="font-size: 10px; margin-left: 4px;">👑 ADMIN</span>`;
+        } else {
+          displayNameEl.innerText = currentUser.full_name || currentUser.email;
+        }
+      }
+
       document.getElementById('user-avatar').innerText = (currentUser.full_name || currentUser.email)[0].toUpperCase();
       initChatSession();
+
+      if (isAdmin) {
+        loadAdminData();
+      }
     }
 
     function handleLogout() {
       localStorage.clear();
       location.reload();
+    }
+
+    /* ==========================================================================
+       ADMINISTRATOR DASHBOARD & USER MANAGEMENT FUNCTIONS
+       ========================================================================== */
+    let adminUsersCache = [];
+    let currentResetUserId = null;
+
+    async function loadAdminData() {
+      const token = localStorage.getItem('session_token');
+      if (!token) return;
+
+      const headers = {
+        'Authorization': `Bearer ${token}`
+      };
+
+      try {
+        // Load stats
+        const statsRes = await fetch('/api/admin/stats', { headers });
+        const statsData = await statsRes.json();
+        if (statsData.success) {
+          document.getElementById('kpi-total-users').innerText = statsData.stats.total_users || 0;
+          document.getElementById('kpi-total-convs').innerText = statsData.stats.total_conversations || 0;
+          document.getElementById('kpi-active-sessions').innerText = statsData.stats.active_sessions || 0;
+        }
+
+        // Load users list
+        const usersRes = await fetch('/api/admin/users', { headers });
+        const usersData = await usersRes.json();
+        if (usersData.success) {
+          adminUsersCache = usersData.users || [];
+          renderAdminTable(adminUsersCache);
+        }
+      } catch (err) {
+        console.error("Failed to load admin data:", err);
+      }
+    }
+
+    function renderAdminTable(users) {
+      const tbody = document.getElementById('admin-users-tbody');
+      const countEl = document.getElementById('admin-user-count');
+      if (!tbody) return;
+
+      if (countEl) countEl.innerText = users.length;
+
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 30px; color: var(--text-muted);">No matching user accounts found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '';
+      users.forEach(u => {
+        const tr = document.createElement('tr');
+        const isUserAdmin = u.role === 'admin';
+        const initial = (u.full_name || u.email || 'U')[0].toUpperCase();
+        const regDate = u.created_at ? new Date(u.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '--';
+        
+        tr.innerHTML = `
+          <td>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 34px; height: 34px; border-radius: 50%; background: ${isUserAdmin ? '#e0e7ff' : '#f1f5f9'}; color: ${isUserAdmin ? '#4338ca' : '#475569'}; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px;">
+                ${escapeHtml(initial)}
+              </div>
+              <div>
+                <strong style="color: #0f172a;">${escapeHtml(u.full_name || 'Anonymous Patient')}</strong>
+                <div style="font-size: 11px; color: var(--text-muted);">ID: ${escapeHtml((u.id || '').substring(0, 8))}...</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-family: monospace; font-size: 13px; font-weight: 600; color: #1e293b;">${escapeHtml(u.email)}</span>
+              <button type="button" class="copy-email-btn" onclick="copyToClipboard('${escapeHtml(u.email)}')" title="Copy email address">📋</button>
+            </div>
+          </td>
+          <td><span style="color: #475569; font-size: 13px;">${escapeHtml(u.date_of_birth || '--')}</span></td>
+          <td>
+            <span class="${isUserAdmin ? 'role-badge-admin' : 'role-badge-patient'}">
+              ${isUserAdmin ? '👑 Admin' : '👤 Patient'}
+            </span>
+          </td>
+          <td><span style="font-size: 12px; color: var(--text-muted);">${regDate}</span></td>
+          <td>
+            <span style="background: #f8fafc; border: 1px solid var(--border); padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; color: #334155;">
+              💬 ${u.conversation_count || 0}
+            </span>
+          </td>
+          <td>
+            <span style="font-size: 11px; background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; padding: 2px 7px; border-radius: 4px; font-weight: 600;">
+              🔒 ${escapeHtml(u.password_status || 'PBKDF2/scrypt')}
+            </span>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button type="button" class="btn-tbl-action" onclick="openAdminActivity('${escapeHtml(u.id)}', '${escapeHtml(u.full_name || u.email)}')" title="View patient medical conversations">👁️ Activity</button>
+            <button type="button" class="btn-tbl-action" onclick="openAdminResetPw('${escapeHtml(u.id)}', '${escapeHtml(u.email)}')" title="Reset password for user">🔑 Reset PW</button>
+            ${!isUserAdmin ? `<button type="button" class="btn-tbl-action danger" onclick="deleteAdminUser('${escapeHtml(u.id)}', '${escapeHtml(u.email)}')" title="Delete user account">🗑️</button>` : ''}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterAdminUsers(query) {
+      const q = (query || '').toLowerCase().trim();
+      if (!q) {
+        renderAdminTable(adminUsersCache);
+        return;
+      }
+      const filtered = adminUsersCache.filter(u => 
+        (u.full_name && u.full_name.toLowerCase().includes(q)) ||
+        (u.email && u.email.toLowerCase().includes(q)) ||
+        (u.created_at && u.created_at.includes(q)) ||
+        (u.role && u.role.toLowerCase().includes(q))
+      );
+      renderAdminTable(filtered);
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Copied login email to clipboard: " + text);
+      }).catch(() => {
+        prompt("Copy email address:", text);
+      });
+    }
+
+    async function openAdminActivity(userId, userName) {
+      const modal = document.getElementById('admin-activity-modal');
+      const body = document.getElementById('admin-act-modal-body');
+      const sub = document.getElementById('admin-act-modal-sub');
+      
+      sub.innerText = `Consultations and clinical assessments for: ${userName} (ID: ${userId})`;
+      body.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--text-muted);">Loading patient activity...</div>';
+      modal.style.display = 'flex';
+
+      const token = localStorage.getItem('session_token');
+      try {
+        const res = await fetch(`/api/admin/user/${userId}/conversations`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        
+        if (!data.success || !data.data || !data.data.conversations || data.data.conversations.length === 0) {
+          body.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--text-muted);">No consultation records logged yet for this patient.</div>';
+          return;
+        }
+
+        body.innerHTML = '';
+        data.data.conversations.forEach((conv, idx) => {
+          const card = document.createElement('div');
+          card.style.cssText = 'background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px;';
+          
+          const time = conv.created_at ? new Date(conv.created_at).toLocaleString() : '--';
+          
+          let msgsHtml = '';
+          if (conv.messages && conv.messages.length > 0) {
+            msgsHtml = '<div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">';
+            conv.messages.slice(-6).forEach(m => {
+              const isUser = m.role === 'user';
+              msgsHtml += `
+                <div style="font-size: 12.5px; padding: 8px 12px; border-radius: 8px; background: ${isUser ? '#eef2ff' : '#ffffff'}; border: 1px solid ${isUser ? '#c7d2fe' : '#e2e8f0'};">
+                  <strong>${isUser ? '👤 Patient' : '🩺 CarePulse AI'}:</strong>
+                  <div style="margin-top: 3px; color: #1e293b; white-space: pre-wrap;">${escapeHtml(m.content || '')}</div>
+                </div>
+              `;
+            });
+            msgsHtml += '</div>';
+          }
+
+          card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
+              <div>
+                <strong style="color: #1e1b4b; font-size: 14px;">#${idx+1} ${escapeHtml(conv.title || 'Consultation Session')}</strong>
+                <div style="font-size: 11px; color: var(--text-muted);">Language: ${escapeHtml(conv.language || 'english')} • Age: ${escapeHtml(conv.age || 'Not specified')}</div>
+              </div>
+              <span style="font-size: 11px; color: var(--text-muted);">${time}</span>
+            </div>
+            ${msgsHtml}
+          `;
+          body.appendChild(card);
+        });
+      } catch (err) {
+        body.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--danger);">Failed to load consultation activity: ' + err.message + '</div>';
+      }
+    }
+
+    function closeAdminActivityModal() {
+      document.getElementById('admin-activity-modal').style.display = 'none';
+    }
+
+    function openAdminResetPw(userId, userEmail) {
+      currentResetUserId = userId;
+      document.getElementById('admin-reset-target-user').innerText = `Target Account: ${userEmail}`;
+      document.getElementById('admin-new-pw-input').value = '';
+      document.getElementById('admin-reset-error').style.display = 'none';
+      document.getElementById('admin-reset-success').style.display = 'none';
+      document.getElementById('admin-reset-pw-modal').style.display = 'flex';
+      setTimeout(() => document.getElementById('admin-new-pw-input').focus(), 100);
+    }
+
+    function closeAdminResetPwModal() {
+      document.getElementById('admin-reset-pw-modal').style.display = 'none';
+      currentResetUserId = null;
+    }
+
+    async function submitAdminResetPassword() {
+      const newPw = document.getElementById('admin-new-pw-input').value.trim();
+      const errEl = document.getElementById('admin-reset-error');
+      const succEl = document.getElementById('admin-reset-success');
+
+      if (!newPw || newPw.length < 6) {
+        errEl.innerText = '⚠️ Password must be at least 6 characters long.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      errEl.style.display = 'none';
+      const token = localStorage.getItem('session_token');
+
+      try {
+        const res = await fetch(`/api/admin/user/${currentResetUserId}/reset-password`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ new_password: newPw })
+        });
+        const data = await res.json();
+        if (data.success) {
+          succEl.innerText = '✅ ' + data.message;
+          succEl.style.display = 'block';
+          setTimeout(() => {
+            closeAdminResetPwModal();
+            loadAdminData();
+          }, 1200);
+        } else {
+          errEl.innerText = '⚠️ ' + (data.error || 'Failed to update password');
+          errEl.style.display = 'block';
+        }
+      } catch (err) {
+        errEl.innerText = '⚠️ Network error: ' + err.message;
+        errEl.style.display = 'block';
+      }
+    }
+
+    async function deleteAdminUser(userId, email) {
+      if (!confirm(`Are you sure you want to delete user account ${email}? This will remove all their consultation history and cannot be undone.`)) {
+        return;
+      }
+
+      const token = localStorage.getItem('session_token');
+      try {
+        const res = await fetch(`/api/admin/user/${userId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('User deleted successfully.');
+          loadAdminData();
+        } else {
+          alert('⚠️ ' + (data.error || 'Failed to delete user'));
+        }
+      } catch (err) {
+        alert('⚠️ Error deleting user: ' + err.message);
+      }
+    }
+
+    async function downloadUsersCSV() {
+      const token = localStorage.getItem('session_token');
+      try {
+        const res = await fetch('/api/admin/export-users', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error("Failed to export users");
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `carepulse_users_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      } catch (err) {
+        alert("⚠️ Failed to download CSV: " + err.message);
+      }
     }
 
     /* ==========================================================================

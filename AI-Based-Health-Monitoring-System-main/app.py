@@ -1,7 +1,11 @@
 """
 Flask Application - CarePulse Health Platform API with Authentication
 """
-from flask import Flask, request, jsonify, render_template
+import os
+import io
+import csv
+from datetime import datetime
+from flask import Flask, request, jsonify, render_template, Response
 from flask_cors import CORS
 from conversation_manager import conversation_manager, ConversationState
 from medical_response_generator import MedicalResponseGenerator
@@ -22,7 +26,8 @@ def require_auth(f):
                 'id': 'guest-user',
                 'full_name': 'Guest Patient',
                 'email': 'guest@healthcheck.local',
-                'date_of_birth': '1995-01-01'
+                'date_of_birth': '1995-01-01',
+                'role': 'patient'
             }
             return f(*args, **kwargs)
 
@@ -33,13 +38,33 @@ def require_auth(f):
                 'id': 'guest-user',
                 'full_name': 'Guest Patient',
                 'email': 'guest@healthcheck.local',
-                'date_of_birth': '1995-01-01'
+                'date_of_birth': '1995-01-01',
+                'role': 'patient'
             }
             return f(*args, **kwargs)
 
         # Add user to request context
         request.user = user
         return f(*args, **kwargs)
+    wrapper.__name__ = f.__name__
+    return wrapper
+
+def require_admin(f):
+    """Decorator to require administrator authentication"""
+    @require_auth
+    def wrapper(*args, **kwargs):
+        user = getattr(request, 'user', None)
+        admin_email = os.environ.get("ADMIN_EMAIL", "admin@carepulse.local").strip().lower()
+        user_email = (user.get('email') or '').strip().lower() if user else ''
+        user_role = (user.get('role') or '').strip().lower() if user else ''
+
+        if user_role == 'admin' or user_email == admin_email:
+            return f(*args, **kwargs)
+
+        return jsonify({
+            'success': False,
+            'error': 'Access denied: System Administrator privileges required.'
+        }), 403
     wrapper.__name__ = f.__name__
     return wrapper
 
@@ -712,6 +737,152 @@ def switch_provider():
         return jsonify({
             'success': False,
             'error': str(e)
+        }), 500
+
+
+# =============================================================================
+# ADMINISTRATOR API ENDPOINTS (User & Credential Auditing)
+# =============================================================================
+
+@app.route('/api/admin/stats', methods=['GET'])
+@require_admin
+def admin_stats():
+    """Get high-level system usage KPI statistics"""
+    try:
+        stats = auth_store.get_admin_stats()
+        return jsonify({
+            'success': True,
+            'stats': stats
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'Failed to retrieve statistics: {e}'
+        }), 500
+
+
+@app.route('/api/admin/users', methods=['GET'])
+@require_admin
+def admin_get_users():
+    """Get all registered user accounts with activity stats for admin monitoring"""
+    try:
+        users = auth_store.get_all_users_admin()
+        return jsonify({
+            'success': True,
+            'count': len(users),
+            'users': users
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'Failed to retrieve users: {e}'
+        }), 500
+
+
+@app.route('/api/admin/user/<user_id>/conversations', methods=['GET'])
+@require_admin
+def admin_user_conversations(user_id):
+    """Get full consultation & diagnostic activity logs for a specific user"""
+    try:
+        data = auth_store.get_user_conversations_admin(user_id)
+        if not data:
+            return jsonify({
+                'success': False,
+                'error': 'User not found'
+            }), 404
+        return jsonify({
+            'success': True,
+            'data': data
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'Failed to fetch user activity: {e}'
+        }), 500
+
+
+@app.route('/api/admin/user/<user_id>/reset-password', methods=['POST'])
+@require_admin
+def admin_reset_user_password(user_id):
+    """Allow administrator to set a new password for any user"""
+    try:
+        body = request.json or {}
+        new_password = body.get('new_password', '').strip()
+        if not new_password or len(new_password) < 6:
+            return jsonify({
+                'success': False,
+                'error': 'New password must be at least 6 characters.'
+            }), 400
+
+        res = auth_store.admin_reset_password(user_id, new_password)
+        status_code = 200 if res.get('success') else 400
+        return jsonify(res), status_code
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'Failed to reset password: {e}'
+        }), 500
+
+
+@app.route('/api/admin/user/<user_id>', methods=['DELETE'])
+@require_admin
+def admin_delete_user(user_id):
+    """Allow administrator to delete a user account and associated consultations"""
+    try:
+        res = auth_store.delete_user_admin(user_id)
+        status_code = 200 if res.get('success') else 400
+        return jsonify(res), status_code
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'Failed to delete user: {e}'
+        }), 500
+
+
+@app.route('/api/admin/export-users', methods=['GET'])
+@require_admin
+def admin_export_users():
+    """Export all user accounts and activity as a CSV file"""
+    try:
+        users = auth_store.get_all_users_admin()
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerow([
+            'User ID',
+            'Full Name',
+            'Email Address (Login)',
+            'Date of Birth',
+            'Role',
+            'Registered At',
+            'Last Login',
+            'Total Consultations',
+            'Credential Security Status'
+        ])
+        
+        for u in users:
+            writer.writerow([
+                u.get('id', ''),
+                u.get('full_name', ''),
+                u.get('email', ''),
+                u.get('date_of_birth', ''),
+                u.get('role', ''),
+                u.get('created_at', ''),
+                u.get('last_login', '') or 'Never',
+                u.get('conversation_count', 0),
+                u.get('password_status', '')
+            ])
+        
+        output.seek(0)
+        filename = f"carepulse_users_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+        return Response(
+            output.getvalue(),
+            mimetype='text/csv',
+            headers={'Content-Disposition': f'attachment; filename={filename}'}
+        )
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'Failed to export users: {e}'
         }), 500
 
 
