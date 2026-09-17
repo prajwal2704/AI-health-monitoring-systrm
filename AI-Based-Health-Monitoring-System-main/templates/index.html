@@ -766,40 +766,6 @@
     .age-option:hover, .age-option.selected { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
     .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
     .btn-secondary { background: #f1f5f9; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-    /* ==========================================================================
-       TAB 5: ADMINISTRATOR DASHBOARD
-       ========================================================================== */
-    .admin-container { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 20px; }
-    .admin-header-bar { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; background: #fff; padding: 22px 26px; border-radius: 18px; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-    .btn-admin-action { padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1.5px solid var(--border); background: #f8fafc; color: #1e293b; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; }
-    .btn-admin-action:hover { background: #f1f5f9; border-color: #cbd5e1; }
-    
-    .admin-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-    .kpi-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-    .kpi-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-    .kpi-num { font-size: 24px; font-weight: 800; color: #0f172a; line-height: 1.1; }
-    .kpi-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 3px; }
-
-    .admin-table-controls { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
-    .admin-search { width: 100%; max-width: 360px; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 13.5px; outline: none; background: #fff; }
-    .admin-search:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
-
-    .admin-table-wrapper { background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.03); overflow-x: auto; }
-    .admin-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13.5px; }
-    .admin-table th { background: #f8fafc; padding: 14px 18px; font-weight: 700; color: #475569; border-bottom: 1.5px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .admin-table td { padding: 14px 18px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .admin-table tr:last-child td { border-bottom: none; }
-    .admin-table tr:hover td { background: #f8fafc; }
-
-    .role-badge-admin { background: #e0e7ff; color: #3730a3; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; }
-    .role-badge-patient { background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
-    
-    .btn-tbl-action { padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: #fff; color: #1e293b; margin-left: 4px; transition: all 0.15s; }
-    .btn-tbl-action:hover { background: #f8fafc; border-color: #94a3b8; }
-    .btn-tbl-action.danger:hover { background: #fef2f2; color: #dc2626; border-color: #fca5a5; }
-
-    .copy-email-btn { background: none; border: none; cursor: pointer; font-size: 13px; color: #64748b; padding: 2px 4px; border-radius: 4px; }
-    .copy-email-btn:hover { background: #e2e8f0; color: #0f172a; }
   </style>
 </head>
 <body>
@@ -817,7 +783,7 @@
           </div>
 
           <div class="hero-brand">
-            <div class="hero-brand-icon">🩺</div>
+            <div class="hero-brand-icon"><svg class="svg-icon" width="28" height="28" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg></div>
             <div class="hero-brand-text">
               <span class="brand-title">CarePulse</span>
               <span class="brand-sub">Clinical Decision Support Platform</span>
@@ -831,21 +797,21 @@
 
           <div class="hero-features">
             <div class="hero-feat-item">
-              <div class="feat-icon">🎯</div>
+              <div class="feat-icon"><svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
               <div>
                 <strong>40+ Differential Pathologies</strong>
                 <p>Bayesian weighted multi-symptom pattern scoring with dynamic follow-up verification.</p>
               </div>
             </div>
             <div class="hero-feat-item">
-              <div class="feat-icon">💓</div>
+              <div class="feat-icon"><svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
               <div>
                 <strong>AHA/ACC Vitals Stratification</strong>
                 <p>Real-time cardiovascular, respiratory, and metabolic risk staging and emergency flagging.</p>
               </div>
             </div>
             <div class="hero-feat-item">
-              <div class="feat-icon">🛡️</div>
+              <div class="feat-icon"><svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
               <div>
                 <strong>Confidential & Session-Encrypted</strong>
                 <p>256-bit secure in-memory clinical storage strictly isolated per patient assessment.</p>
@@ -871,7 +837,7 @@
           </div>
 
           <div class="hero-accreditation">
-            <span>🔒 Conforms to international ambulatory triage and clinical decision advisory standards.</span>
+            <span>Conforms to international ambulatory triage and clinical decision advisory standards.</span>
           </div>
         </div>
       </div>
@@ -881,7 +847,7 @@
         <div>
           <!-- Mobile Brand Header (Ensures CarePulse is prominently displayed on mobile) -->
           <div class="mobile-brand-header">
-            <div class="mobile-brand-icon">🩺</div>
+            <div class="mobile-brand-icon"><svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg></div>
             <div>
               <h1 class="mobile-brand-title">CarePulse</h1>
               <p class="mobile-brand-sub">Clinical Decision Support Platform</p>
@@ -894,7 +860,7 @@
               <h3 id="auth-heading" class="form-title">Portal Access</h3>
             </div>
             <div class="auth-lang-picker">
-              <span style="font-size: 13px;">🌐</span>
+              <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
               <select id="auth-lang-select" onchange="syncAuthLanguage(this.value)" title="Change portal language">
                 <option value="english">English</option>
                 <option value="spanish">Español (Spanish)</option>
@@ -926,7 +892,7 @@
             <div class="form-group" id="group-fullname">
               <label>Full Name <span style="color: #ef4444; font-weight: 800;">*</span></label>
               <div class="input-with-icon">
-                <span class="input-icon">👤</span>
+                <span class="input-icon"><svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
                 <input type="text" id="auth-fullname" required placeholder="e.g. Dr. Emily Watson or John Doe">
               </div>
             </div>
@@ -935,7 +901,7 @@
             <div class="form-group" id="group-dob" style="display: none;">
               <label>Date of Birth <span style="color: #ef4444; font-weight: 800;">*</span> <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">(Required for clinical safety)</span></label>
               <div class="input-with-icon">
-                <span class="input-icon">📅</span>
+                <span class="input-icon"><svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
                 <input type="date" id="auth-dob">
               </div>
             </div>
@@ -944,7 +910,7 @@
             <div class="form-group">
               <label>Work or Patient Email Address <span style="color: #ef4444; font-weight: 800;">*</span></label>
               <div class="input-with-icon">
-                <span class="input-icon">✉️</span>
+                <span class="input-icon"><svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
                 <input type="email" id="auth-email" required placeholder="patient@example.com or dr.watson@carepulse.local">
               </div>
             </div>
@@ -953,10 +919,10 @@
             <div class="form-group">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
                 <label style="margin-bottom: 0;">Password <span style="color: #ef4444; font-weight: 800;">*</span></label>
-                <span id="pw-hint" style="font-size: 12px; color: #4f46e5; font-weight: 700; cursor: pointer; flex-shrink: 0; padding-left: 8px;" onclick="togglePasswordVisibility()">👁️ Show</span>
+                <span id="pw-hint" style="font-size: 12px; color: #4f46e5; font-weight: 700; cursor: pointer; flex-shrink: 0; padding-left: 8px;" onclick="togglePasswordVisibility()">Show</span>
               </div>
               <div class="input-with-icon">
-                <span class="input-icon">🔒</span>
+                <span class="input-icon"><svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
                 <input type="password" id="auth-password" required minlength="6" placeholder="Enter password (min 6 chars)">
               </div>
             </div>
@@ -970,19 +936,18 @@
 
           <!-- Quick 1-Click Guest & Demo Access -->
           <button type="button" class="auth-demo-btn" onclick="startGuestMode()">
-            <span>⚡</span> Quick Guest Access (Instant Demo)
+            Quick Guest Access (Instant Demo)
           </button>
 
           <div class="quick-credentials-row">
             <span class="quick-label">One-Click Demo Fill:</span>
-            <button type="button" class="quick-cred-pill" onclick="fillDemoCredentials('doctor')">🩺 Clinician Demo</button>
-            <button type="button" class="quick-cred-pill" onclick="fillDemoCredentials('patient')">👤 Patient Demo</button>
-            <button type="button" class="quick-cred-pill" style="background: #eef2ff; color: #4338ca; border-color: #c7d2fe; font-weight: 700;" onclick="fillDemoCredentials('admin')">👑 Admin Sign In</button>
-          </div>
+            <button type="button" class="quick-cred-pill" onclick="fillDemoCredentials('doctor')">Clinician Demo</button>
+            <button type="button" class="quick-cred-pill" onclick="fillDemoCredentials('patient')">Patient Demo</button>
+            </div>
         </div>
 
         <div class="auth-security-footer">
-          <span>🔒 256-Bit SSL Encryption</span>
+          <span>256-Bit SSL Encryption</span>
           <span>•</span>
           <span>HIPAA Compliant Session</span>
           <span>•</span>
@@ -999,7 +964,7 @@
     <aside class="sidebar">
       <div class="sidebar-top">
         <div class="brand">
-          <span>🩺</span> CarePulse
+          <svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg> CarePulse
           <span class="brand-tag">v2.0 Clinical</span>
         </div>
       </div>
@@ -1007,21 +972,18 @@
       <!-- Navigation Tabs -->
       <nav class="nav-tabs">
         <button class="nav-tab-btn active" onclick="switchTab('tab-predictor', this)">
-          <span>🔍</span> Disease Predictor
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Disease Predictor
         </button>
         <button class="nav-tab-btn" onclick="switchTab('tab-chat', this)">
-          <span>💬</span> Clinical Consultation
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Clinical Consultation
         </button>
         <button class="nav-tab-btn" onclick="switchTab('tab-vitals', this)">
-          <span>📊</span> Vitals Tracker
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Vitals Tracker
         </button>
         <button class="nav-tab-btn" onclick="switchTab('tab-reports', this)">
-          <span>📑</span> Medical Report
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Medical Report
         </button>
-        <button class="nav-tab-btn" id="nav-btn-admin" style="display: none; background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe; font-weight: 700; margin-top: 6px;" onclick="switchTab('tab-admin', this)">
-          <span>👑</span> Admin Console
-        </button>
-      </nav>
+        </nav>
 
       <div class="sidebar-history-title">Recent Consultations</div>
       <div class="conversations-list" id="convs-list">
@@ -1033,7 +995,7 @@
           <div class="user-avatar" id="user-avatar">P</div>
           <div class="user-name" id="user-display-name">Patient</div>
         </div>
-        <button class="logout-btn" onclick="handleLogout()" title="Logout">🚪</button>
+        <button class="logout-btn" onclick="handleLogout()" title="Logout"><svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
       </div>
     </aside>
 
@@ -1045,12 +1007,12 @@
       <!-- Top Navbar -->
       <nav class="top-navbar">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <button type="button" id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle navigation drawer">☰</button>
+          <button type="button" id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle navigation drawer"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
           <div class="mobile-nav-brand">
-            <span>🩺</span> <strong>CarePulse</strong>
+            <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" style="margin-right:4px;"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg><strong>CarePulse</strong>
           </div>
           <div class="top-status">
-            <span id="badge-age" class="badge badge-age" onclick="openAgeModal()">Age: 18-64 years (Adult) ✎</span>
+            <span id="badge-age" class="badge badge-age" onclick="openAgeModal()">Age: 18-64 years (Adult)</span>
             <span id="badge-state" class="badge badge-ready">System Ready</span>
             <span id="badge-urgency" class="badge badge-urgency-mild" style="display:none;">Urgency: Mild</span>
           </div>
@@ -1080,11 +1042,11 @@
           <!-- Left: Symptom Selector -->
           <div class="panel-card">
             <div class="panel-header">
-              <h2><span>🩺</span> Interactive Symptom Selector</h2>
+              <h2>Interactive Symptom Selector</h2>
               <button class="btn-secondary" style="font-size: 11.5px; padding: 4px 10px;" onclick="clearSelectedSymptoms()">Reset</button>
             </div>
 
-            <input type="text" id="symptom-search" class="symptom-search-box" placeholder="🔍 Search symptoms (e.g. fever, headache, cough)..." oninput="filterSymptoms(this.value)">
+            <input type="text" id="symptom-search" class="symptom-search-box" placeholder="Search symptoms (e.g. fever, headache, cough)..." oninput="filterSymptoms(this.value)">
 
             <label style="font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px;">Selected Symptoms (<span id="selected-count">0</span>):</label>
             <div class="selected-tray" id="selected-symptoms-tray">
@@ -1099,20 +1061,20 @@
             <textarea id="free-symptom-text" class="text-input-area" placeholder="Optional: Describe other symptoms in your own words (e.g. I have severe fever and chills since yesterday)..."></textarea>
 
             <button class="predict-btn" onclick="executeDiseasePrediction()">
-              <span>⚡</span> Run Clinical Disease Prediction
+              Run Clinical Disease Prediction
             </button>
           </div>
 
           <!-- Right: Diagnostic Results -->
           <div class="panel-card">
             <div class="panel-header">
-              <h2><span>📊</span> Diagnostic Assessment</h2>
+              <h2>Diagnostic Assessment</h2>
               <button class="btn-secondary" id="export-btn" style="font-size: 11.5px; padding: 4px 10px; display:none;" onclick="exportCurrentToReport()">Export to Report</button>
             </div>
 
             <div class="prediction-result-container" id="prediction-results-area">
               <div class="empty-prediction">
-                <span>🩺</span>
+                <svg class="svg-icon" width="36" height="36" viewBox="0 0 24 24" style="color:#94a3b8; margin-bottom: 12px;"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg>
                 <h3 style="font-size: 16px; font-weight: 700; color: #334155; margin-bottom: 6px;">No Symptoms Selected</h3>
                 <p style="font-size: 13px;">Select symptoms from the left panel and click <strong>Run Clinical Disease Prediction</strong> to calculate differential diagnoses, confidence levels, and care guidelines.</p>
               </div>
@@ -1125,11 +1087,11 @@
       <section id="tab-chat" class="content-view">
         <div class="chat-container">
           <div class="quick-prompts">
-            <button class="quick-prompt-btn" onclick="sendQuickPrompt('I have high fever, chills, and shivering')">🌡️ Fever & Chills</button>
-            <button class="quick-prompt-btn" onclick="sendQuickPrompt('Throbbing one sided headache with light sensitivity')">🤕 Migraine Aura</button>
-            <button class="quick-prompt-btn" onclick="sendQuickPrompt('Chest tightness, wheezing, and shortness of breath')">🫁 Asthma / Wheeze</button>
-            <button class="quick-prompt-btn" onclick="sendQuickPrompt('Severe abdominal cramps, watery diarrhea, and vomiting')">🤢 Food Poisoning</button>
-            <button class="quick-prompt-btn" onclick="sendQuickPrompt('Frequent urination and excessive thirst')">💧 Diabetes Check</button>
+            <button class="quick-prompt-btn" onclick="sendQuickPrompt('I have high fever, chills, and shivering')">Fever & Chills</button>
+            <button class="quick-prompt-btn" onclick="sendQuickPrompt('Throbbing one sided headache with light sensitivity')">Migraine Aura</button>
+            <button class="quick-prompt-btn" onclick="sendQuickPrompt('Chest tightness, wheezing, and shortness of breath')">Asthma / Wheeze</button>
+            <button class="quick-prompt-btn" onclick="sendQuickPrompt('Severe abdominal cramps, watery diarrhea, and vomiting')">Food Poisoning</button>
+            <button class="quick-prompt-btn" onclick="sendQuickPrompt('Frequent urination and excessive thirst')">Diabetes Check</button>
           </div>
 
           <div class="chat-messages" id="chat-stream">
@@ -1142,9 +1104,9 @@
           </div>
 
           <form class="chat-input-bar" onsubmit="handleChatMessageSubmit(event)">
-            <button type="button" class="action-icon-btn" id="mic-btn" onclick="toggleSpeechRecognition()" title="Speak symptoms (Voice Input)">🎙️</button>
+            <button type="button" class="action-icon-btn" id="mic-btn" onclick="toggleSpeechRecognition()" title="Voice Input"><svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
             <input type="text" id="chat-input-field" class="chat-input-field" placeholder="Describe symptoms or ask a health question..." autocomplete="off">
-            <button type="submit" class="send-icon-btn" title="Send message">➤</button>
+            <button type="submit" class="send-icon-btn" title="Send message"><svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
           </form>
         </div>
       </section>
@@ -1158,7 +1120,7 @@
               <p style="font-size: 13.5px; color: var(--text-muted);">Evaluates vital signs according to American Heart Association (AHA) and WHO benchmarks.</p>
             </div>
             <button class="predict-btn" style="width: auto; padding: 10px 20px; margin: 0;" onclick="evaluateVitalsPanel()">
-              <span>⚡</span> Evaluate Full Vitals Panel
+              Evaluate Full Vitals Panel
             </button>
           </div>
 
@@ -1168,7 +1130,7 @@
             <!-- Blood Pressure -->
             <div class="vital-card">
               <div class="vital-header">
-                <h3><span>🫀</span> Blood Pressure</h3>
+                <h3>Blood Pressure</h3>
                 <span class="vital-status-pill" id="bp-pill" style="background:#f1f5f9; color:#475569;">Not Entered</span>
               </div>
               <div class="vital-inputs">
@@ -1181,7 +1143,7 @@
             <!-- Heart Rate -->
             <div class="vital-card">
               <div class="vital-header">
-                <h3><span>💓</span> Heart Rate / Pulse</h3>
+                <h3>Heart Rate / Pulse</h3>
                 <span class="vital-status-pill" id="hr-pill" style="background:#f1f5f9; color:#475569;">Not Entered</span>
               </div>
               <div class="vital-inputs">
@@ -1193,7 +1155,7 @@
             <!-- SpO2 -->
             <div class="vital-card">
               <div class="vital-header">
-                <h3><span>💨</span> Oxygen Saturation (SpO2)</h3>
+                <h3>Oxygen Saturation (SpO2)</h3>
                 <span class="vital-status-pill" id="spo2-pill" style="background:#f1f5f9; color:#475569;">Not Entered</span>
               </div>
               <div class="vital-inputs">
@@ -1205,7 +1167,7 @@
             <!-- Temperature -->
             <div class="vital-card">
               <div class="vital-header">
-                <h3><span>🌡️</span> Body Temperature</h3>
+                <h3>Body Temperature</h3>
                 <span class="vital-status-pill" id="temp-pill" style="background:#f1f5f9; color:#475569;">Not Entered</span>
               </div>
               <div class="vital-inputs">
@@ -1221,7 +1183,7 @@
             <!-- Blood Sugar -->
             <div class="vital-card">
               <div class="vital-header">
-                <h3><span>🩸</span> Blood Glucose</h3>
+                <h3>Blood Glucose</h3>
                 <span class="vital-status-pill" id="sugar-pill" style="background:#f1f5f9; color:#475569;">Not Entered</span>
               </div>
               <div class="vital-inputs">
@@ -1242,10 +1204,10 @@
         <div class="report-card" id="printable-medical-report">
           <div class="report-header">
             <div>
-              <h2 style="font-size: 22px; font-weight: 800; color: #1e1b4b;">🩺 CarePulse Clinical Summary Report</h2>
+              <h2 style="font-size: 22px; font-weight: 800; color: #1e1b4b;">CarePulse Clinical Summary Report</h2>
               <p style="font-size: 13px; color: var(--text-muted);">Clinical Health Monitoring & Triage Record</p>
             </div>
-            <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+            <button class="print-btn" onclick="window.print()"><svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" style="margin-right:6px;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print / Save PDF</button>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; font-size: 13.5px;">
@@ -1271,103 +1233,7 @@
           </div>
 
           <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: 8px; font-size: 12px; color: #92400e;">
-            ⚠️ DISCLAIMER: This document is a clinical informational triage report and does not constitute a formal diagnosis or medical prescription.
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 5: ADMINISTRATOR & USER MANAGEMENT CONSOLE -->
-      <section id="tab-admin" class="content-view">
-        <div class="admin-container">
-          <!-- Admin Header Bar -->
-          <div class="admin-header-bar">
-            <div>
-              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                <span style="background: #e0e7ff; color: #3730a3; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">SYSTEM ADMINISTRATOR PORTAL</span>
-                <span style="background: #dcfce7; color: #166534; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">● Live Synchronized</span>
-              </div>
-              <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
-                👑 User Accounts & Activity Monitor
-              </h2>
-              <p style="font-size: 13px; color: var(--text-muted);">
-                Monitor registered users, inspect patient clinical consultations, check login credentials, and manage accounts.
-              </p>
-            </div>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button type="button" class="btn-admin-action" onclick="loadAdminData()" title="Refresh user records">
-                🔄 Refresh
-              </button>
-              <button type="button" class="btn-admin-action" style="background: #10b981; color: #fff; border-color: #059669;" onclick="downloadUsersCSV()" title="Export user accounts to CSV spreadsheet">
-                📥 Export CSV
-              </button>
-            </div>
-          </div>
-
-          <!-- KPI Metric Cards -->
-          <div class="admin-kpi-grid">
-            <div class="kpi-card">
-              <div class="kpi-icon" style="background: #e0e7ff; color: #4338ca;">👥</div>
-              <div>
-                <div class="kpi-num" id="kpi-total-users">--</div>
-                <div class="kpi-label">Registered Accounts</div>
-              </div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-icon" style="background: #fef3c7; color: #b45309;">💬</div>
-              <div>
-                <div class="kpi-num" id="kpi-total-convs">--</div>
-                <div class="kpi-label">Consultation Sessions</div>
-              </div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-icon" style="background: #dcfce7; color: #15803d;">⚡</div>
-              <div>
-                <div class="kpi-num" id="kpi-active-sessions">--</div>
-                <div class="kpi-label">Active Sessions</div>
-              </div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-icon" style="background: #ede9fe; color: #6d28d9;">🛡️</div>
-              <div>
-                <div class="kpi-num" style="font-size: 16px; font-weight: 800;">PBKDF2/scrypt</div>
-                <div class="kpi-label">Encrypted Credentials</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Search & Filter Controls -->
-          <div class="admin-table-controls">
-            <div style="flex: 1; min-width: 240px; position: relative;">
-              <input type="text" id="admin-search-input" class="admin-search" placeholder="🔍 Search users by name, email, or date..." oninput="filterAdminUsers(this.value)">
-            </div>
-            <div style="font-size: 12.5px; color: var(--text-muted); font-weight: 600;">
-              Showing <span id="admin-user-count" style="color: var(--primary); font-weight: 800;">0</span> accounts
-            </div>
-          </div>
-
-          <!-- Users Table -->
-          <div class="admin-table-wrapper">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>User / Patient</th>
-                  <th>Login Email (Account)</th>
-                  <th>Date of Birth</th>
-                  <th>Role</th>
-                  <th>Registered</th>
-                  <th>Consultations</th>
-                  <th>Credential Security</th>
-                  <th style="text-align: right;">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="admin-users-tbody">
-                <tr>
-                  <td colspan="8" style="text-align: center; padding: 30px; color: var(--text-muted);">
-                    Loading user records...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            DISCLAIMER: This document is a clinical informational triage report and does not constitute a formal diagnosis or medical prescription.
           </div>
         </div>
       </section>
@@ -1375,26 +1241,22 @@
       <!-- Mobile Bottom Navigation Bar (Visible on phones) -->
       <nav class="mobile-bottom-nav">
         <button type="button" class="bottom-nav-btn active" id="bnav-predictor" onclick="switchMobileNav('tab-predictor', this)">
-          <span class="bnav-icon">🔍</span>
+          <span class="bnav-icon"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
           <span>Predict</span>
         </button>
         <button type="button" class="bottom-nav-btn" id="bnav-chat" onclick="switchMobileNav('tab-chat', this)">
-          <span class="bnav-icon">💬</span>
+          <span class="bnav-icon"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
           <span>Consult</span>
         </button>
         <button type="button" class="bottom-nav-btn" id="bnav-vitals" onclick="switchMobileNav('tab-vitals', this)">
-          <span class="bnav-icon">💓</span>
+          <span class="bnav-icon"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
           <span>Vitals</span>
         </button>
         <button type="button" class="bottom-nav-btn" id="bnav-reports" onclick="switchMobileNav('tab-reports', this)">
-          <span class="bnav-icon">📑</span>
+          <span class="bnav-icon"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
           <span>Report</span>
         </button>
-        <button type="button" class="bottom-nav-btn" id="bnav-admin" style="display: none;" onclick="switchMobileNav('tab-admin', this)">
-          <span class="bnav-icon">👑</span>
-          <span>Admin</span>
-        </button>
-      </nav>
+        </nav>
     </main>
   </div>
 
@@ -1413,1259 +1275,6 @@
     </div>
   </div>
 
-  <!-- Admin User Consultations Modal -->
-  <div id="admin-activity-modal" class="modal-backdrop">
-    <div class="modal-box" style="max-width: 760px; width: 95%; max-height: 85vh; display: flex; flex-direction: column;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-        <div>
-          <h3 id="admin-act-modal-title" style="font-size: 17px; font-weight: 800; color: #0f172a;">Patient Consultation Activity</h3>
-          <p id="admin-act-modal-sub" style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;"></p>
-        </div>
-        <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 12px;" onclick="closeAdminActivityModal()">✕ Close</button>
-      </div>
-      <div id="admin-act-modal-body" style="overflow-y: auto; flex: 1; padding-right: 4px;">
-        <!-- Loaded conversation items -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Admin Reset Password Modal -->
-  <div id="admin-reset-pw-modal" class="modal-backdrop">
-    <div class="modal-box" style="max-width: 440px;">
-      <h3 style="font-size: 17px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">🔑 Reset User Password</h3>
-      <p id="admin-reset-target-user" style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;"></p>
-      <div class="form-group">
-        <label>New Temporary Password (min 6 characters) <span style="color: #ef4444;">*</span></label>
-        <input type="password" id="admin-new-pw-input" class="symptom-search-box" style="width: 100%;" placeholder="Enter new password for user">
-      </div>
-      <div id="admin-reset-error" class="auth-error"></div>
-      <div id="admin-reset-success" style="display: none; background: #f0fdf4; color: #166534; padding: 10px; border-radius: 8px; font-size: 12.5px; font-weight: 600; margin-top: 10px;"></div>
-      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
-        <button type="button" class="btn-secondary" onclick="closeAdminResetPwModal()">Cancel</button>
-        <button type="button" class="btn-primary" onclick="submitAdminResetPassword()">Update Password</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // State management
-    let isRegisterMode = false;
-    let currentUser = null;
-    let currentConversationId = null;
-    let currentAge = "18-64 years (Adult)";
-    let currentLanguage = "english";
-    let selectedSymptoms = new Set();
-    let symptomCategories = {};
-    let latestPrediction = null;
-    let speechRecognition = null;
-    let isRecording = false;
-
-    const AGE_GROUPS = [
-      "0-2 years (Infant)",
-      "3-5 years (Toddler)",
-      "6-12 years (Child)",
-      "13-17 years (Adolescent)",
-      "18-64 years (Adult)",
-      "65+ years (Senior)"
-    ];
-
-    window.onload = async () => {
-      renderAgeModalOptions();
-      loadSymptomsList();
-
-      const token = localStorage.getItem('session_token');
-      const cachedUser = localStorage.getItem('user');
-
-      if (token && cachedUser) {
-        try {
-          currentUser = JSON.parse(cachedUser);
-          showApp();
-        } catch (e) {
-          startGuestMode();
-        }
-      } else {
-        // Toggle to Sign In by default
-        toggleAuthMode();
-      }
-    };
-
-    function toggleMobileSidebar() {
-      const sb = document.querySelector('.sidebar');
-      const bd = document.getElementById('sidebar-backdrop');
-      if (sb) sb.classList.toggle('open');
-      if (bd) bd.classList.toggle('open');
-    }
-
-    function closeMobileSidebar() {
-      const sb = document.querySelector('.sidebar');
-      const bd = document.getElementById('sidebar-backdrop');
-      if (sb) sb.classList.remove('open');
-      if (bd) bd.classList.remove('open');
-    }
-
-    function switchMobileNav(tabId, btn) {
-      document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-      const tabIndex = { 'tab-predictor': 0, 'tab-chat': 1, 'tab-vitals': 2, 'tab-reports': 3, 'tab-admin': 4 }[tabId] || 0;
-      const desktopBtns = document.querySelectorAll('.nav-tab-btn');
-      if (desktopBtns[tabIndex]) {
-        switchTab(tabId, desktopBtns[tabIndex]);
-      } else {
-        switchTab(tabId);
-      }
-    }
-
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.content-view').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
-
-      const targetView = document.getElementById(tabId);
-      if (targetView) targetView.classList.add('active');
-      if (btn) btn.classList.add('active');
-
-      const bNavMap = { 'tab-predictor': 'bnav-predictor', 'tab-chat': 'bnav-chat', 'tab-vitals': 'bnav-vitals', 'tab-reports': 'bnav-reports', 'tab-admin': 'bnav-admin' };
-      document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
-      const activeBNav = document.getElementById(bNavMap[tabId]);
-      if (activeBNav) activeBNav.classList.add('active');
-
-      closeMobileSidebar();
-
-      if (tabId === 'tab-reports') {
-        updateReportView();
-      } else if (tabId === 'tab-admin') {
-        loadAdminData();
-      }
-    }
-
-    function setAuthMode(register) {
-      isRegisterMode = register;
-      const tabLogin = document.getElementById('tab-btn-login');
-      const tabReg = document.getElementById('tab-btn-register');
-      if (tabLogin && tabReg) {
-        tabLogin.classList.toggle('active', !register);
-        tabReg.classList.toggle('active', register);
-      }
-
-      // Name is strictly required and visible in all modes
-      const nameGroup = document.getElementById('group-fullname');
-      const nameInput = document.getElementById('auth-fullname');
-      if (nameGroup) nameGroup.style.display = 'block';
-      if (nameInput) nameInput.required = true;
-
-      // Date of Birth is required for Registration
-      const dobGroup = document.getElementById('group-dob');
-      const dobInput = document.getElementById('auth-dob');
-      if (dobGroup) dobGroup.style.display = register ? 'block' : 'none';
-      if (dobInput) dobInput.required = register;
-
-      document.getElementById('auth-email').required = true;
-      document.getElementById('auth-password').required = true;
-
-      document.getElementById('auth-submit-btn').innerText = register ? 'Register Patient Profile' : 'Sign In to CarePulse';
-      const heading = document.getElementById('auth-heading');
-      if (heading) heading.innerText = register ? 'Create Clinical Record' : 'Portal Access';
-      const err = document.getElementById('auth-error');
-      if (err) err.style.display = 'none';
-    }
-
-    function toggleAuthMode() {
-      setAuthMode(!isRegisterMode);
-    }
-
-    function togglePasswordVisibility() {
-      const pwInput = document.getElementById('auth-password');
-      const hint = document.getElementById('pw-hint');
-      if (!pwInput) return;
-      if (pwInput.type === 'password') {
-        pwInput.type = 'text';
-        if (hint) hint.innerText = '🔒 Hide';
-      } else {
-        pwInput.type = 'password';
-        if (hint) hint.innerText = '👁️ Show';
-      }
-    }
-
-    function fillDemoCredentials(role) {
-      setAuthMode(false);
-      const nameInput = document.getElementById('auth-fullname');
-      const emailInput = document.getElementById('auth-email');
-      const pwInput = document.getElementById('auth-password');
-      const dobInput = document.getElementById('auth-dob');
-      if (role === 'doctor') {
-        if (nameInput) nameInput.value = 'Dr. Emily Watson, MD';
-        if (dobInput) dobInput.value = '1982-04-12';
-        emailInput.value = 'dr.watson@carepulse.local';
-        pwInput.value = 'CarePulse2026!';
-      } else if (role === 'admin') {
-        if (nameInput) nameInput.value = 'System Administrator';
-        if (dobInput) dobInput.value = '1985-01-01';
-        emailInput.value = 'admin@carepulse.local';
-        pwInput.value = 'Admin@CarePulse2026!';
-      } else {
-        if (nameInput) nameInput.value = 'John Doe';
-        if (dobInput) dobInput.value = '1995-08-20';
-        emailInput.value = 'patient@carepulse.local';
-        pwInput.value = 'CarePulse2026!';
-      }
-      emailInput.focus();
-    }
-
-    function syncAuthLanguage(lang) {
-      changeLanguage(lang);
-      const topSelect = document.getElementById('lang-select');
-      if (topSelect) topSelect.value = lang;
-    }
-
-    async function startGuestMode() {
-      try {
-        const res = await fetch('/api/auth/guest', { method: 'POST' });
-        const data = await res.json();
-        if (data.success) {
-          currentUser = data.user;
-          localStorage.setItem('user', JSON.stringify(currentUser));
-          localStorage.setItem('session_token', data.session_token);
-        } else {
-          currentUser = { email: "guest@healthcheck.local", full_name: "Guest Patient" };
-          localStorage.setItem('user', JSON.stringify(currentUser));
-          localStorage.setItem('session_token', "guest_token_" + Date.now());
-        }
-      } catch (e) {
-        currentUser = { email: "guest@healthcheck.local", full_name: "Guest Patient" };
-        localStorage.setItem('user', JSON.stringify(currentUser));
-        localStorage.setItem('session_token', "guest_token_" + Date.now());
-      }
-      showApp();
-    }
-
-    async function handleAuthSubmit(e) {
-      e.preventDefault();
-      const errorDiv = document.getElementById('auth-error');
-      errorDiv.style.display = 'none';
-
-      const fullName = document.getElementById('auth-fullname').value.trim();
-      const dob = document.getElementById('auth-dob') ? document.getElementById('auth-dob').value : '';
-      const email = document.getElementById('auth-email').value.trim();
-      const password = document.getElementById('auth-password').value;
-
-      // Strict client-side validation: ALL BLANKS ARE REQUIRED
-      if (!fullName) {
-        errorDiv.innerText = '⚠️ Full Name is required. All blanks must be filled.';
-        errorDiv.style.display = 'block';
-        document.getElementById('auth-fullname').focus();
-        return;
-      }
-      if (isRegisterMode && !dob) {
-        errorDiv.innerText = '⚠️ Date of Birth is required for clinical safety. All blanks must be filled.';
-        errorDiv.style.display = 'block';
-        document.getElementById('auth-dob').focus();
-        return;
-      }
-      if (!email) {
-        errorDiv.innerText = '⚠️ Email address is required. All blanks must be filled.';
-        errorDiv.style.display = 'block';
-        document.getElementById('auth-email').focus();
-        return;
-      }
-      if (!password || password.length < 6) {
-        errorDiv.innerText = '⚠️ Password is required (minimum 6 characters). All blanks must be filled.';
-        errorDiv.style.display = 'block';
-        document.getElementById('auth-password').focus();
-        return;
-      }
-
-      const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
-      const payload = isRegisterMode ? {
-        full_name: fullName,
-        date_of_birth: dob,
-        email, password
-      } : { full_name: fullName, email, password };
-
-      const btn = document.getElementById('auth-submit-btn');
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          localStorage.setItem('session_token', data.session_token);
-          localStorage.setItem('user', JSON.stringify(data.user));
-          currentUser = data.user;
-          showApp();
-        } else {
-          errorDiv.innerText = '⚠️ ' + (data.error || 'Authentication failed. Please check all fields.');
-          errorDiv.style.display = 'block';
-        }
-      } catch (err) {
-        errorDiv.innerText = '⚠️ Starting in offline mode with name: ' + fullName;
-        errorDiv.style.display = 'block';
-        currentUser = { email: email, full_name: fullName };
-        localStorage.setItem('user', JSON.stringify(currentUser));
-        localStorage.setItem('session_token', "user_session_" + Date.now());
-        setTimeout(() => showApp(), 800);
-      } finally {
-        btn.disabled = false;
-      }
-    }
-
-    function showApp() {
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('app-container').style.display = 'flex';
-      
-      const isAdmin = currentUser && (
-        currentUser.role === 'admin' ||
-        (currentUser.email && currentUser.email.toLowerCase() === 'admin@carepulse.local') ||
-        (currentUser.email && currentUser.email.toLowerCase().startsWith('admin@'))
-      );
-
-      const adminNavBtn = document.getElementById('nav-btn-admin');
-      const adminBNavBtn = document.getElementById('bnav-admin');
-      if (adminNavBtn) adminNavBtn.style.display = isAdmin ? 'flex' : 'none';
-      if (adminBNavBtn) adminBNavBtn.style.display = isAdmin ? 'flex' : 'none';
-
-      const displayNameEl = document.getElementById('user-display-name');
-      if (displayNameEl) {
-        if (isAdmin) {
-          displayNameEl.innerHTML = `${escapeHtml(currentUser.full_name || currentUser.email)} <span class="role-badge-admin" style="font-size: 10px; margin-left: 4px;">👑 ADMIN</span>`;
-        } else {
-          displayNameEl.innerText = currentUser.full_name || currentUser.email;
-        }
-      }
-
-      document.getElementById('user-avatar').innerText = (currentUser.full_name || currentUser.email)[0].toUpperCase();
-      initChatSession();
-
-      if (isAdmin) {
-        loadAdminData();
-      }
-    }
-
-    function handleLogout() {
-      localStorage.clear();
-      location.reload();
-    }
-
-    /* ==========================================================================
-       ADMINISTRATOR DASHBOARD & USER MANAGEMENT FUNCTIONS
-       ========================================================================== */
-    let adminUsersCache = [];
-    let currentResetUserId = null;
-
-    async function loadAdminData() {
-      const token = localStorage.getItem('session_token');
-      if (!token) return;
-
-      const headers = {
-        'Authorization': `Bearer ${token}`
-      };
-
-      try {
-        // Load stats
-        const statsRes = await fetch('/api/admin/stats', { headers });
-        const statsData = await statsRes.json();
-        if (statsData.success) {
-          document.getElementById('kpi-total-users').innerText = statsData.stats.total_users || 0;
-          document.getElementById('kpi-total-convs').innerText = statsData.stats.total_conversations || 0;
-          document.getElementById('kpi-active-sessions').innerText = statsData.stats.active_sessions || 0;
-        }
-
-        // Load users list
-        const usersRes = await fetch('/api/admin/users', { headers });
-        const usersData = await usersRes.json();
-        if (usersData.success) {
-          adminUsersCache = usersData.users || [];
-          renderAdminTable(adminUsersCache);
-        }
-      } catch (err) {
-        console.error("Failed to load admin data:", err);
-      }
-    }
-
-    function renderAdminTable(users) {
-      const tbody = document.getElementById('admin-users-tbody');
-      const countEl = document.getElementById('admin-user-count');
-      if (!tbody) return;
-
-      if (countEl) countEl.innerText = users.length;
-
-      if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 30px; color: var(--text-muted);">No matching user accounts found.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = '';
-      users.forEach(u => {
-        const tr = document.createElement('tr');
-        const isUserAdmin = u.role === 'admin';
-        const initial = (u.full_name || u.email || 'U')[0].toUpperCase();
-        const regDate = u.created_at ? new Date(u.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '--';
-        
-        tr.innerHTML = `
-          <td>
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <div style="width: 34px; height: 34px; border-radius: 50%; background: ${isUserAdmin ? '#e0e7ff' : '#f1f5f9'}; color: ${isUserAdmin ? '#4338ca' : '#475569'}; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px;">
-                ${escapeHtml(initial)}
-              </div>
-              <div>
-                <strong style="color: #0f172a;">${escapeHtml(u.full_name || 'Anonymous Patient')}</strong>
-                <div style="font-size: 11px; color: var(--text-muted);">ID: ${escapeHtml((u.id || '').substring(0, 8))}...</div>
-              </div>
-            </div>
-          </td>
-          <td>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="font-family: monospace; font-size: 13px; font-weight: 600; color: #1e293b;">${escapeHtml(u.email)}</span>
-              <button type="button" class="copy-email-btn" onclick="copyToClipboard('${escapeHtml(u.email)}')" title="Copy email address">📋</button>
-            </div>
-          </td>
-          <td><span style="color: #475569; font-size: 13px;">${escapeHtml(u.date_of_birth || '--')}</span></td>
-          <td>
-            <span class="${isUserAdmin ? 'role-badge-admin' : 'role-badge-patient'}">
-              ${isUserAdmin ? '👑 Admin' : '👤 Patient'}
-            </span>
-          </td>
-          <td><span style="font-size: 12px; color: var(--text-muted);">${regDate}</span></td>
-          <td>
-            <span style="background: #f8fafc; border: 1px solid var(--border); padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; color: #334155;">
-              💬 ${u.conversation_count || 0}
-            </span>
-          </td>
-          <td>
-            <span style="font-size: 11px; background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; padding: 2px 7px; border-radius: 4px; font-weight: 600;">
-              🔒 ${escapeHtml(u.password_status || 'PBKDF2/scrypt')}
-            </span>
-          </td>
-          <td style="text-align: right; white-space: nowrap;">
-            <button type="button" class="btn-tbl-action" onclick="openAdminActivity('${escapeHtml(u.id)}', '${escapeHtml(u.full_name || u.email)}')" title="View patient medical conversations">👁️ Activity</button>
-            <button type="button" class="btn-tbl-action" onclick="openAdminResetPw('${escapeHtml(u.id)}', '${escapeHtml(u.email)}')" title="Reset password for user">🔑 Reset PW</button>
-            ${!isUserAdmin ? `<button type="button" class="btn-tbl-action danger" onclick="deleteAdminUser('${escapeHtml(u.id)}', '${escapeHtml(u.email)}')" title="Delete user account">🗑️</button>` : ''}
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function filterAdminUsers(query) {
-      const q = (query || '').toLowerCase().trim();
-      if (!q) {
-        renderAdminTable(adminUsersCache);
-        return;
-      }
-      const filtered = adminUsersCache.filter(u => 
-        (u.full_name && u.full_name.toLowerCase().includes(q)) ||
-        (u.email && u.email.toLowerCase().includes(q)) ||
-        (u.created_at && u.created_at.includes(q)) ||
-        (u.role && u.role.toLowerCase().includes(q))
-      );
-      renderAdminTable(filtered);
-    }
-
-    function copyToClipboard(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Copied login email to clipboard: " + text);
-      }).catch(() => {
-        prompt("Copy email address:", text);
-      });
-    }
-
-    async function openAdminActivity(userId, userName) {
-      const modal = document.getElementById('admin-activity-modal');
-      const body = document.getElementById('admin-act-modal-body');
-      const sub = document.getElementById('admin-act-modal-sub');
-      
-      sub.innerText = `Consultations and clinical assessments for: ${userName} (ID: ${userId})`;
-      body.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--text-muted);">Loading patient activity...</div>';
-      modal.style.display = 'flex';
-
-      const token = localStorage.getItem('session_token');
-      try {
-        const res = await fetch(`/api/admin/user/${userId}/conversations`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await res.json();
-        
-        if (!data.success || !data.data || !data.data.conversations || data.data.conversations.length === 0) {
-          body.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--text-muted);">No consultation records logged yet for this patient.</div>';
-          return;
-        }
-
-        body.innerHTML = '';
-        data.data.conversations.forEach((conv, idx) => {
-          const card = document.createElement('div');
-          card.style.cssText = 'background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px;';
-          
-          const time = conv.created_at ? new Date(conv.created_at).toLocaleString() : '--';
-          
-          let msgsHtml = '';
-          if (conv.messages && conv.messages.length > 0) {
-            msgsHtml = '<div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">';
-            conv.messages.slice(-6).forEach(m => {
-              const isUser = m.role === 'user';
-              msgsHtml += `
-                <div style="font-size: 12.5px; padding: 8px 12px; border-radius: 8px; background: ${isUser ? '#eef2ff' : '#ffffff'}; border: 1px solid ${isUser ? '#c7d2fe' : '#e2e8f0'};">
-                  <strong>${isUser ? '👤 Patient' : '🩺 CarePulse AI'}:</strong>
-                  <div style="margin-top: 3px; color: #1e293b; white-space: pre-wrap;">${escapeHtml(m.content || '')}</div>
-                </div>
-              `;
-            });
-            msgsHtml += '</div>';
-          }
-
-          card.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
-              <div>
-                <strong style="color: #1e1b4b; font-size: 14px;">#${idx+1} ${escapeHtml(conv.title || 'Consultation Session')}</strong>
-                <div style="font-size: 11px; color: var(--text-muted);">Language: ${escapeHtml(conv.language || 'english')} • Age: ${escapeHtml(conv.age || 'Not specified')}</div>
-              </div>
-              <span style="font-size: 11px; color: var(--text-muted);">${time}</span>
-            </div>
-            ${msgsHtml}
-          `;
-          body.appendChild(card);
-        });
-      } catch (err) {
-        body.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--danger);">Failed to load consultation activity: ' + err.message + '</div>';
-      }
-    }
-
-    function closeAdminActivityModal() {
-      document.getElementById('admin-activity-modal').style.display = 'none';
-    }
-
-    function openAdminResetPw(userId, userEmail) {
-      currentResetUserId = userId;
-      document.getElementById('admin-reset-target-user').innerText = `Target Account: ${userEmail}`;
-      document.getElementById('admin-new-pw-input').value = '';
-      document.getElementById('admin-reset-error').style.display = 'none';
-      document.getElementById('admin-reset-success').style.display = 'none';
-      document.getElementById('admin-reset-pw-modal').style.display = 'flex';
-      setTimeout(() => document.getElementById('admin-new-pw-input').focus(), 100);
-    }
-
-    function closeAdminResetPwModal() {
-      document.getElementById('admin-reset-pw-modal').style.display = 'none';
-      currentResetUserId = null;
-    }
-
-    async function submitAdminResetPassword() {
-      const newPw = document.getElementById('admin-new-pw-input').value.trim();
-      const errEl = document.getElementById('admin-reset-error');
-      const succEl = document.getElementById('admin-reset-success');
-
-      if (!newPw || newPw.length < 6) {
-        errEl.innerText = '⚠️ Password must be at least 6 characters long.';
-        errEl.style.display = 'block';
-        return;
-      }
-
-      errEl.style.display = 'none';
-      const token = localStorage.getItem('session_token');
-
-      try {
-        const res = await fetch(`/api/admin/user/${currentResetUserId}/reset-password`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ new_password: newPw })
-        });
-        const data = await res.json();
-        if (data.success) {
-          succEl.innerText = '✅ ' + data.message;
-          succEl.style.display = 'block';
-          setTimeout(() => {
-            closeAdminResetPwModal();
-            loadAdminData();
-          }, 1200);
-        } else {
-          errEl.innerText = '⚠️ ' + (data.error || 'Failed to update password');
-          errEl.style.display = 'block';
-        }
-      } catch (err) {
-        errEl.innerText = '⚠️ Network error: ' + err.message;
-        errEl.style.display = 'block';
-      }
-    }
-
-    async function deleteAdminUser(userId, email) {
-      if (!confirm(`Are you sure you want to delete user account ${email}? This will remove all their consultation history and cannot be undone.`)) {
-        return;
-      }
-
-      const token = localStorage.getItem('session_token');
-      try {
-        const res = await fetch(`/api/admin/user/${userId}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('User deleted successfully.');
-          loadAdminData();
-        } else {
-          alert('⚠️ ' + (data.error || 'Failed to delete user'));
-        }
-      } catch (err) {
-        alert('⚠️ Error deleting user: ' + err.message);
-      }
-    }
-
-    async function downloadUsersCSV() {
-      const token = localStorage.getItem('session_token');
-      try {
-        const res = await fetch('/api/admin/export-users', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!res.ok) throw new Error("Failed to export users");
-        const blob = await res.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `carepulse_users_${new Date().toISOString().slice(0,10)}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-      } catch (err) {
-        alert("⚠️ Failed to download CSV: " + err.message);
-      }
-    }
-
-    /* ==========================================================================
-       SYMPTOM CHECKER & DISEASE PREDICTION LOGIC
-       ========================================================================== */
-    async function loadSymptomsList() {
-      try {
-        const res = await fetch('/api/symptoms-list');
-        const data = await res.json();
-        if (data.success) {
-          symptomCategories = data.categories;
-          renderSymptomCategories();
-        }
-      } catch (err) {
-        console.error("Failed to load symptoms list:", err);
-      }
-    }
-
-    function renderSymptomCategories(filter = '') {
-      const container = document.getElementById('symptom-categories-container');
-      container.innerHTML = '';
-      const filterLower = filter.toLowerCase().trim();
-
-      for (const [category, symptoms] of Object.entries(symptomCategories)) {
-        const matchingSymptoms = symptoms.filter(s =>
-          !filterLower || s.name.toLowerCase().includes(filterLower) || s.token.includes(filterLower)
-        );
-
-        if (matchingSymptoms.length === 0) continue;
-
-        const groupDiv = document.createElement('div');
-        groupDiv.className = 'cat-group';
-
-        const titleDiv = document.createElement('div');
-        titleDiv.className = 'cat-title';
-        titleDiv.innerText = category;
-        groupDiv.appendChild(titleDiv);
-
-        const chipsDiv = document.createElement('div');
-        chipsDiv.className = 'chips-cluster';
-
-        matchingSymptoms.forEach(sym => {
-          const chip = document.createElement('div');
-          chip.className = `chip ${selectedSymptoms.has(sym.token) ? 'active' : ''}`;
-          chip.innerText = sym.name;
-          chip.onclick = () => toggleSymptom(sym.token, sym.name);
-          chipsDiv.appendChild(chip);
-        });
-
-        groupDiv.appendChild(chipsDiv);
-        container.appendChild(groupDiv);
-      }
-    }
-
-    function toggleSymptom(token, name) {
-      if (selectedSymptoms.has(token)) {
-        selectedSymptoms.delete(token);
-      } else {
-        selectedSymptoms.add(token);
-      }
-      renderSelectedTray();
-      renderSymptomCategories(document.getElementById('symptom-search').value);
-    }
-
-    function filterSymptoms(query) {
-      renderSymptomCategories(query);
-    }
-
-    function renderSelectedTray() {
-      const tray = document.getElementById('selected-symptoms-tray');
-      document.getElementById('selected-count').innerText = selectedSymptoms.size;
-
-      if (selectedSymptoms.size === 0) {
-        tray.innerHTML = '<span style="font-size: 12px; color: #94a3b8;">Click symptom chips below or type to add symptoms...</span>';
-        return;
-      }
-
-      tray.innerHTML = '';
-      selectedSymptoms.forEach(token => {
-        let readable = token.replace(/_/g, ' ');
-        for (const cat in symptomCategories) {
-          const found = symptomCategories[cat].find(s => s.token === token);
-          if (found) { readable = found.name; break; }
-        }
-
-        const chip = document.createElement('div');
-        chip.className = 'selected-chip';
-        chip.innerHTML = `${escapeHtml(readable)} <span onclick="removeSymptom('${token}')">✕</span>`;
-        tray.appendChild(chip);
-      });
-    }
-
-    function removeSymptom(token) {
-      selectedSymptoms.delete(token);
-      renderSelectedTray();
-      renderSymptomCategories(document.getElementById('symptom-search').value);
-    }
-
-    function clearSelectedSymptoms() {
-      selectedSymptoms.clear();
-      document.getElementById('free-symptom-text').value = '';
-      renderSelectedTray();
-      renderSymptomCategories();
-    }
-
-    async function executeDiseasePrediction() {
-      const symptomsList = Array.from(selectedSymptoms);
-      const text = document.getElementById('free-symptom-text').value.trim();
-
-      if (symptomsList.length === 0 && !text) {
-        alert("Please select at least one symptom or describe what you are experiencing.");
-        return;
-      }
-
-      const resultsArea = document.getElementById('prediction-results-area');
-      resultsArea.innerHTML = `
-        <div style="text-align: center; padding: 50px 20px; color: var(--primary);">
-          <div style="font-size: 32px; animation: pulse 1s infinite;">🩺</div>
-          <p style="font-weight: 700; margin-top: 10px;">Evaluating clinical symptom patterns & calculating differential diagnoses...</p>
-        </div>
-      `;
-
-      try {
-        const res = await fetch('/api/predict-disease', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            symptoms: symptomsList,
-            text: text,
-            age: currentAge,
-            language: currentLanguage
-          })
-        });
-        const data = await res.json();
-
-        if (data.success && data.prediction) {
-          latestPrediction = data;
-          renderPredictionResult(data.prediction, data.response);
-          document.getElementById('export-btn').style.display = 'inline-block';
-        } else {
-          resultsArea.innerHTML = `<div class="empty-prediction" style="color:var(--danger)">Failed to evaluate: ${data.error || 'Unknown error'}</div>`;
-        }
-      } catch (err) {
-        resultsArea.innerHTML = `<div class="empty-prediction" style="color:var(--danger)">Network error connecting to diagnostic engine.</div>`;
-      }
-    }
-
-    function renderPredictionResult(pred, resp) {
-      const resultsArea = document.getElementById('prediction-results-area');
-      const primary = pred.primary_diagnosis || {};
-      const urgency = pred.urgency || 'mild';
-
-      // Update top urgency badge
-      const urgBadge = document.getElementById('badge-urgency');
-      urgBadge.style.display = 'inline-block';
-      urgBadge.className = `badge badge-urgency-${urgency}`;
-      urgBadge.innerText = `Urgency: ${urgency.toUpperCase()}`;
-
-      let differentialsHtml = '';
-      if (pred.differential_diagnoses && pred.differential_diagnoses.length > 0) {
-        differentialsHtml = `
-          <div style="margin-top: 16px;">
-            <h4 style="font-size: 13.5px; font-weight: 700; color: #334155; margin-bottom: 8px;">Differential Diagnoses to Consider</h4>
-            ${pred.differential_diagnoses.map(d => `
-              <div class="differential-item">
-                <div>
-                  <h4>${escapeHtml(d.name)}</h4>
-                  <span style="font-size: 11.5px; color: #64748b;">${escapeHtml(d.category)}</span>
-                </div>
-                <div style="text-align: right;">
-                  <span style="font-size: 13px; font-weight: 700; color: #4f46e5;">${d.confidence}% match</span>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        `;
-      }
-
-      let followUpsHtml = '';
-      if (resp && resp.follow_up_questions && resp.follow_up_questions.length > 0) {
-        followUpsHtml = `
-          <div class="follow-up-card">
-            <h5><span>🔍</span> Targeted Follow-up Questions (Refine Diagnosis)</h5>
-            ${resp.follow_up_questions.map(q => `
-              <div class="q-item">
-                <span>• ${escapeHtml(q.question)}</span>
-                <div class="q-btns">
-                  <button class="q-btn yes" onclick="confirmSymptomFromFollowUp('${q.symptom_token}')">Yes</button>
-                  <button class="q-btn no" onclick="this.parentElement.parentElement.style.opacity='0.4'">No</button>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        `;
-      }
-
-      resultsArea.innerHTML = `
-        <div class="primary-diagnosis-card">
-          <div class="diagnosis-top">
-            <div>
-              <div class="diagnosis-name">${escapeHtml(primary.name)}</div>
-              <div class="diagnosis-category">${escapeHtml(primary.category || 'Clinical Assessment')}</div>
-            </div>
-            <span class="badge badge-urgency-${urgency}" style="font-size: 12px; padding: 5px 12px;">
-              ${urgency.toUpperCase()} URGENCY
-            </span>
-          </div>
-
-          <div class="confidence-meter">
-            <div class="meter-label">
-              <span>Diagnostic Confidence</span>
-              <span>${primary.confidence}% Match</span>
-            </div>
-            <div class="meter-track">
-              <div class="meter-fill" style="width: ${Math.min(primary.confidence, 100)}%;"></div>
-            </div>
-          </div>
-
-          <div class="symptoms-comparison">
-            <div class="symptom-sublist">
-              <h5>✓ Matched Symptoms</h5>
-              ${(primary.matched_symptoms || []).map(s => `<div>• ${escapeHtml(s)}</div>`).join('')}
-            </div>
-            <div class="symptom-sublist">
-              <h5>⚠️ Symptoms to Monitor</h5>
-              ${(primary.unmatched_symptoms_to_watch || []).map(s => `<div>• ${escapeHtml(s)}</div>`).join('')}
-            </div>
-          </div>
-
-          ${followUpsHtml}
-
-          <div class="guidelines-box">
-            <div class="guideline-section">
-              <h4>🏡 Age-Appropriate Home Care Instructions</h4>
-              <p>${escapeHtml(resp.home_care || 'Maintain rest and adequate hydration.')}</p>
-            </div>
-
-            <div class="guideline-section" style="background:#fff1f2; border-color:#fecdd3;">
-              <h4 style="color:#be123c;">🚨 Medical Attention & Red Flag Warnings</h4>
-              <p style="color:#9f1239;">${escapeHtml(resp.medical_attention || 'Seek emergency care if symptoms escalate.')}</p>
-            </div>
-
-            <div class="guideline-section">
-              <h4>📋 Clinical Description & Pathophysiology</h4>
-              <p>${escapeHtml(resp.possible_causes || primary.description)}</p>
-            </div>
-          </div>
-
-          ${differentialsHtml}
-        </div>
-      `;
-    }
-
-    function confirmSymptomFromFollowUp(symptomToken) {
-      selectedSymptoms.add(symptomToken);
-      renderSelectedTray();
-      renderSymptomCategories(document.getElementById('symptom-search').value);
-      executeDiseasePrediction();
-    }
-
-    /* ==========================================================================
-       CHAT TAB & SPEECH INTEGRATION
-       ========================================================================== */
-    async function initChatSession() {
-      let token = localStorage.getItem('session_token');
-      if (!token) {
-        try {
-          const gRes = await fetch('/api/auth/guest', { method: 'POST' });
-          const gData = await gRes.json();
-          if (gData.success) {
-            token = gData.session_token;
-            localStorage.setItem('session_token', token);
-            localStorage.setItem('user', JSON.stringify(gData.user));
-          }
-        } catch (e) {}
-      }
-
-      try {
-        const res = await fetch('/api/conversation/start', {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({})
-        });
-        const data = await res.json();
-        if (data.success) {
-          currentConversationId = data.conversation_id;
-          // Set default age
-          await fetch(`/api/conversation/${currentConversationId}/age`, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ age: currentAge })
-          });
-        }
-      } catch (err) {
-        console.error("Could not start session:", err);
-      }
-    }
-
-    function sendQuickPrompt(promptText) {
-      document.getElementById('chat-input-field').value = promptText;
-      handleChatMessageSubmit(new Event('submit'));
-    }
-
-    async function handleChatMessageSubmit(e) {
-      if (e) e.preventDefault();
-      const input = document.getElementById('chat-input-field');
-      const text = input.value.trim();
-      if (!text) return;
-
-      input.value = '';
-      appendChatMessage('user', text);
-
-      let token = localStorage.getItem('session_token');
-      if (!currentConversationId) {
-        await initChatSession();
-      }
-
-      const convId = currentConversationId || 'new';
-
-      try {
-        const res = await fetch(`/api/conversation/${convId}/chat`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            message: text,
-            symptoms_list: Array.from(selectedSymptoms),
-            age: currentAge,
-            language: currentLanguage
-          })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          if (data.conversation_id) currentConversationId = data.conversation_id;
-          appendChatMessage('assistant', data.response, data.disease_prediction);
-        } else {
-          // If session expired or invalid, auto-refresh guest token and retry
-          if (data.error && data.error.toLowerCase().includes('session')) {
-            await startGuestMode();
-            token = localStorage.getItem('session_token');
-            const retryRes = await fetch(`/api/conversation/new/chat`, {
-              method: 'POST',
-              headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                message: text,
-                symptoms_list: Array.from(selectedSymptoms),
-                age: currentAge,
-                language: currentLanguage
-              })
-            });
-            const retryData = await retryRes.json();
-            if (retryData.success) {
-              if (retryData.conversation_id) currentConversationId = retryData.conversation_id;
-              appendChatMessage('assistant', retryData.response, retryData.disease_prediction);
-              return;
-            }
-          }
-          appendChatMessage('assistant', `⚠️ ${data.error || 'Unable to generate response.'}`);
-        }
-      } catch (err) {
-        appendChatMessage('assistant', '⚠️ Server connection error. Please verify the backend is running.');
-      }
-    }
-
-    function appendChatMessage(role, content, prediction = null) {
-      const stream = document.getElementById('chat-stream');
-      const row = document.createElement('div');
-      row.className = `msg-row ${role}`;
-
-      const bubble = document.createElement('div');
-      bubble.className = 'msg-bubble';
-
-      if (role === 'user') {
-        bubble.innerText = content;
-      } else {
-        let cardHtml = '';
-        if (typeof content === 'object' && content.summary) {
-          let predBadge = '';
-          if (prediction && prediction.primary_diagnosis) {
-            predBadge = `
-              <div style="background:#eef2ff; border:1px solid #c7d2fe; padding:8px 12px; border-radius:8px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <span style="font-size:11px; font-weight:700; color:#4f46e5; text-transform:uppercase;">Predicted Condition</span>
-                  <div style="font-size:15px; font-weight:800; color:#1e1b4b;">${escapeHtml(prediction.primary_diagnosis.name)} (${prediction.primary_diagnosis.confidence}% Match)</div>
-                </div>
-                <span class="badge badge-urgency-${prediction.urgency || 'mild'}">${(prediction.urgency || 'mild').toUpperCase()}</span>
-              </div>
-            `;
-          }
-
-          cardHtml = `
-            ${predBadge}
-            <div style="margin-bottom:10px;">
-              <h4 style="font-size:13px; font-weight:700; color:#1e1b4b; margin-bottom:4px;">📋 Clinical Assessment</h4>
-              <p style="font-size:13.5px; color:#334155; line-height:1.5;">${escapeHtml(content.summary)}</p>
-            </div>
-            <div style="margin-bottom:10px;">
-              <h4 style="font-size:13px; font-weight:700; color:#15803d; margin-bottom:4px;">🏡 Home Care Instructions</h4>
-              <p style="font-size:13px; color:#334155; white-space:pre-wrap;">${escapeHtml(content.home_care || 'Rest and hydrate.')}</p>
-            </div>
-            <div style="margin-bottom:10px; background:#fff1f2; padding:10px; border-radius:8px; border:1px solid #fecdd3;">
-              <h4 style="font-size:13px; font-weight:700; color:#be123c; margin-bottom:4px;">🚨 Warning Signs</h4>
-              <p style="font-size:12.5px; color:#9f1239; white-space:pre-wrap;">${escapeHtml(content.medical_attention)}</p>
-            </div>
-            <button class="btn-secondary" style="font-size:11.5px; padding:3px 8px; margin-top:6px;" onclick="speakText(this)">🔊 Listen</button>
-          `;
-          bubble.innerHTML = cardHtml;
-        } else {
-          bubble.innerText = content;
-        }
-      }
-
-      row.appendChild(bubble);
-      stream.appendChild(row);
-      stream.scrollTop = stream.scrollHeight;
-    }
-
-    /* Speech synthesis & recognition */
-    function speakText(btn) {
-      const text = btn.parentElement.innerText.replace('🔊 Listen', '');
-      const utterance = new SpeechSynthesisUtterance(text);
-      window.speechSynthesis.speak(utterance);
-    }
-
-    function toggleSpeechRecognition() {
-      const micBtn = document.getElementById('mic-btn');
-      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-      if (!SpeechRec) {
-        alert("Speech Recognition is not supported in this browser. Please use Chrome or Edge.");
-        return;
-      }
-
-      if (isRecording) {
-        speechRecognition.stop();
-        micBtn.classList.remove('recording');
-        isRecording = false;
-        return;
-      }
-
-      speechRecognition = new SpeechRec();
-      speechRecognition.continuous = false;
-      speechRecognition.interimResults = false;
-      const langVoiceMap = {
-        'hindi': 'hi-IN',
-        'spanish': 'es-ES',
-        'french': 'fr-FR',
-        'telugu': 'te-IN',
-        'tamil': 'ta-IN',
-        'bengali': 'bn-IN',
-        'marathi': 'mr-IN',
-        'gujarati': 'gu-IN',
-        'kannada': 'kn-IN',
-        'malayalam': 'ml-IN',
-        'punjabi': 'pa-IN',
-        'urdu': 'ur-PK'
-      };
-      speechRecognition.lang = langVoiceMap[currentLanguage] || 'en-US';
-
-      speechRecognition.onstart = () => {
-        isRecording = true;
-        micBtn.classList.add('recording');
-      };
-
-      speechRecognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById('chat-input-field').value = transcript;
-        micBtn.classList.remove('recording');
-        isRecording = false;
-      };
-
-      speechRecognition.onerror = () => {
-        micBtn.classList.remove('recording');
-        isRecording = false;
-      };
-
-      speechRecognition.onend = () => {
-        micBtn.classList.remove('recording');
-        isRecording = false;
-      };
-
-      speechRecognition.start();
-    }
-
-    /* ==========================================================================
-       TAB 3: VITALS TRACKER LOGIC
-       ========================================================================== */
-    async function evaluateVitalsPanel() {
-      const sbp = document.getElementById('vital-sbp').value;
-      const dbp = document.getElementById('vital-dbp').value;
-      const hr = document.getElementById('vital-hr').value;
-      const spo2 = document.getElementById('vital-spo2').value;
-      const temp = document.getElementById('vital-temp').value;
-      const tempUnit = document.getElementById('vital-temp-unit').value;
-      const sugar = document.getElementById('vital-sugar').value;
-      const sugarType = document.getElementById('vital-sugar-type').value;
-
-      const payload = {
-        systolic_bp: sbp ? parseFloat(sbp) : null,
-        diastolic_bp: dbp ? parseFloat(dbp) : null,
-        heart_rate: hr ? parseFloat(hr) : null,
-        spo2: spo2 ? parseFloat(spo2) : null,
-        temperature: temp ? parseFloat(temp) : null,
-        temp_unit: tempUnit,
-        blood_sugar: sugar ? parseFloat(sugar) : null,
-        sugar_type: sugarType
-      };
-
-      try {
-        const res = await fetch('/api/vitals/analyze', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-
-        if (data.success && data.analysis) {
-          renderVitalsEvaluation(data.analysis);
-        }
-      } catch (err) {
-        alert("Failed to analyze vitals.");
-      }
-    }
-
-    function renderVitalsEvaluation(analysis) {
-      const alertBox = document.getElementById('vitals-alert-box');
-      alertBox.style.display = 'block';
-
-      if (analysis.risk_score >= 5) {
-        alertBox.style.background = '#fee2e2';
-        alertBox.style.border = '1px solid #fca5a5';
-        alertBox.style.color = '#991b1b';
-      } else if (analysis.risk_score >= 3) {
-        alertBox.style.background = '#ffedd5';
-        alertBox.style.border = '1px solid #fdba74';
-        alertBox.style.color = '#9a3412';
-      } else {
-        alertBox.style.background = '#f0fdf4';
-        alertBox.style.border = '1px solid #bbf7d0';
-        alertBox.style.color = '#166534';
-      }
-
-      alertBox.innerHTML = `
-        <h4 style="font-weight: 800; font-size: 15px; margin-bottom: 4px;">Overall Vitals Status: ${analysis.overall_status} (Risk Score: ${analysis.risk_score}/10)</h4>
-        ${analysis.alerts.length > 0 ? analysis.alerts.map(a => `<div>${a}</div>`).join('') : '<div>All evaluated parameters are within acceptable clinical limits.</div>'}
-      `;
-
-      // Update individual pills
-      const v = analysis.vitals;
-      if (v.blood_pressure) updatePill('bp-pill', v.blood_pressure.status, v.blood_pressure.level);
-      if (v.heart_rate) updatePill('hr-pill', v.heart_rate.status, v.heart_rate.level);
-      if (v.spo2) updatePill('spo2-pill', v.spo2.status, v.spo2.level);
-      if (v.temperature) updatePill('temp-pill', v.temperature.status, v.temperature.level);
-      if (v.blood_sugar) updatePill('sugar-pill', v.blood_sugar.status, v.blood_sugar.level);
-    }
-
-    function updatePill(id, text, level) {
-      const el = document.getElementById(id);
-      el.innerText = text;
-      if (level === 'critical' || level === 'high') {
-        el.style.background = '#fee2e2'; el.style.color = '#b91c1c';
-      } else if (level === 'moderate') {
-        el.style.background = '#fef3c7'; el.style.color = '#b45309';
-      } else {
-        el.style.background = '#dcfce7'; el.style.color = '#15803d';
-      }
-    }
-
-    /* ==========================================================================
-       TAB 4: REPORTS & AGE MODAL
-       ========================================================================== */
-    function updateReportView() {
-      document.getElementById('rep-name').innerText = currentUser ? (currentUser.full_name || currentUser.email) : 'Guest Patient';
-      document.getElementById('rep-age').innerText = currentAge;
-      document.getElementById('rep-date').innerText = new Date().toLocaleString();
-
-      if (latestPrediction && latestPrediction.prediction) {
-        const pred = latestPrediction.prediction;
-        const primary = pred.primary_diagnosis || {};
-        document.getElementById('rep-urgency').innerText = (pred.urgency || 'Mild').toUpperCase();
-        document.getElementById('rep-symptoms').innerText = pred.active_symptoms ? pred.active_symptoms.join(', ') : 'None listed';
-        document.getElementById('rep-diagnosis').innerText = `${primary.name} (${primary.confidence}% Match)`;
-        document.getElementById('rep-care').innerText = latestPrediction.response ? latestPrediction.response.home_care : 'None';
-      }
-    }
-
-    function exportCurrentToReport() {
-      updateReportView();
-      switchTab('tab-reports', document.querySelectorAll('.nav-tab-btn')[3]);
-    }
-
-    function renderAgeModalOptions() {
-      const container = document.getElementById('age-options-container');
-      container.innerHTML = '';
-      AGE_GROUPS.forEach(age => {
-        const div = document.createElement('div');
-        div.className = `age-option ${age === currentAge ? 'selected' : ''}`;
-        div.innerText = age;
-        div.onclick = () => {
-          document.querySelectorAll('.age-option').forEach(el => el.classList.remove('selected'));
-          div.classList.add('selected');
-          currentAge = age;
-        };
-        container.appendChild(div);
-      });
-    }
-
-    function openAgeModal() { document.getElementById('age-modal').style.display = 'flex'; }
-    function closeAgeModal() { document.getElementById('age-modal').style.display = 'none'; }
-    function confirmAgeSelection() {
-      document.getElementById('badge-age').innerText = `Age: ${currentAge} ✎`;
-      closeAgeModal();
-      if (latestPrediction) executeDiseasePrediction();
-    }
-
-    function changeLanguage(lang) {
-      currentLanguage = lang;
-      const authSelect = document.getElementById('auth-lang-select');
-      if (authSelect && authSelect.value !== lang) authSelect.value = lang;
-      const topSelect = document.getElementById('lang-select');
-      if (topSelect && topSelect.value !== lang) topSelect.value = lang;
-      if (latestPrediction) executeDiseasePrediction();
-    }
-
-    function escapeHtml(text) {
-      if (!text) return '';
-      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-      return String(text).replace(/[&<>"']/g, m => map[m]);
-    }
   </script>
 </body>
 </html>

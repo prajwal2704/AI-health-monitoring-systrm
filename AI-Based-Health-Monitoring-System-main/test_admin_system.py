@@ -12,6 +12,7 @@ Tests:
 9. Web interface template rendering includes Admin Console markup
 """
 import json
+import time
 from app import app
 from auth_memory_store import auth_store
 
@@ -32,18 +33,26 @@ def run_tests():
     print(f"[{total}] Health Check: PASS")
     passed += 1
 
-    # 2. Template renders Admin UI
+    # 2. Portals Separation: Patient UI (/) has zero admin elements; Dedicated Admin Portal (/admin) renders Admin Console
     total += 1
-    r = client.get('/')
-    assert r.status_code == 200
-    html = r.data.decode('utf-8')
-    assert 'tab-admin' in html, "tab-admin section missing from template"
-    assert 'admin@carepulse.local' in html, "Admin default email missing from template"
-    assert 'User Accounts & Activity Monitor' in html, "Admin title missing from template"
-    assert 'admin-users-tbody' in html, "Admin table missing from template"
-    assert 'admin-activity-modal' in html, "Admin activity modal missing from template"
-    assert 'admin-reset-pw-modal' in html, "Admin reset password modal missing from template"
-    print(f"[{total}] Web Dashboard & Admin UI Rendering: PASS")
+    # Check Patient Portal (/)
+    r_patient = client.get('/')
+    assert r_patient.status_code == 200
+    p_html = r_patient.data.decode('utf-8')
+    assert 'tab-admin' not in p_html, "tab-admin must NOT be in patient portal"
+    assert 'Admin Console' not in p_html, "Admin Console must NOT be in patient portal"
+    assert 'Admin Sign In' not in p_html, "Admin Sign In must NOT be in patient portal"
+
+    # Check Dedicated Admin Portal (/admin)
+    r_admin = client.get('/admin')
+    assert r_admin.status_code == 200
+    a_html = r_admin.data.decode('utf-8')
+    assert 'CarePulse Admin' in a_html, "CarePulse Admin missing from admin portal"
+    assert 'admin@carepulse.local' in a_html, "Admin default email missing from admin portal"
+    assert 'users-table-body' in a_html, "users-table-body missing from admin portal"
+    assert 'activity-modal' in a_html, "activity-modal missing from admin portal"
+    assert 'reset-pw-modal' in a_html, "reset-pw-modal missing from admin portal"
+    print(f"[{total}] Portals Separation (Patient & Dedicated Admin Portal): PASS")
     passed += 1
 
     # 3. Unauthenticated access to admin endpoints must be blocked (403 or 401)
@@ -57,18 +66,13 @@ def run_tests():
 
     # 4. Regular patient user access to admin endpoints must be blocked (403)
     total += 1
+    test_patient_email = f"patient_{int(time.time())}@carepulse.local"
     patient_res = client.post('/api/auth/register', json={
         'full_name': 'Test Regular Patient',
         'date_of_birth': '1998-05-12',
-        'email': 'patient_test@carepulse.local',
+        'email': test_patient_email,
         'password': 'Password123!'
     })
-    if not patient_res.json.get('success'):
-        # might already exist
-        patient_res = client.post('/api/auth/login', json={
-            'email': 'patient_test@carepulse.local',
-            'password': 'Password123!'
-        })
     patient_token = patient_res.json['session_token']
     assert patient_res.json['user']['role'] == 'patient', f"Expected role patient, got {patient_res.json['user']['role']}"
 
@@ -127,7 +131,7 @@ def run_tests():
     # Find patient_test user ID
     target_user_id = None
     for u in users:
-        if u['email'] == 'patient_test@carepulse.local':
+        if u['email'] == test_patient_email:
             target_user_id = u['id']
             break
     assert target_user_id is not None
@@ -150,7 +154,7 @@ def run_tests():
 
     # Verify user can now authenticate with the new password
     verify_login = client.post('/api/auth/login', json={
-        'email': 'patient_test@carepulse.local',
+        'email': test_patient_email,
         'password': new_pw
     })
     assert verify_login.status_code == 200

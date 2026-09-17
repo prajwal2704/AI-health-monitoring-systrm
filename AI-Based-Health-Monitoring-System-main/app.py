@@ -20,7 +20,7 @@ CORS(app)  # Enable CORS for all routes
 def require_auth(f):
     """Decorator to require authentication with automatic guest/demo fallback"""
     def wrapper(*args, **kwargs):
-        session_token = request.headers.get('Authorization', '').replace('Bearer ', '').strip()
+        session_token = request.headers.get('Authorization', '').replace('Bearer ', '').strip() or request.args.get('token', '').strip()
         if not session_token or session_token.startswith('guest_') or session_token in ('guest', 'demo'):
             request.user = {
                 'id': 'guest-user',
@@ -283,6 +283,11 @@ def index():
     """Serve the Web UI interface"""
     return render_template('index.html')
 
+@app.route('/admin', methods=['GET'])
+def admin_portal():
+    """Serve the dedicated Admin Portal interface"""
+    return render_template('admin.html')
+
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
@@ -524,7 +529,7 @@ def chat(conversation_id):
                     'home_care': "• Maintain generous fluid intake and get complete rest.\n• Avoid strenuous tasks until evaluated.",
                     'medical_attention': "Seek immediate medical consultation if symptoms escalate rapidly or severe pain develops.",
                     'possible_causes': "Possible acute viral infection or localized inflammation.",
-                    'disclaimer': "⚠️ IMPORTANT: Informational guidance only. Consult a doctor for formal diagnosis."
+                    'disclaimer': "IMPORTANT: Informational guidance only. Consult a doctor for formal diagnosis."
                 }
             }
         

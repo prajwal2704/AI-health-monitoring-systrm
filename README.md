@@ -6,7 +6,7 @@ CarePulse is a comprehensive, production-grade clinical health monitoring and di
 
 ---
 
-## 🚀 1-Click Free Cloud Deployment (24/7 Permanent Link)
+## Free Cloud Deployment (24/7 Permanent Link)
 
 You can deploy CarePulse to the cloud for free with **zero command line setup**:
 
@@ -22,7 +22,7 @@ You can deploy CarePulse to the cloud for free with **zero command line setup**:
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
 - **Clinical Disease Prediction Engine** (`engine/`):
   - Weighted inference model supporting 40+ disease diagnostic profiles across 8 clinical specialties.
@@ -41,24 +41,55 @@ You can deploy CarePulse to the cloud for free with **zero command line setup**:
 
 ---
 
-## 💻 Local Development
+## Key Architecture & Portals
 
-### 1. Clone & Install
+CarePulse provides a strictly isolated two-portal architecture:
+- **Patient Portal (`http://localhost:5005`)**: Clean, symbol-free clinical decision support for patients and triage staff. Contains zero admin controls or buttons.
+- **Admin Portal (`http://localhost:5006` or `/admin`)**: Dedicated administration console for clinical managers. View registered user accounts, inspect consultation queries, reset passwords, and export audit records to CSV.
+
+---
+
+## Local Development & Multi-Server Launch
+
+### 1. Install Dependencies
 ```bash
 git clone https://github.com/prajwal2704/AI-health-monitoring-systrm.git
 cd AI-health-monitoring-systrm
 pip install -r requirements.txt
 ```
 
-### 2. Run the Application
+### 2. Launching the Portals
+
+#### Option A: Run Both Portals Simultaneously (Recommended)
 ```bash
-python run_app.py
+python run_all.py
 ```
-Open **`http://localhost:5000`** in your browser.
+- **Patient Portal**: `http://localhost:5005`
+- **Admin Portal**: `http://localhost:5006`
+
+#### Option B: Run Individually
+- To start the **Patient Portal**:
+  ```bash
+  python run_app.py
+  ```
+- To start the **Dedicated Admin Server**:
+  ```bash
+  python admin_server.py
+  ```
+
+### 3. Administrator Credentials
+- **Admin Portal Link**: `http://localhost:5006` (or `http://localhost:5005/admin`)
+- **Default Email**: `admin@carepulse.local`
+- **Default Password**: `Admin@CarePulse2026!` *(configurable in `.env`)*
 
 ---
 
-## 🐳 Docker Deployment
+## Cloud Deployment (Render / Single Server)
+On cloud hosts where a single port is exposed:
+- Main URL (`/`): Serves the clean Patient Portal.
+- Admin URL (`/admin`): Serves the dedicated Administrator Console.
+
+## Docker Deployment
 ```bash
 docker build -t carepulse .
 docker run -p 5000:5000 carepulse

@@ -174,15 +174,14 @@ Please provide medical guidance in the following structured format:
         # Add Age-Specific Safety Notes
         age_lower = str(age).lower()
         if "infant" in age_lower or "0-2" in age_lower:
-            home_care += "\n• ⚠️ PEDIATRIC SAFETY: Never administer honey to infants under 12 months (infantile botulism risk). Do NOT administer adult medications."
+            home_care += "\n• [PEDIATRIC SAFETY] Never administer honey to infants under 12 months (infantile botulism risk). Do NOT administer adult medications."
         elif "child" in age_lower or "2-12" in age_lower:
-            home_care += "\n• ⚠️ PEDIATRIC SAFETY: Never administer aspirin to children or teenagers due to Reye's syndrome risk."
+            home_care += "\n• [PEDIATRIC SAFETY] Never administer aspirin to children or teenagers due to Reye's syndrome risk."
         elif "senior" in age_lower or "65+" in age_lower:
-            home_care += "\n• ⚠️ SENIOR CARE: Ensure fall prevention, adequate hydration, and review interactions with ongoing chronic medications."
+            home_care += "\n• [SENIOR CARE] Ensure fall prevention, adequate hydration, and review interactions with ongoing chronic medications."
 
         # Section C: When to Seek Medical Attention & Red Flags
-        urgency_emoji = "🚨" if urgency in ["critical", "high"] else "⚠️"
-        medical_attention = f"{urgency_emoji} URGENCY LEVEL: {urgency.upper()}\n"
+        medical_attention = f"URGENCY LEVEL: {urgency.upper()}\n"
 
         if emergency_flags:
             medical_attention += "\n".join(emergency_flags) + "\n\n"
@@ -333,15 +332,15 @@ Emphasize patient safety and always include age-appropriate guidance."""
     def _get_disclaimer(self, language: str = 'english') -> str:
         """Get medical safety disclaimer"""
         disclaimers = {
-            'english': "⚠️ IMPORTANT DISCLAIMER: This assessment is generated for educational and informational purposes only and does not replace a formal doctor's diagnosis. If you are experiencing severe symptoms or a medical emergency, call your local emergency services (911 / 108 / 112) immediately.",
-            'kannada': "⚠️ ಪ್ರಮುಖ ಹಕ್ಕುತ್ಯಾಗ: ಈ ಮೌಲ್ಯಮಾಪನವು ಕೇವಲ ಶೈಕ್ಷಣಿಕ ಮತ್ತು ಮಾಹಿತಿ ಉದ್ದೇಶಗಳಿಗಾಗಿ ಮಾತ್ರವಾಗಿದ್ದು, ವೈದ್ಯರ ಔಪಚಾರಿಕ ರೋಗನಿರ್ಣಯವನ್ನು ಬದಲಾಯಿಸುವುದಿಲ್ಲ. ತುರ್ತು ಪರಿಸ್ಥಿತಿಯಲ್ಲಿ ತಕ್ಷಣವೇ ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆಗೆ ಭೇಟಿ ನೀಡಿ (108 / 112).",
-            'spanish': "⚠️ AVISO IMPORTANTE: Esta evaluación se genera únicamente con fines educativos e informativos y no reemplaza el diagnóstico de un médico. Si presenta una emergencia, llame de inmediato a los servicios médicos.",
-            'french': "⚠️ AVERTISSEMENT IMPORTANT: Cette évaluation est fournie à titre informatif et ne remplace pas une consultation médicale formelle. En cas d'urgence, contactez les services de secours.",
-            'hindi': "⚠️ महत्वपूर्ण अस्वीकरण: यह मूल्यांकन केवल शैक्षिक और सूचनात्मक उद्देश्यों के लिए है और डॉक्टर के निदान का स्थान नहीं लेता है। आपात स्थिति में तुरंत अस्पताल जाएं।",
-            'telugu': "⚠️ ముఖ్యమైన నిరాకరణ: ఈ సమాచారం కేవలం అవగాహన కొరకు మాత్రమే మరియు వైద్యుని అధికారిక రోగ నిర్ధారణను భర్తీ చేయదు. అత్యవసర పరిస్థితుల్లో వెంటనే వైద్యుడిని సంప్రదించండి.",
-            'tamil': "⚠️ முக்கியமான மறுப்பு: இந்த தகவல் தகவல் நோக்கங்களுக்காக மட்டுமே. சரியான மருத்துவ மதிப்பீட்டிற்கு மருத்துவரை அணுகவும்.",
-            'bengali': "⚠️ গুরুত্বপূর্ণ দাবিত্যাগ: এই তথ্য শুধুমাত্র তথ্যের উদ্দেশ্যে এবং চিকিৎসকের বিকল্প নয়।",
-            'marathi': "⚠️ महत्त्वाचे नकार: ही माहिती केवळ माहितीच्या हेतूसाठी आहे. गंभीर लक्षणांसाठी त्वरित डॉक्टरांशी संपर्क साधा."
+            'english': "IMPORTANT DISCLAIMER: This assessment is generated for educational and informational purposes only and does not replace a formal doctor's diagnosis. If you are experiencing severe symptoms or a medical emergency, call your local emergency services (911 / 108 / 112) immediately.",
+            'kannada': "ಪ್ರಮುಖ ಹಕ್ಕುತ್ಯಾಗ: ಈ ಮೌಲ್ಯಮಾಪನವು ಕೇವಲ ಶೈಕ್ಷಣಿಕ ಮತ್ತು ಮಾಹಿತಿ ಉದ್ದೇಶಗಳಿಗಾಗಿ ಮಾತ್ರವಾಗಿದ್ದು, ವೈದ್ಯರ ಔಪಚಾರಿಕ ರೋಗನಿರ್ಣಯವನ್ನು ಬದಲಾಯಿಸುವುದಿಲ್ಲ. ತುರ್ತು ಪರಿಸ್ಥಿತಿಯಲ್ಲಿ ತಕ್ಷಣವೇ ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆಗೆ ಭೇಟಿ ನೀಡಿ (108 / 112).",
+            'spanish': "AVISO IMPORTANTE: Esta evaluación se genera únicamente con fines educativos e informativos y no reemplaza el diagnóstico de un médico. Si presenta una emergencia, llame de inmediato a los servicios médicos.",
+            'french': "AVERTISSEMENT IMPORTANT: Cette évaluation est fournie à titre informatif et ne remplace pas une consultation médicale formelle. En cas d'urgence, contactez les services de secours.",
+            'hindi': "महत्वपूर्ण अस्वीकरण: यह मूल्यांकन केवल शैक्षिक और सूचनात्मक उद्देश्यों के लिए है और डॉक्टर के निदान का स्थान नहीं लेता है। आपात स्थिति में तुरंत अस्पताल जाएं।",
+            'telugu': "ముఖ్యమైన నిరాకరణ: ఈ సమాచారం కేవలం అవగాహన కొరకు మాత్రమే మరియు వైద్యుని అధికారిక రోగ నిర్ధారణను భర్తీ చేయదు. అత్యవసర పరిస్థితుల్లో వెంటనే వైద్యుడిని సంప్రదించండి.",
+            'tamil': "முக்கியமான மறுப்பு: இந்த தகவல் தகவல் நோக்கங்களுக்காக மட்டுமே. சரியான மருத்துவ மதிப்பீட்டிற்கு மருத்துவரை அணுகவும்.",
+            'bengali': "গুরুত্বপূর্ণ দাবিত্যাগ: এই তথ্য শুধুমাত্র তথ্যের উদ্দেশ্যে এবং চিকিৎসকের বিকল্প নয়।",
+            'marathi': "महत्त्वाचे नकार: ही माहिती केवळ माहितीच्या हेतूसाठी आहे. गंभीर लक्षणांसाठी त्वरित डॉक्टरांशी संपर्क साधा."
         }
         return disclaimers.get(language.lower(), disclaimers['english'])
 

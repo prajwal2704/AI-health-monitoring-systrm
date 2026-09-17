@@ -36,12 +36,12 @@ class VitalsMonitor:
                 bp_status = "Hypertensive Crisis"
                 bp_level = "critical"
                 risk_score += 5
-                alerts.append("🚨 CRITICAL: Blood Pressure is in Hypertensive Crisis (>180/120 mmHg). Seek emergency care immediately!")
+                alerts.append("[CRITICAL] Blood Pressure is in Hypertensive Crisis (>180/120 mmHg). Seek emergency care immediately!")
             elif sbp >= 140 or dbp >= 90:
                 bp_status = "Stage 2 Hypertension"
                 bp_level = "high"
                 risk_score += 3
-                alerts.append("⚠️ Blood Pressure is Stage 2 Hypertension (≥140/90 mmHg). Consult your physician.")
+                alerts.append("[WARNING] Blood Pressure is Stage 2 Hypertension (≥140/90 mmHg). Consult your physician.")
             elif (130 <= sbp <= 139) or (80 <= dbp <= 89):
                 bp_status = "Stage 1 Hypertension"
                 bp_level = "moderate"
@@ -54,7 +54,7 @@ class VitalsMonitor:
                 bp_status = "Hypotension (Low BP)"
                 bp_level = "moderate"
                 risk_score += 2
-                alerts.append("⚠️ Low blood pressure detected (<90/60 mmHg). Stay hydrated and sit down if dizzy.")
+                alerts.append("[WARNING] Low blood pressure detected (<90/60 mmHg). Stay hydrated and sit down if dizzy.")
             else:
                 bp_status = "Normal Blood Pressure"
                 bp_level = "normal"
@@ -74,7 +74,7 @@ class VitalsMonitor:
                 hr_status = "Severe Tachycardia"
                 hr_level = "high"
                 risk_score += 3
-                alerts.append(f"⚠️ Resting pulse is markedly elevated ({hr:.0f} bpm). Avoid stimulants and rest.")
+                alerts.append(f"[WARNING] Resting pulse is markedly elevated ({hr:.0f} bpm). Avoid stimulants and rest.")
             elif hr > 100:
                 hr_status = "Tachycardia (Elevated)"
                 hr_level = "moderate"
@@ -83,7 +83,7 @@ class VitalsMonitor:
                 hr_status = "Marked Bradycardia"
                 hr_level = "moderate"
                 risk_score += 2
-                alerts.append(f"⚠️ Low heart rate detected ({hr:.0f} bpm). Consult doctor if feeling faint.")
+                alerts.append(f"[WARNING] Low heart rate detected ({hr:.0f} bpm). Consult doctor if feeling faint.")
             elif hr < 60:
                 hr_status = "Mild Bradycardia"
                 hr_level = "mild"
@@ -106,12 +106,12 @@ class VitalsMonitor:
                 spo2_status = "Severe Hypoxia"
                 spo2_level = "critical"
                 risk_score += 5
-                alerts.append(f"🚨 EMERGENCY: Blood oxygen level is critically low ({sat:.0f}%). Oxygen support urgently needed!")
+                alerts.append(f"[CRITICAL] Blood oxygen level is critically low ({sat:.0f}%). Oxygen support urgently needed!")
             elif sat <= 94:
                 spo2_status = "Mild Hypoxia / Low Oxygen"
                 spo2_level = "high"
                 risk_score += 3
-                alerts.append(f"⚠️ Oxygen saturation is depressed ({sat:.0f}%). Monitor closely and seek medical checkup.")
+                alerts.append(f"[WARNING] Oxygen saturation is depressed ({sat:.0f}%). Monitor closely and seek medical checkup.")
             else:
                 spo2_status = "Normal Oxygenation"
                 spo2_level = "normal"
@@ -133,7 +133,7 @@ class VitalsMonitor:
                 temp_status = "Severe High Fever / Hyperpyrexia"
                 temp_level = "high"
                 risk_score += 4
-                alerts.append(f"🚨 High temperature detected ({temp_f:.1f}°F / {((temp_f-32)*5/9):.1f}°C). Sponge with lukewarm water.")
+                alerts.append(f"[CRITICAL] High temperature detected ({temp_f:.1f}°F / {((temp_f-32)*5/9):.1f}°C). Sponge with lukewarm water.")
             elif temp_f > 100.4:
                 temp_status = "Fever"
                 temp_level = "moderate"
@@ -146,7 +146,7 @@ class VitalsMonitor:
                 temp_status = "Hypothermia"
                 temp_level = "high"
                 risk_score += 3
-                alerts.append(f"⚠️ Abnormally low temperature ({temp_f:.1f}°F). Warm the patient immediately.")
+                alerts.append(f"[WARNING] Abnormally low temperature ({temp_f:.1f}°F). Warm the patient immediately.")
             else:
                 temp_status = "Normal Temperature"
                 temp_level = "normal"
@@ -168,13 +168,13 @@ class VitalsMonitor:
                 bs_status = "Hypoglycemia (Low Blood Sugar)"
                 bs_level = "high"
                 risk_score += 4
-                alerts.append(f"🚨 Hypoglycemia alert ({bs:.0f} mg/dL)! Consume 15g fast-acting sugar (fruit juice, candy) immediately.")
+                alerts.append(f"[CRITICAL] Hypoglycemia alert ({bs:.0f} mg/dL)! Consume 15g fast-acting sugar (fruit juice, candy) immediately.")
             elif is_fasting:
                 if bs >= 126:
                     bs_status = "Diabetic Range (Fasting)"
                     bs_level = "high"
                     risk_score += 3
-                    alerts.append(f"⚠️ Fasting blood glucose is elevated ({bs:.0f} mg/dL). HbA1c test recommended.")
+                    alerts.append(f"[WARNING] Fasting blood glucose is elevated ({bs:.0f} mg/dL). HbA1c test recommended.")
                 elif bs >= 100:
                     bs_status = "Impaired Fasting Glucose (Pre-diabetic)"
                     bs_level = "moderate"
@@ -188,7 +188,7 @@ class VitalsMonitor:
                     bs_status = "Diabetic Range (Random)"
                     bs_level = "high"
                     risk_score += 3
-                    alerts.append(f"⚠️ Random blood glucose is significantly high ({bs:.0f} mg/dL). Consult your endocrinologist.")
+                    alerts.append(f"[WARNING] Random blood glucose is significantly high ({bs:.0f} mg/dL). Consult your endocrinologist.")
                 elif bs >= 140:
                     bs_status = "Elevated Blood Glucose"
                     bs_level = "moderate"

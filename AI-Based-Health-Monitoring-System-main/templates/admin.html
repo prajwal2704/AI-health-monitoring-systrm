@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarePulse Administration - Clinical Operations & User Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-light: #e0f2fe;
+      --primary-gradient: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      --surface: #ffffff;
+      --bg: #f8fafc;
+      --card-border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .svg-icon {
+      display: inline-block;
+      vertical-align: middle;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Auth Screen (Admin Login) */
+    #admin-auth-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(circle at 10% 20%, rgba(2, 132, 199, 0.08) 0%, transparent 40%),
+                  radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                  #f8fafc;
+    }
+
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .auth-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eff6ff;
+      color: var(--primary-dark);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      border: 1px solid #bfdbfe;
+    }
+
+    .auth-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .auth-subtitle {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon-left {
+      position: absolute;
+      left: 12px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 11px 14px 11px 38px;
+      font-size: 14px;
+      font-family: inherit;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text-main);
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--primary-gradient);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      box-shadow: 0 2px 4px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-submit:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .auth-alert {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+      line-height: 1.4;
+    }
+
+    .auth-alert.error {
+      display: block;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+    }
+
+    .auth-footer-notice {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--card-border);
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Main Admin Layout */
+    #admin-main-screen {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    /* Top Navbar */
+    .admin-navbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--card-border);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--primary-gradient);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-text-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .admin-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: #f1f5f9;
+      border: 1px solid var(--card-border);
+      border-radius: 9999px;
+      font-size: 13px;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    .btn-logout {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: #fff;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-logout:hover {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: var(--danger);
+    }
+
+    /* Main Content Area */
+    .admin-container {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 28px 24px 60px 24px;
+      flex: 1;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .page-subtitle {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: #fff;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--primary);
+      border: 1px solid var(--primary-dark);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    /* KPI Metrics Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .kpi-card {
+      background: #fff;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .kpi-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .kpi-icon-box.blue {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .kpi-icon-box.green {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .kpi-icon-box.amber {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .kpi-icon-box.purple {
+      background: #f3e8ff;
+      color: #7e22ce;
+    }
+
+    .kpi-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 2px;
+      letter-spacing: -0.02em;
+    }
+
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Users Table Card */
+    .table-card {
+      background: #fff;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .table-toolbar {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .table-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 12px 8px 34px;
+      font-size: 13px;
+      font-family: inherit;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: #f8fafc;
+      transition: all 0.15s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      background: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13.5px;
+    }
+
+    thead th {
+      background: #f8fafc;
+      padding: 12px 18px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    tbody td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--card-border);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .user-info-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-avatar-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .user-avatar-circle.admin-avatar {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .user-text-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name-text {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .user-role-badge {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 2px;
+      letter-spacing: 0.04em;
+    }
+
+    .user-role-badge.patient {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .user-role-badge.admin {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .email-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+    }
+
+    .btn-copy {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .btn-copy:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    .security-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .action-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-table-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      background: #fff;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-table-action:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .btn-table-action.danger:hover {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: var(--danger);
+    }
+
+    /* Modal Backdrop & Dialog */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-dialog {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 580px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modalFadeIn 0.2s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-close-modal:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .modal-body {
+      padding: 22px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-footer {
+      padding: 14px 22px;
+      border-top: 1px solid var(--card-border);
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .activity-item {
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .activity-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .activity-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .activity-content {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 36px 20px;
+      color: var(--text-muted);
+      font-size: 13.5px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.show {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= AUTHENTICATION SCREEN (ADMIN LOGIN ONLY) ================= -->
+  <div id="admin-auth-screen">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-badge">
+          <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Restricted Portal
+        </div>
+        <h1 class="auth-title">CarePulse Admin</h1>
+        <p class="auth-subtitle">Authorized clinical staff and administrative access only</p>
+      </div>
+
+      <div id="auth-alert" class="auth-alert"></div>
+
+      <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="admin-email">Administrator Email</label>
+          <div class="input-wrapper">
+            <svg class="svg-icon input-icon-left" width="16" height="16" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input type="email" id="admin-email" class="form-input" placeholder="admin@carepulse.local" required autocomplete="username" value="admin@carepulse.local">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="admin-password">Administrator Password</label>
+          <div class="input-wrapper">
+            <svg class="svg-icon input-icon-left" width="16" height="16" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="admin-password" class="form-input" placeholder="Enter administrative password" required autocomplete="current-password">
+          </div>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="btn-submit">
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Authenticate & Enter
+        </button>
+      </form>
+
+      <div class="auth-footer-notice">
+        <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Patient portal runs independently. Patient users cannot sign in here.
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN ADMIN DASHBOARD ================= -->
+  <div id="admin-main-screen">
+    <!-- Navbar -->
+    <header class="admin-navbar">
+      <div class="nav-brand">
+        <div class="brand-logo-icon">
+          <svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="brand-text-block">
+          <span class="brand-name">CarePulse Operations</span>
+          <span class="brand-sub">Administration Console</span>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <div class="admin-pill">
+          <span class="status-dot"></span>
+          <span id="active-admin-email">admin@carepulse.local</span>
+        </div>
+        <button type="button" class="btn-logout" onclick="handleAdminLogout()">
+          <svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="admin-container">
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">System Overview & User Management</h2>
+          <p class="page-subtitle">Inspect registered patient identifiers, review consultations, and manage account credentials</p>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="btn-secondary" onclick="loadAdminData()">
+            <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            Refresh Data
+          </button>
+          <button type="button" class="btn-primary" onclick="exportUsersCsv()">
+            <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-box blue">
+            <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="kpi-details">
+            <span class="kpi-label">Registered Accounts</span>
+            <span class="kpi-value" id="kpi-total-users">-</span>
+            <span class="kpi-sub">Total database profiles</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-box amber">
+            <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="kpi-details">
+            <span class="kpi-label">Clinical Consultations</span>
+            <span class="kpi-value" id="kpi-total-convs">-</span>
+            <span class="kpi-sub">Recorded diagnostic queries</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-box green">
+            <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="kpi-details">
+            <span class="kpi-label">Active Sessions</span>
+            <span class="kpi-value" id="kpi-active-sessions">-</span>
+            <span class="kpi-sub">Authenticated tokens</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-box purple">
+            <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div class="kpi-details">
+            <span class="kpi-label">Security Protocol</span>
+            <span class="kpi-value" style="font-size: 18px; line-height: 1.5; margin-top: 4px;">PBKDF2 / SHA-256</span>
+            <span class="kpi-sub">Salted Cryptographic Hash</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users Table Card -->
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="table-title">Registered Accounts & Credential Registry</div>
+          <div class="search-input-wrapper">
+            <svg class="svg-icon input-icon-left" width="15" height="15" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="user-search" class="search-input" placeholder="Search by name or email..." oninput="filterUsersTable()">
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient / Account</th>
+                <th>Login Email (Credential Identifier)</th>
+                <th>Date of Birth</th>
+                <th>Registered On</th>
+                <th>Consultations</th>
+                <th>Credential Status</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body">
+              <tr>
+                <td colspan="7" class="empty-state">Loading user registry...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Activity Inspection Modal -->
+  <div id="activity-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="activity-modal-title">Consultation Activity</h3>
+        <button type="button" class="btn-close-modal" onclick="closeModal('activity-modal')">
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="activity-modal-body">
+        <div class="empty-state">Loading activity records...</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="closeModal('activity-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Password Reset Modal -->
+  <div id="reset-pw-modal" class="modal-overlay">
+    <div class="modal-dialog" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Reset User Password</h3>
+        <button type="button" class="btn-close-modal" onclick="closeModal('reset-pw-modal')">
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+          Assign a new secure temporary password for: <strong id="reset-pw-user-name" style="color: var(--text-main);">-</strong>
+        </p>
+        <div id="reset-pw-error" class="auth-alert"></div>
+        <div class="form-group">
+          <label class="form-label" for="new-password-input">New Password</label>
+          <div class="input-wrapper">
+            <svg class="svg-icon input-icon-left" width="16" height="16" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="new-password-input" class="form-input" placeholder="Minimum 6 characters" minlength="6">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="closeModal('reset-pw-modal')">Cancel</button>
+        <button type="button" class="btn-primary" onclick="submitPasswordReset()">Save New Password</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="admin-toast" class="toast">
+    <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toast-message">Operation successful</span>
+  </div>
+
+  <script>
+    let allUsers = [];
+    let activeResetUserId = null;
+
+    function getSessionToken() {
+      return localStorage.getItem('carepulse_admin_token') || localStorage.getItem('carepulse_token') || '';
+    }
+
+    function setSessionToken(token) {
+      localStorage.setItem('carepulse_admin_token', token);
+    }
+
+    function removeSessionToken() {
+      localStorage.removeItem('carepulse_admin_token');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('admin-toast');
+      const msgEl = document.getElementById('toast-message');
+      msgEl.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.innerText = str;
+      return div.innerHTML;
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Copied to clipboard: ' + text);
+      }).catch(() => {
+        showToast('Error copying text');
+      });
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    async function checkAuthAndInit() {
+      const token = getSessionToken();
+      if (!token) {
+        showAuthScreen();
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (res.ok && data.success && data.user && data.user.role === 'admin') {
+          showMainScreen(data.user);
+          loadAdminData();
+        } else {
+          removeSessionToken();
+          showAuthScreen();
+        }
+      } catch (err) {
+        showAuthScreen();
+      }
+    }
+
+    function showAuthScreen() {
+      document.getElementById('admin-auth-screen').style.display = 'flex';
+      document.getElementById('admin-main-screen').style.display = 'none';
+    }
+
+    function showMainScreen(user) {
+      document.getElementById('admin-auth-screen').style.display = 'none';
+      document.getElementById('admin-main-screen').style.display = 'flex';
+      document.getElementById('active-admin-email').innerText = user.email || 'admin@carepulse.local';
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('admin-email').value.trim();
+      const password = document.getElementById('admin-password').value;
+      const alertEl = document.getElementById('auth-alert');
+      const submitBtn = document.getElementById('btn-login-submit');
+
+      alertEl.className = 'auth-alert';
+      alertEl.style.display = 'none';
+      submitBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          if (data.user && data.user.role !== 'admin') {
+            alertEl.className = 'auth-alert error';
+            alertEl.innerText = 'Access denied. Account does not have administrator privileges.';
+            alertEl.style.display = 'block';
+            submitBtn.disabled = false;
+            return;
+          }
+          setSessionToken(data.session_token);
+          showMainScreen(data.user);
+          loadAdminData();
+        } else {
+          alertEl.className = 'auth-alert error';
+          alertEl.innerText = data.error || 'Authentication failed. Please verify credentials.';
+          alertEl.style.display = 'block';
+        }
+      } catch (err) {
+        alertEl.className = 'auth-alert error';
+        alertEl.innerText = 'Server connection error: ' + err.message;
+        alertEl.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+      }
+    }
+
+    async function handleAdminLogout() {
+      const token = getSessionToken();
+      try {
+        await fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+      } catch (e) {}
+      removeSessionToken();
+      showAuthScreen();
+    }
+
+    async function loadAdminData() {
+      const token = getSessionToken();
+      if (!token) return;
+
+      try {
+        // 1. Stats
+        const statsRes = await fetch('/api/admin/stats', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (statsRes.ok) {
+          const stats = await statsRes.json();
+          if (stats.success && stats.stats) {
+            document.getElementById('kpi-total-users').innerText = stats.stats.total_users || 0;
+            document.getElementById('kpi-total-convs').innerText = stats.stats.total_conversations || 0;
+            document.getElementById('kpi-active-sessions').innerText = stats.stats.active_sessions || 0;
+          }
+        }
+
+        // 2. Users Table
+        const usersRes = await fetch('/api/admin/users', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (usersRes.ok) {
+          const udata = await usersRes.json();
+          if (udata.success && Array.isArray(udata.users)) {
+            allUsers = udata.users;
+            renderUsersTable(allUsers);
+          }
+        }
+      } catch (err) {
+        console.error('Error loading admin data:', err);
+      }
+    }
+
+    function renderUsersTable(users) {
+      const tbody = document.getElementById('users-table-body');
+      if (!users || users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No user records found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = users.map(u => {
+        const isAdmin = (u.role === 'admin');
+        const initials = (u.full_name || u.email || 'U').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        const regDate = u.created_at ? new Date(u.created_at).toLocaleDateString() : 'N/A';
+        const dobStr = u.dob ? escapeHtml(u.dob) : 'Not specified';
+
+        return `
+          <tr>
+            <td>
+              <div class="user-info-cell">
+                <div class="user-avatar-circle ${isAdmin ? 'admin-avatar' : ''}">${escapeHtml(initials)}</div>
+                <div class="user-text-meta">
+                  <span class="user-name-text">${escapeHtml(u.full_name || 'Anonymous User')}</span>
+                  <span class="user-role-badge ${isAdmin ? 'admin' : 'patient'}">${isAdmin ? 'Administrator' : 'Patient'}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="email-cell">
+                <span>${escapeHtml(u.email)}</span>
+                <button type="button" class="btn-copy" onclick="copyToClipboard('${escapeHtml(u.email)}')" title="Copy Email">
+                  <svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </td>
+            <td>${dobStr}</td>
+            <td>${regDate}</td>
+            <td>
+              <span style="font-weight: 600;">${u.conversation_count || 0}</span> sessions
+            </td>
+            <td>
+              <span class="security-badge">
+                <svg class="svg-icon" width="11" height="11" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                ${escapeHtml(u.password_status || 'Salted PBKDF2')}
+              </span>
+            </td>
+            <td style="text-align: right;">
+              <div class="action-group" style="justify-content: flex-end;">
+                <button type="button" class="btn-table-action" onclick="viewUserActivity('${escapeHtml(u.id)}', '${escapeHtml(u.full_name || u.email)}')" title="View Consultations">
+                  <svg class="svg-icon" width="12" height="12" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Activity
+                </button>
+                <button type="button" class="btn-table-action" onclick="promptResetPassword('${escapeHtml(u.id)}', '${escapeHtml(u.full_name || u.email)}')" title="Reset Password">
+                  <svg class="svg-icon" width="12" height="12" viewBox="0 0 24 24"><path d="M21 2l-2 2m-1.5 1.5L14 9l-3 3-2-2-5 5 2 2 5-5-2-2 3.5-3.5L18 6l2-2z"/></svg>
+                  Reset PW
+                </button>
+                ${!isAdmin ? `
+                  <button type="button" class="btn-table-action danger" onclick="deleteUser('${escapeHtml(u.id)}', '${escapeHtml(u.email)}')" title="Delete Account">
+                    <svg class="svg-icon" width="12" height="12" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  </button>
+                ` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterUsersTable() {
+      const q = document.getElementById('user-search').value.toLowerCase().trim();
+      if (!q) {
+        renderUsersTable(allUsers);
+        return;
+      }
+      const filtered = allUsers.filter(u => 
+        (u.email && u.email.toLowerCase().includes(q)) ||
+        (u.full_name && u.full_name.toLowerCase().includes(q))
+      );
+      renderUsersTable(filtered);
+    }
+
+    async function viewUserActivity(userId, userName) {
+      const token = getSessionToken();
+      document.getElementById('activity-modal-title').innerText = `Consultation Records: ${userName}`;
+      const bodyEl = document.getElementById('activity-modal-body');
+      bodyEl.innerHTML = '<div class="empty-state">Loading consultation records...</div>';
+      openModal('activity-modal');
+
+      try {
+        const res = await fetch(`/api/admin/user/${encodeURIComponent(userId)}/conversations`, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (res.ok && data.success && Array.isArray(data.conversations) && data.conversations.length > 0) {
+          bodyEl.innerHTML = data.conversations.map((c, idx) => {
+            const timeStr = c.created_at ? new Date(c.created_at).toLocaleString() : `Session #${idx + 1}`;
+            const symptoms = (c.symptoms && c.symptoms.length > 0) ? c.symptoms.join(', ') : 'None registered';
+            const messages = (c.messages || []).map(m => `[${m.role.toUpperCase()}]: ${m.content}`).join('\n\n');
+
+            return `
+              <div class="activity-item">
+                <div class="activity-meta">
+                  <span>${escapeHtml(timeStr)}</span>
+                  <span>Age Group: ${escapeHtml(c.age || 'Adult')}</span>
+                </div>
+                <div class="activity-title">Symptoms Evaluated: ${escapeHtml(symptoms)}</div>
+                ${c.primary_diagnosis ? `<div style="font-size:12px; color:var(--primary-dark); font-weight:600; margin-bottom:6px;">Diagnosis: ${escapeHtml(c.primary_diagnosis.name || '')} (${c.primary_diagnosis.confidence || 0}% match)</div>` : ''}
+                <div class="activity-content">${escapeHtml(messages || 'No conversation messages stored.')}</div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          bodyEl.innerHTML = '<div class="empty-state">No clinical consultations found for this account.</div>';
+        }
+      } catch (err) {
+        bodyEl.innerHTML = `<div class="empty-state" style="color:var(--danger)">Failed to load activity: ${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    function promptResetPassword(userId, userName) {
+      activeResetUserId = userId;
+      document.getElementById('reset-pw-user-name').innerText = userName;
+      document.getElementById('new-password-input').value = '';
+      const errEl = document.getElementById('reset-pw-error');
+      errEl.style.display = 'none';
+      openModal('reset-pw-modal');
+    }
+
+    async function submitPasswordReset() {
+      const newPassword = document.getElementById('new-password-input').value;
+      const errEl = document.getElementById('reset-pw-error');
+      errEl.style.display = 'none';
+
+      if (!newPassword || newPassword.length < 6) {
+        errEl.className = 'auth-alert error';
+        errEl.innerText = 'Password must be at least 6 characters long.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      const token = getSessionToken();
+      try {
+        const res = await fetch(`/api/admin/user/${encodeURIComponent(activeResetUserId)}/reset-password`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ new_password: newPassword })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          closeModal('reset-pw-modal');
+          showToast('Password updated successfully for account.');
+          loadAdminData();
+        } else {
+          errEl.className = 'auth-alert error';
+          errEl.innerText = data.error || 'Failed to update password';
+          errEl.style.display = 'block';
+        }
+      } catch (err) {
+        errEl.className = 'auth-alert error';
+        errEl.innerText = 'Network error: ' + err.message;
+        errEl.style.display = 'block';
+      }
+    }
+
+    async function deleteUser(userId, email) {
+      if (!confirm(`Are you sure you want to delete user account: ${email}?\nThis action cannot be undone.`)) {
+        return;
+      }
+
+      const token = getSessionToken();
+      try {
+        const res = await fetch(`/api/admin/user/${encodeURIComponent(userId)}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          showToast(`Account ${email} deleted.`);
+          loadAdminData();
+        } else {
+          alert('Failed to delete account: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Network error: ' + err.message);
+      }
+    }
+
+    function exportUsersCsv() {
+      const token = getSessionToken();
+      window.location.href = `/api/admin/export-users?token=${encodeURIComponent(token)}`;
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', checkAuthAndInit);
+  </script>
+</body>
+</html>

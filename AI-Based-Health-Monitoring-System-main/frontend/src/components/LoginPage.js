@@ -213,15 +213,15 @@ const LoginPage = ({ onLoginSuccess }) => {
 
         <div className="features-preview">
           <div className="feature">
-            <div className="feature-icon">🩺</div>
+            <div className="feature-icon"><Lock size={18} /></div>
             <span>Clinical Diagnostic Guidance</span>
           </div>
           <div className="feature">
-            <div className="feature-icon">🔒</div>
+            <div className="feature-icon"><Lock size={18} /></div>
             <span>Secure & Private Consultations</span>
           </div>
           <div className="feature">
-            <div className="feature-icon">🌍</div>
+            <div className="feature-icon"><Heart size={18} /></div>
             <span>Multi-Language Support</span>
           </div>
         </div>

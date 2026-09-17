@@ -5,7 +5,17 @@ conversation chat with disease prediction, symptoms list, direct disease predict
 """
 import requests
 
-BASE_URL = "http://localhost:5000"
+def get_active_base_url():
+    for p in [5005, 5000]:
+        try:
+            r = requests.get(f"http://localhost:{p}/health", timeout=1)
+            if r.status_code == 200 and r.json().get('service') == 'CarePulse Health Platform':
+                return f"http://localhost:{p}"
+        except Exception:
+            continue
+    return "http://localhost:5000"
+
+BASE_URL = get_active_base_url()
 
 def test_all():
     print("==================================================")

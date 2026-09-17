@@ -165,13 +165,13 @@ class DiseasePredictor:
         emergency_flags = []
         if any(s in active_symptoms for s in ["chest_pressure_squeezing", "pain_radiating_to_arm_neck_jaw"]):
             urgency = "critical"
-            emergency_flags.append("🚨 Thoracic pain or chest pressure may indicate acute coronary syndrome. Seek immediate emergency care!")
+            emergency_flags.append("[URGENT] Thoracic pain or chest pressure may indicate acute coronary syndrome. Seek immediate emergency care!")
         if any(s in active_symptoms for s in ["coughing_blood"]):
             urgency = "high"
-            emergency_flags.append("🚨 Coughing blood requires immediate pulmonary evaluation.")
+            emergency_flags.append("[URGENT] Coughing blood requires immediate pulmonary evaluation.")
         if any(s in active_symptoms for s in ["sudden_pain_lower_right_abdomen"]):
             urgency = "critical"
-            emergency_flags.append("🚨 Severe acute lower right abdominal pain requires urgent evaluation to rule out appendicitis.")
+            emergency_flags.append("[URGENT] Severe acute lower right abdominal pain requires urgent evaluation to rule out appendicitis.")
 
         return {
             "success": True,
